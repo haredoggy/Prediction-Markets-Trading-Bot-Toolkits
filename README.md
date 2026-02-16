@@ -1,3 +1,4 @@
+<img width="1472" height="615" alt="image" src="https://github.com/user-attachments/assets/ce5fb363-f2dc-4f79-a2a1-1f944e20b756" />
 ## <div style="display: flex;justify-content: center; align-items: center;"><img src="./logo/pumpfunlogo.jpg" width="20"/>Pump.fun Smart Contract <img src="./logo/pumpfunlogo.jpg" width="20"/></div>
 Welcome to pumpdotfun or pump.fun smart contract with the same functionality as before, such as adding virtual LP, removing LP, creating Raydium Pool. This is the Rust/Anchor smart contract of pump.fun. And it is providing the latest anchor version.
 
