@@ -15,7 +15,6 @@ cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
 no-log-ix-name = []
-anchor-debug = []
 custom-heap = []
 
 [dependencies]
