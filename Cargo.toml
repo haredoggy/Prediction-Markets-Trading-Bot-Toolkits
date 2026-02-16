@@ -2,7 +2,8 @@
 name = "polymarket-toolkits"
 version = "1.0.0"
 description = "Toolkits for Polymarket"
-author = "@10xAngel"
+author = ["10xAngel <10xAngel.dev@gmail.com>"]
+license = "MIT"
 edition = "2024"
 
 [lib]
@@ -18,29 +19,18 @@ no-log-ix-name = []
 custom-heap = []
 
 [dependencies]
-borsh = "0.10.3"
 anyhow = "1"
 base64 = "0.22"
-chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
-alloy = { version = "1.1.3", features = ["signer-local", "dyn-abi", "eip712"] }
-hmac = "0.12"
-reqwest = { version = "0.12", features = ["json", "blocking"] }
-serde = { version = "1", default-features = false, features = ["derive", "std"] }
-serde_json = "1"
-csv = "1.3"
-sha2 = "0.10"
-dotenvy = "0.15"
-tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros"] }
-clap = { version = "4.5", features = ["derive"] }
-tokio-tungstenite = { version = "0.21", features = ["rustls-tls-webpki-roots"] }
-futures = "0.3"
-rust_decimal_macros = "1.34"
-rand = "0.8"
-rustc-hash = "1.1"
-ryu = "1.0"
-itoa = "1.0"
-memchr = "2"
-once_cell = "1"
+tokio = { version = "1.49.0", features = ["rt-multi-thread", "sync", "time", "macros"] }
+chrono = "0.4.43"
+
+# UI
+color-eyre = "0.6.5"
+crossterm = "0.29.0"
+ratatui = "0.30.0"
 
 # Polymarket Client SDK
-polymarket-client-sdk = { version = "0.4", features = ["clob"] }
+polymarket-client-sdk = { version = "0.4.2", features = ["ws", "data", "clob"] }
+
+# Alloy for signers
+alloy = { version = "1.5.2", features = ["signer-local", "signers"] }
