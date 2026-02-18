@@ -1,13 +1,105 @@
-# Your wallet's private key (64-character hex string, no 0x prefix)
-# KEEP THIS SECRET! Never share or commit to git!
-# Example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-PRIVATE_KEY:
+# Polymarket Toolkits Configuration File
+# Copy this file to config.yaml and fill in your values
 
-# The whale address you want to copy trades from (40-character hex, no 0x prefix)
-# Find successful traders on Polymarket and use their wallet address
-# Example: 204f72f35326db932158cba6adff0b9a1da95e14
-TARGET_WALLET_ADDRESS:
+# ============================================================================
+# Bot Configuration
+# ============================================================================
+bot:
+  # Target wallet address for monitoring (40-character hex, no 0x prefix)
+  target_wallet: "0x0000000000000000000000000000000000000000"
+  
+  # Alchemy API key for blockchain data access
+  # Get free API key from: https://www.alchemy.com/
+  alchemy_api_key: ""
+  
+  # Your wallet's private key (64-character hex string, no 0x prefix)
+  # KEEP THIS SECRET! Never share or commit to git!
+  private_key: ""
+  
+  # Proxy wallet address (funder) for the account
+  funder_address: "0x0000000000000000000000000000000000000000"
+  
+  # Whether trading is enabled (set to false for monitoring only)
+  enable_trading: true
+  
+  # Whether to use mock trading mode (no real orders)
+  mock_trading: false
 
-# WebSocket RPC Provider (choose ONE - Alchemy is recommended for beginners)
-# Get free API key from: https://www.alchemy.com/
-ALCHEMY_API_KEY:
+# ============================================================================
+# Site Configuration (API Endpoints)
+# ============================================================================
+site:
+  # Gamma API base URL for market data
+  gamma_api_base: "https://gamma-api.polymarket.com"
+  
+  # CLOB API base URL for order operations
+  clob_api_base: "https://clob.polymarket.com"
+  
+  # CLOB WebSocket URL for real-time order updates
+  clob_wss_url: "wss://clob.polymarket.com"
+
+# ============================================================================
+# Trading Configuration
+# ============================================================================
+trading:
+  # Price buffer for order placement
+  price_buffer: 0.00
+  
+  # Scaling ratio for order size calculation
+  scaling_ratio: 1.00
+  
+  # Minimum cash value per trade (USD)
+  min_cash_value: 0.00
+  
+  # Minimum share count per trade
+  min_share_count: 0.0
+  
+  # Whether to use probabilistic sizing
+  use_probabilistic_sizing: true
+  
+  # Fixed trade value in USD (0.0 = disabled, >0 = fixed dollar amount per trade)
+  # When set > 0, ignores scaling_ratio and uses fixed dollar amount per trade
+  fixed_trade_value: 1.00
+  
+  # Minimum whale trade size to copy (skip trades below this)
+  min_whale_shares_to_copy: 0.0
+  
+  # Price increment for resubmit attempts
+  resubmit_price_increment: 0.01
+  
+  # Order reply timeout (seconds)
+  order_reply_timeout_secs: 10
+  
+  # Book request timeout (milliseconds)
+  book_req_timeout_ms: 2500
+  
+  # WebSocket ping timeout (seconds)
+  ws_ping_timeout_secs: 300
+  
+  # WebSocket reconnect delay (seconds)
+  ws_reconnect_delay_secs: 3
+  
+  # GTD expiry seconds for live markets
+  gtd_expiry_live_secs: 61
+  
+  # GTD expiry seconds for closed markets
+  gtd_expiry_closed_secs: 1800
+
+# ============================================================================
+# Risk Management Configuration
+# ============================================================================
+risk:
+  # Minimum share count to be considered a "large trade" for circuit breaker
+  large_trade_shares: 1500.0
+  
+  # Number of consecutive large trades needed to trigger circuit breaker
+  consecutive_trigger: 2
+  
+  # Time window in seconds for tracking consecutive trades
+  sequence_window_secs: 30
+  
+  # Minimum orderbook depth in USD required beyond our order size
+  min_depth_usd: 200.0
+  
+  # Duration in seconds that circuit breaker stays tripped after activation
+  trip_duration_secs: 120

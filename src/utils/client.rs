@@ -8,7 +8,6 @@ use polymarket_client_sdk::{
     types::Address,
 };
 use std::str::FromStr;
-use crate::config::site;
 
 /// Creates an authenticated CLOB client with API key credentials.
 ///
@@ -19,6 +18,7 @@ use crate::config::site;
 ///
 /// # Arguments
 ///
+/// * `api_base_url` - The API base URL for the client
 /// * `private_key` - The private key string for wallet authentication
 /// * `funder_address` - The proxy wallet address (funder) for the account
 ///
@@ -35,11 +35,11 @@ use crate::config::site;
 /// - API key creation/derivation fails
 /// - Authentication fails
 pub async fn create_authenticated_clob_client(
+    api_base_url: String,
     private_key: String,
     funder_address: String,
 ) -> Result<(Client<Authenticated<Normal>>, Credentials)> {
     const CHAIN_ID: u64 = POLYGON;
-    let api_base_url = site::CLOB_API_BASE.to_string();
 
     // Create signer from private key
     let signer = LocalSigner::from_str(&private_key)?.with_chain_id(Some(CHAIN_ID));

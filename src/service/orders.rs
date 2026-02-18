@@ -1,11 +1,5 @@
-//! Polymarket order functions using the official rs-clob-client SDK
-//! 
-//! This module provides buy and sell order functions using the official
-//! polymarket-client-sdk from https://github.com/Polymarket/rs-clob-client
-//! 
-//! These functions post orders using L1 authentication (signature only, no API keys)
-
 use anyhow::{Result, anyhow};
+use tokio::sync::{mpsc, oneshot};
 use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
 use chrono::DateTime;
@@ -17,6 +11,43 @@ use polymarket_client_sdk::clob::types::{OrderType, Side, Amount, SignatureType}
 use polymarket_client_sdk::clob::types::response::PostOrderResponse;
 use polymarket_client_sdk::types::Decimal;
 
+use crate::models::{ParsedEvent, ResubmitRequest, WorkItem};
+use crate::config::settings::ORDER_REPLY_TIMEOUT;
+
+// ============================================================================
+// Order Engine
+// ============================================================================
+
+#[derive(Clone)]
+pub struct OrderEngine {
+    pub tx: mpsc::Sender<WorkItem>,
+    #[allow(dead_code)]
+    pub resubmit_tx: mpsc::UnboundedSender<ResubmitRequest>,
+    pub enable_trading: bool,
+}
+
+impl OrderEngine {
+    pub async fn submit(&self, evt: ParsedEvent, is_live: Option<bool>) -> String {
+        if !self.enable_trading {
+            return "SKIPPED_DISABLED".into();
+        }
+
+        let (resp_tx, resp_rx) = oneshot::channel();
+        if let Err(e) = self.clone().tx.try_send(WorkItem {
+            event: evt,
+            respond_to: resp_tx,
+            is_live,
+        }) {
+            return format!("QUEUE_ERR: {e}");
+        }
+
+        match tokio::time::timeout(ORDER_REPLY_TIMEOUT, resp_rx).await {
+            Ok(Ok(msg)) => msg,
+            Ok(Err(_)) => "WORKER_DROPPED".into(),
+            Err(_) => "WORKER_TIMEOUT".into(),
+        }
+    }
+}
 
 /// Place a buy order (market order) without API keys
 /// Uses L1 authentication (signature only)
