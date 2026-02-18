@@ -332,8 +332,7 @@ cargo clippy -- -D warnings
 
 如有问题、疑问或贡献：
 
-- **问题反馈**：[GitHub Issues](https://github.com/your-repo/issues)
-- **电子邮件**：10xAngel.dev@gmail.com
+[前往此处](SUPPORT.md)
 
 ## 致谢
 
