@@ -1,0 +1,13 @@
+# Your wallet's private key (64-character hex string, no 0x prefix)
+# KEEP THIS SECRET! Never share or commit to git!
+# Example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+PRIVATE_KEY:
+
+# The whale address you want to copy trades from (40-character hex, no 0x prefix)
+# Find successful traders on Polymarket and use their wallet address
+# Example: 204f72f35326db932158cba6adff0b9a1da95e14
+TARGET_WALLET_ADDRESS:
+
+# WebSocket RPC Provider (choose ONE - Alchemy is recommended for beginners)
+# Get free API key from: https://www.alchemy.com/
+ALCHEMY_API_KEY:
