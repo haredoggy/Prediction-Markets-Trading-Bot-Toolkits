@@ -26,6 +26,7 @@ If you just want to talk shop — ask questions, share feedback, or discuss impl
 - [Discussions](../../discussions)
 - [Whatsapp](https://wa.me/16286666724?text=Hello%20there)
 - [Telegram](https://t.me/angel_10_x)
+- [Discord](https://discord.com/users/1114372741672488990)
 
 
 ## ⚙️ Self-Help

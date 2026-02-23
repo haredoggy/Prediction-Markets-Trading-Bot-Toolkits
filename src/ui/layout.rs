@@ -291,15 +291,20 @@ pub fn render_running_ui(f: &mut Frame, ui: &RunningBotUI) {
             };
             Line::from(vec![
                 Span::styled(
+                    entry.formatted_timestamp(),
+                    Style::default().fg(Color::DarkGray),
+                ),
+                Span::raw(" "),
+                Span::styled(
                     prefix,
                     Style::default()
                         .fg(entry.level.color())
                         .add_modifier(Modifier::BOLD),
                 ),
                 Span::raw(" "),
-                Span::styled(&entry.message, Style::default().fg(entry.level.color())),
+                Span::styled(entry.message.clone(), Style::default().fg(entry.level.color())),
             ])
-        })
+            })
         .collect();
 
     let log_widget = Paragraph::new(log_lines)
@@ -463,10 +468,10 @@ where
 
         if should_quit {
             // Send shutdown message
-            let _ = ui.logs.push_back(LogEntry {
-                message: "Shutting down bot...".to_string(),
-                level: LogLevel::Warning,
-            });
+            let _ = ui.logs.push_back(LogEntry::new(
+                "Shutting down bot...".to_string(),
+                LogLevel::Warning,
+            ));
             terminal.draw(|f| render_running_ui(f, &ui))?;
             tokio::time::sleep(std::time::Duration::from_millis(500)).await;
             break;

@@ -38,7 +38,7 @@ pub async fn create_authenticated_clob_client(
     api_base_url: String,
     private_key: String,
     funder_address: String,
-) -> Result<(Client<Authenticated<Normal>>, Credentials)> {
+) -> Result<Client<Authenticated<Normal>>> {
     const CHAIN_ID: u64 = POLYGON;
 
     // Create signer from private key
@@ -66,7 +66,6 @@ pub async fn create_authenticated_clob_client(
     };
 
     // Create authenticated client with credentials, signature type, and funder
-    let credentials_clone = credentials.clone();
     let authenticated_client = Client::new(&api_base_url, Config::default())?
         .authentication_builder(&signer)
         .credentials(credentials)
@@ -81,5 +80,5 @@ pub async fn create_authenticated_clob_client(
     //     .authenticate()
     //     .await?;s
 
-    Ok((authenticated_client, credentials_clone))
+    Ok(authenticated_client)
 }

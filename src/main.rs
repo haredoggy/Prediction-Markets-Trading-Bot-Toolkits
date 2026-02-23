@@ -3,8 +3,8 @@ use tokio::sync::mpsc;
 
 use polymarket_toolkits::bot;
 use polymarket_toolkits::config::AppConfig;
-use polymarket_toolkits::ui::layout::{BotType, run_bot_ui, run_selection_ui};
 use polymarket_toolkits::ui::components::logs::{LogEntry, LogLevel};
+use polymarket_toolkits::ui::layout::{BotType, run_bot_ui, run_selection_ui};
 
 // ============================================================================
 // Main
@@ -23,14 +23,15 @@ async fn main() -> Result<()> {
         Some(BotType::CopyTrading) => {
             let app_config = AppConfig::load()?;
 
+            println!("Initializing Copy Trading Bot...");
             // Create log channel
             let (log_tx, log_rx) = mpsc::unbounded_channel();
 
             // Send initial log
-            let _ = log_tx.send(LogEntry {
-                message: "Initializing Copy Trading Bot...".to_string(),
-                level: LogLevel::Info,
-            });
+            let _ = log_tx.send(LogEntry::new(
+                "Initializing Copy Trading Bot...".to_string(),
+                LogLevel::Info,
+            ));
 
             // Create bot task
             let log_tx_clone = log_tx.clone();

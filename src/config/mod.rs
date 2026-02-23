@@ -6,6 +6,8 @@ pub mod settings;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use serde_json;
+use serde_yaml;
 use std::fs;
 use std::path::Path;
 use std::time::Duration;
@@ -25,15 +27,15 @@ pub struct AppConfig {
     /// Bot-specific configuration (wallet, credentials, API keys)
     #[serde(default)]
     pub bot: BotConfig,
-    
+
     /// Site endpoints and API URLs
     #[serde(default)]
     pub site: SiteConfig,
-    
+
     /// Trading parameters and execution settings
     #[serde(default)]
     pub trading: TradingConfig,
-    
+
     /// Risk management and circuit breaker settings
     #[serde(default)]
     pub risk: RiskConfig,
@@ -46,40 +48,30 @@ pub struct AppConfig {
 /// Bot-specific configuration including wallet credentials and API keys.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BotConfig {
-    /// Target wallet address for monitoring
-    #[serde(default = "default_zero_address")]
-    pub target_wallet: String,
-    
-    /// Alchemy API key for blockchain data access
+    /// List of wallet addresses to track for copy trading
     #[serde(default)]
-    pub alchemy_api_key: String,
-    
+    pub wallets_to_track: Vec<String>,
+
     /// Private key for signing transactions (64-character hex, no 0x prefix)
     #[serde(default)]
     pub private_key: String,
-    
+
     /// Proxy wallet address (funder) for the account
     #[serde(default = "default_zero_address")]
     pub funder_address: String,
-    
+
     /// Whether trading is enabled
     #[serde(default = "default_true")]
     pub enable_trading: bool,
-    
-    /// Whether to use mock trading mode (no real orders)
-    #[serde(default = "default_false")]
-    pub mock_trading: bool,
 }
 
 impl Default for BotConfig {
     fn default() -> Self {
         Self {
-            target_wallet: default_zero_address(),
-            alchemy_api_key: String::new(),
+            wallets_to_track: Vec::new(),
             private_key: String::new(),
             funder_address: default_zero_address(),
             enable_trading: true,
-            mock_trading: false,
         }
     }
 }
@@ -94,11 +86,15 @@ pub struct SiteConfig {
     /// Gamma API base URL for market data
     #[serde(default = "default_gamma_api_base")]
     pub gamma_api_base: String,
-    
+
+    /// Data API base URL for position data
+    #[serde(default = "default_data_api_base")]
+    pub data_api_base: String,
+
     /// CLOB API base URL for order operations
     #[serde(default = "default_clob_api_base")]
     pub clob_api_base: String,
-    
+
     /// CLOB WebSocket URL for real-time order updates
     #[serde(default = "default_clob_wss_url")]
     pub clob_wss_url: String,
@@ -108,6 +104,7 @@ impl Default for SiteConfig {
     fn default() -> Self {
         Self {
             gamma_api_base: default_gamma_api_base(),
+            data_api_base: default_data_api_base(),
             clob_api_base: default_clob_api_base(),
             clob_wss_url: default_clob_wss_url(),
         }
@@ -119,12 +116,17 @@ impl SiteConfig {
     pub fn gamma_api_base(&self) -> &str {
         &self.gamma_api_base
     }
-    
+
+    /// Returns the Data API base URL
+    pub fn data_api_base(&self) -> &str {
+        &self.data_api_base
+    }
+
     /// Returns the CLOB API base URL
     pub fn clob_api_base(&self) -> &str {
         &self.clob_api_base
     }
-    
+
     /// Returns the CLOB WebSocket URL
     pub fn clob_wss_url(&self) -> &str {
         &self.clob_wss_url
@@ -141,58 +143,70 @@ pub struct TradingConfig {
     /// Price buffer for order placement
     #[serde(default = "default_price_buffer")]
     pub price_buffer: f64,
-    
+
     /// Scaling ratio for order size calculation
     #[serde(default = "default_scaling_ratio")]
     pub scaling_ratio: f64,
-    
+
     /// Minimum cash value per trade (USD)
     #[serde(default = "default_min_cash_value")]
     pub min_cash_value: f64,
-    
+
     /// Minimum share count per trade
     #[serde(default = "default_min_share_count")]
     pub min_share_count: f64,
-    
+
     /// Whether to use probabilistic sizing
     #[serde(default = "default_true")]
     pub use_probabilistic_sizing: bool,
-    
+
     /// Fixed trade value in USD (0.0 = disabled, >0 = fixed dollar amount per trade)
     #[serde(default = "default_fixed_trade_value")]
     pub fixed_trade_value: f64,
-    
+
     /// Minimum whale trade size to copy (skip trades below this)
     #[serde(default = "default_min_whale_shares")]
     pub min_whale_shares_to_copy: f64,
-    
+
     /// Price increment for resubmit attempts
     #[serde(default = "default_resubmit_price_increment")]
     pub resubmit_price_increment: f64,
-    
+
     /// Order reply timeout
     #[serde(default = "default_order_reply_timeout_secs")]
     pub order_reply_timeout_secs: u64,
-    
+
     /// Book request timeout (milliseconds)
     #[serde(default = "default_book_req_timeout_ms")]
     pub book_req_timeout_ms: u64,
-    
+
     /// WebSocket ping timeout (seconds)
     #[serde(default = "default_ws_ping_timeout_secs")]
     pub ws_ping_timeout_secs: u64,
-    
+
     /// WebSocket reconnect delay (seconds)
     #[serde(default = "default_ws_reconnect_delay_secs")]
     pub ws_reconnect_delay_secs: u64,
-    
+
     /// GTD expiry seconds for live markets
     #[serde(default = "default_gtd_expiry_live_secs")]
     pub gtd_expiry_live_secs: u64,
-    
+
     /// GTD expiry seconds for closed markets
     #[serde(default = "default_gtd_expiry_closed_secs")]
     pub gtd_expiry_closed_secs: u64,
+
+    /// Percentage of trade size to copy (e.g., 2.0 = 2%)
+    #[serde(default = "default_copy_percentage")]
+    pub copy_percentage: f64,
+
+    /// Rate limit for API requests (requests per second)
+    #[serde(default = "default_rate_limit")]
+    pub rate_limit: u32,
+
+    /// Polling interval in seconds for checking new trades
+    #[serde(default = "default_poll_interval")]
+    pub poll_interval: u64,
 }
 
 impl Default for TradingConfig {
@@ -212,6 +226,9 @@ impl Default for TradingConfig {
             ws_reconnect_delay_secs: default_ws_reconnect_delay_secs(),
             gtd_expiry_live_secs: default_gtd_expiry_live_secs(),
             gtd_expiry_closed_secs: default_gtd_expiry_closed_secs(),
+            copy_percentage: default_copy_percentage(),
+            rate_limit: default_rate_limit(),
+            poll_interval: default_poll_interval(),
         }
     }
 }
@@ -222,7 +239,7 @@ impl TradingConfig {
     pub fn should_skip_trade(&self, whale_shares: f64) -> bool {
         whale_shares < self.min_whale_shares_to_copy
     }
-    
+
     /// Returns GTD expiry seconds based on market liveness
     #[inline]
     pub fn get_gtd_expiry_secs(&self, is_live: bool) -> u64 {
@@ -232,25 +249,25 @@ impl TradingConfig {
             self.gtd_expiry_closed_secs
         }
     }
-    
+
     /// Returns order reply timeout as Duration
     #[inline]
     pub fn order_reply_timeout(&self) -> Duration {
         Duration::from_secs(self.order_reply_timeout_secs)
     }
-    
+
     /// Returns book request timeout as Duration
     #[inline]
     pub fn book_req_timeout(&self) -> Duration {
         Duration::from_millis(self.book_req_timeout_ms)
     }
-    
+
     /// Returns WebSocket ping timeout as Duration
     #[inline]
     pub fn ws_ping_timeout(&self) -> Duration {
         Duration::from_secs(self.ws_ping_timeout_secs)
     }
-    
+
     /// Returns WebSocket reconnect delay as Duration
     #[inline]
     pub fn ws_reconnect_delay(&self) -> Duration {
@@ -268,19 +285,19 @@ pub struct RiskConfig {
     /// Minimum share count to be considered a "large trade" for circuit breaker
     #[serde(default = "default_large_trade_shares")]
     pub large_trade_shares: f64,
-    
+
     /// Number of consecutive large trades needed to trigger circuit breaker
     #[serde(default = "default_consecutive_trigger")]
     pub consecutive_trigger: u8,
-    
+
     /// Time window in seconds for tracking consecutive trades
     #[serde(default = "default_sequence_window_secs")]
     pub sequence_window_secs: u64,
-    
+
     /// Minimum orderbook depth in USD required beyond our order size
     #[serde(default = "default_min_depth_usd")]
     pub min_depth_usd: f64,
-    
+
     /// Duration in seconds that circuit breaker stays tripped after activation
     #[serde(default = "default_trip_duration_secs")]
     pub trip_duration_secs: u64,
@@ -327,31 +344,72 @@ impl Default for AppConfig {
 }
 
 impl AppConfig {
-    /// Loads configuration from a YAML file.
+    /// Loads configuration from both config.json and config.yaml files.
+    ///
+    /// Configuration is split into two files:
+    /// - `config.json`: Contains all non-sensitive configuration (bot settings, site endpoints, trading params, risk settings)
+    /// - `config.yaml`: Contains only sensitive credentials (private_key, funder_address)
     ///
     /// # Environment Variables
     ///
-    /// - `CONFIG`: Path to config file (defaults to "config.yaml")
+    /// - `CONFIG_JSON`: Path to JSON config file (defaults to "config.json")
+    /// - `CONFIG_YAML`: Path to YAML config file (defaults to "config.yaml")
     ///
     /// # Returns
     ///
-    /// Returns the loaded configuration or default configuration if file doesn't exist.
+    /// Returns the merged configuration or default configuration if files don't exist.
     ///
     /// # Errors
     ///
-    /// Returns an error if the config file exists but cannot be read or parsed.
+    /// Returns an error if config files exist but cannot be read or parsed.
     pub fn load() -> Result<Self> {
-        let config_path = std::env::var("CONFIG").unwrap_or_else(|_| "config.yaml".to_string());
+        let json_path = std::env::var("CONFIG_JSON").unwrap_or_else(|_| "config.json".to_string());
+        let yaml_path = std::env::var("CONFIG_YAML").unwrap_or_else(|_| "config.yaml".to_string());
 
-        if Path::new(&config_path).exists() {
-            let content = fs::read_to_string(&config_path)?;
-            let config: AppConfig = serde_yaml::from_str(&content)?;
-            Ok(config)
+        // Load JSON config (non-sensitive settings)
+        let mut config = if Path::new(&json_path).exists() {
+            let content = fs::read_to_string(&json_path)?;
+            serde_json::from_str(&content)?
         } else {
-            Ok(Self::default())
+            Self::default()
+        };
+
+        // Load YAML config (sensitive credentials only) and merge
+        if Path::new(&yaml_path).exists() {
+            let content = fs::read_to_string(&yaml_path)?;
+            // Try to parse as full AppConfig
+            match serde_yaml::from_str::<AppConfig>(&content) {
+                Ok(yaml_config) => {
+                    // Merge sensitive fields from YAML into the JSON config
+                    if !yaml_config.bot.private_key.is_empty() {
+                        config.bot.private_key = yaml_config.bot.private_key;
+                    }
+                    if yaml_config.bot.funder_address != default_zero_address() {
+                        config.bot.funder_address = yaml_config.bot.funder_address;
+                    }
+                }
+                Err(_) => {
+                    // Try parsing as just bot section with nested structure
+                    #[derive(Deserialize)]
+                    struct PartialConfig {
+                        #[serde(default)]
+                        bot: BotConfig,
+                    }
+                    if let Ok(partial) = serde_yaml::from_str::<PartialConfig>(&content) {
+                        if !partial.bot.private_key.is_empty() {
+                            config.bot.private_key = partial.bot.private_key;
+                        }
+                        if partial.bot.funder_address != default_zero_address() {
+                            config.bot.funder_address = partial.bot.funder_address;
+                        }
+                    }
+                }
+            }
         }
+
+        Ok(config)
     }
-    
+
     /// Converts risk configuration to risk guard configuration.
     pub fn risk_guard_config(&self) -> risk_guard::RiskGuardConfig {
         self.risk.to_risk_guard_config()
@@ -377,6 +435,10 @@ fn default_false() -> bool {
 // Site defaults
 fn default_gamma_api_base() -> String {
     "https://gamma-api.polymarket.com".to_string()
+}
+
+fn default_data_api_base() -> String {
+    "https://data-api.polymarket.com".to_string()
 }
 
 fn default_clob_api_base() -> String {
@@ -459,4 +521,17 @@ fn default_min_depth_usd() -> f64 {
 
 fn default_trip_duration_secs() -> u64 {
     120
+}
+
+// Additional TradingConfig defaults from config.json
+fn default_copy_percentage() -> f64 {
+    20.0
+}
+
+fn default_rate_limit() -> u32 {
+    25
+}
+
+fn default_poll_interval() -> u64 {
+    5
 }
