@@ -28,43 +28,58 @@ Polymarket Toolkits is a production-ready Rust application for automated trading
 
 ### Key Capabilities
 
-- **Terminal User Interface**: Interactive TUI built with `ratatui` for bot selection and real-time log monitoring
-- **Copy Trading Bot**: Automatically detect and copy trades from monitored wallet addresses
-- **Position Tracking**: Real-time monitoring of position changes with configurable polling intervals
-- **Automated Order Execution**: Intelligent order placement with FAK (Fill-or-Kill) and GTD (Good-Till-Date) support
-- **Risk Management**: Built-in circuit breakers and safety guards to protect against adverse market conditions
-- **Rate Limiting**: Configurable API rate limiting to prevent overwhelming external services
-- **Market Data Caching**: Efficient caching of market metadata to reduce API calls
-- **High Performance**: Optimized for low-latency execution with async I/O and connection pooling
+| Area | What you get |
+|------|----------------|
+| **TUI** | Bot selection menu and real-time logs |
+| **Copy trading** | Follow tracked wallets automatically |
+| **Safety** | Circuit breakers, risk guards, dry run mode |
+| **Performance** | Async I/O, rate limiting, market data cache |
+
+- **Terminal User Interface**
+  - Interactive TUI built with `ratatui` for bot selection and real-time log monitoring
+- **Copy Trading Bot**
+  - Automatically detect and copy trades from monitored wallet addresses
+- **Position Tracking**
+  - Real-time monitoring of position changes with configurable polling intervals
+- **Automated Order Execution**
+  - Intelligent order placement with FAK (Fill-or-Kill) and GTD (Good-Till-Date) support
+- **Risk Management**
+  - Built-in circuit breakers and safety guards to protect against adverse market conditions
+- **Rate Limiting**
+  - Configurable API rate limiting to prevent overwhelming external services
+- **Market Data Caching**
+  - Efficient caching of market metadata to reduce API calls
+- **High Performance**
+  - Optimized for low-latency execution with async I/O and connection pooling
+
+---
 
 ## Background & Motivation
 
 ### Why Rust?
 
-Rust was chosen as the programming language for this toolkit for several critical reasons:
+Rust wasn’t just chosen for this toolkit — it felt like the natural ground to build on. In a space where speed, precision, and trust must live side by side, Rust moves quietly but decisively, letting performance speak without compromise.
 
-- **Performance**: Zero-cost abstractions and memory safety without garbage collection overhead make Rust ideal for high-frequency trading operations
-- **Reliability**: Rust's ownership system and compile-time guarantees prevent entire classes of bugs (null pointer exceptions, data races, memory leaks) that could be catastrophic in trading systems
-- **Concurrency**: Built-in async/await with Tokio provides excellent concurrency primitives for handling multiple API calls, WebSocket connections, and order executions simultaneously
-- **Ecosystem**: Strong ecosystem for blockchain interactions (Alloy), HTTP clients (reqwest), and async runtime (Tokio)
-- **Production Ready**: Rust's focus on safety and performance makes it perfect for financial applications where bugs can mean real money lost
+Its ownership model removes entire classes of runtime failures, bringing a kind of structural calm to systems that operate at market tempo. With async Rust and Tokio handling concurrent flows — API calls, streams, and executions — everything moves in rhythm, supported by a solid ecosystem of tools.
+
+In the end, Rust offers more than speed or safety — it offers confidence. For software that interacts with markets in real time, that assurance is what allows this toolkit to run fast, stay reliable, and keep pace with the moment.
 
 ### The Polymarket Shift: From Latency Arbitrage to Copy Trading
 
-In early-mid February 2026, Polymarket made a significant change that reshaped the trading landscape: **they removed the ~500ms artificial delay on taker (market) orders for crypto markets**. This change was introduced quietly to reduce latency arbitrage, deter delay-exploiting bots, and improve overall market fairness and efficiency.
+Back in early–mid February 2026, Polymarket quietly rolled out a change that reshaped how people trade on the platform. They removed the ~500ms artificial delay on taker (market) orders for crypto markets — a small technical tweak that ended up having a big impact. The goal was simple: cut down on latency arbitrage, discourage delay-exploiting bots, and make markets feel more fair and efficient overall.
 
-**The Impact:**
+**What changed?**
 
-Latency-based market making and micro-arbitrage bots (like gabagool22 and similar high-frequency setups) relied heavily on this delay. Pure HFT-style arbitrage and low-risk spread farming on short-term crypto markets became much harder or unprofitable without that structural edge. Traditional bot plays like rapid taker entries on mispricings or maker-side cancellation windows largely vanished.
+A lot of latency-driven strategies suddenly lost their edge. Bots and setups that depended on that delay — things like micro-arbitrage, quick taker snipes, or maker-side cancellation windows — became far less reliable. The classic HFT-style plays that thrived on structural timing advantages mostly faded, especially in fast-moving short-term markets.
 
-**The New Strategy:**
+**Where things are heading now**
 
-Instead of fighting for vanishing micro-inefficiencies or rebuilding complex maker strategies from scratch, **copy trading leverages human/smart-wallet alpha** — directional conviction, timing, and sizing from proven traders. This approach:
+Instead of chasing shrinking micro-inefficiencies or rebuilding complicated maker strategies, many traders are shifting toward copy trading — essentially riding the alpha of proven wallets. The idea is straightforward:
 
-- **Follows the Smart Money**: Tracks wallets of successful traders who have demonstrated consistent profitability
-- **Captures Market Timing**: Benefits from human intuition about when to enter/exit positions
-- **Reduces Complexity**: No need for complex market making strategies or latency optimization
-- **Scales with Proven Traders**: As you identify more successful wallets, you can diversify your copy trading portfolio
+- Follow the smart money by tracking traders with consistent performance
+- Benefit from real market timing driven by human conviction and positioning
+- Keep things simpler without heavy infrastructure or latency tuning
+- Scale naturally by adding more high-quality wallets over time
 
 ### Why Copy Trading Bot?
 
@@ -77,6 +92,12 @@ The Copy Trading Bot is the first fully functional bot in this toolkit because:
 5. **Foundation**: Copy trading infrastructure (position tracking, order execution) serves as a foundation for future bot types
 
 This toolkit is designed to help traders adapt to the new Polymarket landscape by providing robust, reliable tools for copy trading — leveraging the wisdom of successful traders rather than competing in a latency arms race.
+
+### What is this bot?
+
+It’s simply a copy trading bot that follows a target wallet’s moves. No strategy, no risk controls, and definitely no promise of profit — this is v1. Whether you win or lose depends on things like the wallet you follow, your position size, and market dynamics. You can still make it work if you build your own approach around it. There’s already a next version but not public, and I’ll keep rolling out improvements over time.
+
+---
 
 ## Features
 
@@ -121,6 +142,8 @@ This toolkit is designed to help traders adapt to the new Polymarket landscape b
 - **Rate Limiting**: Configurable API rate limits (default: 25 requests per 10 seconds)
 - **Market ID Caching**: Reduces API calls by caching market metadata
 
+---
+
 ## Installation
 
 ### Prerequisites
@@ -152,6 +175,8 @@ cargo build
 # Run with debug logging
 RUST_LOG=debug cargo run
 ```
+
+---
 
 ## Configuration
 
@@ -243,12 +268,12 @@ The project uses a **split configuration** approach for security:
 
 ### Security Notes
 
-⚠️ **CRITICAL**: Never commit your `config.yaml` file to version control. It contains sensitive private keys.
-
-- Add `config.yaml` to `.gitignore` (already included)
-- `config.json` is safe to commit (contains no secrets)
-- Use environment variables for CI/CD deployments
-- Store private keys in secure secret management systems for production
+> ⚠️ **CRITICAL**: Never commit your `config.yaml` file to version control. It contains sensitive private keys.
+>
+> - Add `config.yaml` to `.gitignore` (already included)
+> - `config.json` is safe to commit (contains no secrets)
+> - Use environment variables for CI/CD deployments
+> - Store private keys in secure secret management systems for production
 
 ## Usage
 
@@ -310,6 +335,8 @@ Example log output:
 - **Enter**: Select bot
 - **q**: Quit application
 - **Esc**: Exit (when in bot UI)
+
+---
 
 ## Architecture
 
@@ -380,6 +407,8 @@ src/
 - **Rate Limiting**: Semaphore-based concurrency control for API calls
 - **Caching**: Market ID caching to reduce API calls
 
+---
+
 ## Safety & Risk Management
 
 ### Circuit Breaker System
@@ -406,6 +435,8 @@ The circuit breaker automatically halts trading when:
 6. **Regular Updates**: Keep dependencies updated for security patches
 7. **Backup Funds**: Never use more than you can afford to lose
 
+---
+
 ## Performance
 
 ### Benchmarks
@@ -423,6 +454,8 @@ The circuit breaker automatically halts trading when:
 - Configure `rate_limit` based on API limits
 - Monitor cache hit rates for market ID lookups
 - Use appropriate WebSocket ping intervals
+
+---
 
 ## Troubleshooting
 
@@ -458,6 +491,8 @@ The circuit breaker automatically halts trading when:
 - Ensure terminal supports ANSI colors
 - Check terminal size (minimum 80x24 recommended)
 - Try running in a different terminal emulator
+
+---
 
 ## Contributing
 
@@ -495,18 +530,18 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Disclaimer
 
-⚠️ **Trading Risk Warning**: This software is provided for educational and research purposes. Trading cryptocurrencies and prediction markets involves substantial risk of loss. Past performance does not guarantee future results. Use at your own risk.
-
-- **No Warranty**: The software is provided "as is" without warranty of any kind
-- **Not Financial Advice**: This is not investment or financial advice
-- **Compliance**: Ensure compliance with local regulations and Polymarket's terms of service
-- **Testing**: Always test thoroughly with `enable_trading: false` before using real funds
+> ⚠️ **Trading Risk Warning**: This software is provided for educational and research purposes. Trading cryptocurrencies and prediction markets involves substantial risk of loss. Past performance does not guarantee future results. Use at your own risk.
+>
+> - **No Warranty**: The software is provided "as is" without warranty of any kind  
+> - **Not Financial Advice**: This is not investment or financial advice  
+> - **Compliance**: Ensure compliance with local regulations and Polymarket's terms of service  
+> - **Testing**: Always test thoroughly with `enable_trading: false` before using real funds
 
 ## Support
 
 For issues, questions, or contributions:
 
-- Go to [here](.SUPPORT.md)
+- See [Support](SUPPORT.md) for issues and contributions
 
 ## Acknowledgments
 

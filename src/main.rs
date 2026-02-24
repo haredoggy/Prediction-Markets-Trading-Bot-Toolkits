@@ -2,7 +2,7 @@ use anyhow::Result;
 use tokio::sync::mpsc;
 
 use polymarket_toolkits::bot;
-use polymarket_toolkits::config::AppConfig;
+use polymarket_toolkits::config::settings::AppConfig;
 use polymarket_toolkits::ui::components::logs::{LogEntry, LogLevel};
 use polymarket_toolkits::ui::layout::{BotType, run_bot_ui, run_selection_ui};
 

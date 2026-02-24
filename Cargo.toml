@@ -2,7 +2,7 @@
 name = "polymarket-toolkits"
 version = "1.0.0"
 description = "Toolkits for Polymarket"
-author = ["10xAngel <10xAngel.dev@gmail.com>"]
+authors = ["10xAngel <10xAngel.dev@gmail.com>"]
 license = "MIT"
 edition = "2024"
 

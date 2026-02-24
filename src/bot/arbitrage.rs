@@ -4,7 +4,7 @@
 
 use anyhow::Result;
 
-use crate::config::AppConfig;
+use crate::config::settings::AppConfig;
 
 pub async fn run_bot(_app_config: AppConfig) -> Result<()> {
     println!("🚧 Arbitrage Bot is coming soon!");

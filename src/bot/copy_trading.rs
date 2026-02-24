@@ -7,7 +7,7 @@ use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::sync::{Semaphore, mpsc};
 
 use crate::{
-    config::AppConfig,
+    config::settings::AppConfig,
     service::{
         positions::{detect_position_changes, fetch_positions_for_wallet},
         trader::CopyTrader,
@@ -102,7 +102,7 @@ pub async fn run_bot(app_config: AppConfig, log_tx: mpsc::UnboundedSender<LogEnt
                             .into_iter()
                             .map(|change| {
                                 let semaphore = trade_semaphore.clone();
-                                let copy_trader = copy_trader_clone.clone();
+                                let mut copy_trader = copy_trader_clone.clone();
                                 let log_tx = log_tx_clone.clone();
                                 let change_clone = change.clone();
 

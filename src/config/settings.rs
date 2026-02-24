@@ -1,366 +1,532 @@
-/// Settings and configuration management
-/// Handles environment variable loading and validation
+//! Unified configuration management for the Polymarket trading bot.
+//!
+//! This module provides a single, comprehensive configuration structure that consolidates
+//! all bot settings, trading parameters, site endpoints, and risk management configuration.
 
-use anyhow::{Context, Result};
-use std::env;
+use anyhow::Result;
+use serde::{Deserialize, Serialize};
+use serde_json;
+use serde_yaml;
+use std::fs;
 use std::path::Path;
 use std::time::Duration;
+
 use crate::utils::risk_guard;
 
 // ============================================================================
-// Blockchain Constants
+// Unified Configuration Structure
 // ============================================================================
 
-use once_cell::sync::Lazy;
+/// Main application configuration structure.
+///
+/// Consolidates all configuration needed to run the trading bot, organized into
+/// logical sections: bot settings, site endpoints, trading parameters, and risk management.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AppConfig {
+    /// Bot-specific configuration (wallet, credentials, API keys)
+    #[serde(default)]
+    pub bot: BotConfig,
 
-pub const ORDERS_FILLED_EVENT_SIGNATURE: &str =
-    "0xd0a08e8c493f9c94f29311604c9de1b4e8c8d4c06bd0c789af57f2d65bfec0f6";
+    /// Site endpoints and API URLs
+    #[serde(default)]
+    pub site: SiteConfig,
 
-/// Target whale address topic - loaded from TARGET_WHALE_ADDRESS env var
-/// Format: 40-char hex address without 0x prefix (e.g., "204f72f35326db932158cba6adff0b9a1da95e14")
-/// Gets zero-padded to 66 chars with 0x prefix for topic matching
-/// 
-/// Note: This is validated in Config::from_env() before use, so expect should not panic
-/// in normal operation. If you see this panic, it means Config::from_env() was not called first.
-pub static TARGET_TOPIC_HEX: Lazy<String> = Lazy::new(|| {
-    let addr = env::var("TARGET_WHALE_ADDRESS")
-        .expect("TARGET_WHALE_ADDRESS should have been validated in Config::from_env(). \
-                If you see this, please ensure you call Config::from_env() before using TARGET_TOPIC_HEX");
-    format!("0x000000000000000000000000{}", addr.trim_start_matches("0x").to_lowercase())
-});
+    /// Trading parameters and execution settings
+    #[serde(default)]
+    pub trading: TradingConfig,
 
-pub const MONITORED_ADDRESSES: [&str; 3] = [
-    "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E",
-    "0x4d97dcd97ec945f40cf65f87097ace5ea0476045",
-    "0xC5d563A36AE78145C45a50134d48A1215220f80a",
-];
-
-// ============================================================================
-// API & File Constants
-// ============================================================================
-
-// Debug flag - set to true to print full API error messages (remove after debugging)
-pub const DEBUG_FULL_ERRORS: bool = true;
-
-// ============================================================================
-// Trading Constants
-// ============================================================================
-
-pub const PRICE_BUFFER: f64 = 0.00;
-pub const SCALING_RATIO: f64 = 1.00;
-pub const MIN_CASH_VALUE: f64 = 0.00;
-pub const MIN_SHARE_COUNT: f64 = 0.0;  // Set to 0 to rely purely on MIN_CASH_VALUE for EV scaling
-pub const USE_PROBABILISTIC_SIZING: bool = true;
-
-// Fixed trade value: set to 1.00 for $1 per trade (tx tracker wallet style)
-// When set > 0, ignores SCALING_RATIO and uses fixed dollar amount per trade
-pub const FIXED_TRADE_VALUE: f64 = 1.00;
-
-// Minimum whale trade size to copy (skip trades below this)
-pub const MIN_WHALE_SHARES_TO_COPY: f64 = 0.0;
-
-/// Returns true if this trade should be skipped (too small, negative expected value)
-#[inline]
-pub fn should_skip_trade(whale_shares: f64) -> bool {
-    whale_shares < MIN_WHALE_SHARES_TO_COPY
+    /// Risk management and circuit breaker settings
+    #[serde(default)]
+    pub risk: RiskConfig,
 }
 
 // ============================================================================
-// Timeouts
+// Bot Configuration
 // ============================================================================
 
-pub const ORDER_REPLY_TIMEOUT: Duration = Duration::from_secs(10);
+/// Bot-specific configuration including wallet credentials and API keys.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BotConfig {
+    /// List of wallet addresses to track for copy trading
+    #[serde(default)]
+    pub wallets_to_track: Vec<String>,
 
-// ============================================================================
-// Resubmitter Configuration (for FAK failures)
-// ============================================================================
-
-pub const RESUBMIT_PRICE_INCREMENT: f64 = 0.01;
-
-// Tier-based max resubmit attempts (4000+ gets 5, others get 4)
-#[inline]
-pub fn get_max_resubmit_attempts(whale_shares: f64) -> u8 {
-    if whale_shares >= 4000.0 { 5 }
-    else { 4 }
-}
-
-/// Returns true if this attempt should increment price, false for flat retry
-/// >= 4000: chase attempt 1 only
-/// <4000: never chase (buffer=0)
-#[inline]
-pub fn should_increment_price(whale_shares: f64, attempt: u8) -> bool {
-    if whale_shares >= 4000.0 {
-        attempt == 1  
-    } else {
-        false  
-    }
-}
-
-#[inline]
-pub fn get_gtd_expiry_secs(is_live: bool) -> u64 {
-    if is_live { 61 }    
-    else { 1800 }        
-}
-
-// Tier-based max buffer for resubmits (on top of initial tier buffer)
-// >= 4000: chase up to +0.02
-// <4000: no chasing (0.00)
-#[inline]
-pub fn get_resubmit_max_buffer(whale_shares: f64) -> f64 {
-    if whale_shares >= 4000.0 { 0.01 }
-    else { 0.00 }
-}
-pub const BOOK_REQ_TIMEOUT: Duration = Duration::from_millis(2500);
-pub const WS_PING_TIMEOUT: Duration = Duration::from_secs(300);
-pub const WS_RECONNECT_DELAY: Duration = Duration::from_secs(3);
-
-// ============================================================================
-// Execution Tiers
-// ============================================================================
-
-#[derive(Debug, Clone, Copy)]
-pub struct ExecutionTier {
-    pub min_shares: f64,
-    pub price_buffer: f64,
-    pub order_action: &'static str,
-    pub size_multiplier: f64,
-}
-
-pub const EXECUTION_TIERS: [ExecutionTier; 3] = [
-    ExecutionTier {
-        min_shares: 4000.0,
-        price_buffer: 0.01,
-        order_action: "FAK",
-        size_multiplier: 1.25,
-    },
-    ExecutionTier {
-        min_shares: 2000.0,
-        price_buffer: 0.01,
-        order_action: "FAK",
-        size_multiplier: 1.0,
-    },
-    ExecutionTier {
-        min_shares: 1000.0,
-        price_buffer: 0.00,
-        order_action: "FAK",
-        size_multiplier: 1.0,
-    },
-];
-
-/// Get tier params for a given trade size
-/// Returns (buffer, order_action, size_multiplier)
-#[inline]
-pub fn get_tier_params(whale_shares: f64, side_is_buy: bool, token_id: &str) -> (f64, &'static str, f64) {
-    if !side_is_buy {
-        return (PRICE_BUFFER, "GTD", 1.0);
-    }
-
-    // Get base tier params - direct if-else is faster than iterator for 3 tiers
-    let (base_buffer, order_action, size_multiplier) = if whale_shares >= 4000.0 {
-        (0.01, "FAK", 1.25)
-    } else if whale_shares >= 2000.0 {
-        (0.01, "FAK", 1.0)
-    } else if whale_shares >= 1000.0 {
-        (0.0, "FAK", 1.0)
-    } else {
-        (PRICE_BUFFER, "FAK", 1.0)  // Small buys use FAK (Fill and Kill)
-    };
-
-    (base_buffer, order_action, size_multiplier)
-}
-
-// ============================================================================
-// Runtime Configuration (loaded from environment)
-// ============================================================================
-
-#[derive(Debug, Clone)]
-pub struct Config {
-    // Credentials
+    /// Private key for signing transactions (64-character hex, no 0x prefix)
+    #[serde(default)]
     pub private_key: String,
+
+    /// Proxy wallet address (funder) for the account
+    #[serde(default = "default_zero_address")]
     pub funder_address: String,
-    
-    // WebSocket
-    pub wss_url: String,
-    
-    // Trading flags
+
+    /// Whether trading is enabled
+    #[serde(default = "default_true")]
     pub enable_trading: bool,
-    pub mock_trading: bool,
-    
-    // Circuit breaker
-    pub cb_large_trade_shares: f64,
-    pub cb_consecutive_trigger: u8,
-    pub cb_sequence_window_secs: u64,
-    pub cb_min_depth_usd: f64,
-    pub cb_trip_duration_secs: u64,
 }
 
-impl Config {
-    /// Load configuration from environment variables
-    /// 
-    /// # Errors
-    /// 
-    /// Returns errors with helpful messages if required configuration is missing or invalid.
-    /// For detailed setup help, see docs/02_SETUP_GUIDE.md
-    pub fn from_env() -> Result<Self> {
-        // Check if .env file exists (helpful error for beginners)
-        if !Path::new(".env").exists() {
-            anyhow::bail!(
-                "Configuration file .env not found!\n\
-                \n\
-                Setup steps:\n\
-                1. Copy .env.example to .env\n\
-                2. Open .env in a text editor\n\
-                3. Fill in your configuration values\n\
-                    4. See docs/02_SETUP_GUIDE.md for detailed instructions\n\
-                \n\
-                Quick check: Run 'cargo run --release --bin check_config' to validate your setup"
-            );
+impl Default for BotConfig {
+    fn default() -> Self {
+        Self {
+            wallets_to_track: Vec::new(),
+            private_key: String::new(),
+            funder_address: default_zero_address(),
+            enable_trading: true,
         }
-        
-        let private_key = env::var("PRIVATE_KEY")
-            .context("PRIVATE_KEY env var is required. Add it to your .env file.\n\
-                     Format: 64-character hex string (no 0x prefix)\n\
-                     Example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")?;
-        
-        // Validate private key format
-        let key_clean = private_key.trim().strip_prefix("0x").unwrap_or(private_key.trim());
-        if key_clean.len() != 64 {
-            anyhow::bail!(
-                "PRIVATE_KEY must be exactly 64 hex characters (found {}).\n\
-                Remove any '0x' prefix. Current value starts with: {}",
-                key_clean.len(),
-                if key_clean.len() > 10 { format!("{}...", &key_clean[..10]) } else { key_clean.to_string() }
-            );
+    }
+}
+
+// ============================================================================
+// Site Configuration
+// ============================================================================
+
+/// Site endpoints and API URLs configuration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SiteConfig {
+    /// Gamma API base URL for market data
+    #[serde(default = "default_gamma_api_base")]
+    pub gamma_api_base: String,
+
+    /// Data API base URL for position data
+    #[serde(default = "default_data_api_base")]
+    pub data_api_base: String,
+
+    /// CLOB API base URL for order operations
+    #[serde(default = "default_clob_api_base")]
+    pub clob_api_base: String,
+
+    /// CLOB WebSocket URL for real-time order updates
+    #[serde(default = "default_clob_wss_url")]
+    pub clob_wss_url: String,
+}
+
+impl Default for SiteConfig {
+    fn default() -> Self {
+        Self {
+            gamma_api_base: default_gamma_api_base(),
+            data_api_base: default_data_api_base(),
+            clob_api_base: default_clob_api_base(),
+            clob_wss_url: default_clob_wss_url(),
         }
-        if !key_clean.chars().all(|c| c.is_ascii_hexdigit()) {
-            anyhow::bail!("PRIVATE_KEY contains invalid characters. Must be hexadecimal (0-9, a-f, A-F).");
+    }
+}
+
+impl SiteConfig {
+    /// Returns the Gamma API base URL
+    pub fn gamma_api_base(&self) -> &str {
+        &self.gamma_api_base
+    }
+
+    /// Returns the Data API base URL
+    pub fn data_api_base(&self) -> &str {
+        &self.data_api_base
+    }
+
+    /// Returns the CLOB API base URL
+    pub fn clob_api_base(&self) -> &str {
+        &self.clob_api_base
+    }
+
+    /// Returns the CLOB WebSocket URL
+    pub fn clob_wss_url(&self) -> &str {
+        &self.clob_wss_url
+    }
+}
+
+// ============================================================================
+// Trading Configuration
+// ============================================================================
+
+/// Trading parameters and execution settings.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TradingConfig {
+    /// Price buffer for order placement
+    #[serde(default = "default_price_buffer")]
+    pub price_buffer: f64,
+
+    /// Scaling ratio for order size calculation
+    #[serde(default = "default_scaling_ratio")]
+    pub scaling_ratio: f64,
+
+    /// Minimum cash value per trade (USD)
+    #[serde(default = "default_min_cash_value")]
+    pub min_cash_value: f64,
+
+    /// Minimum share count per trade
+    #[serde(default = "default_min_share_count")]
+    pub min_share_count: f64,
+
+    /// Whether to use probabilistic sizing
+    #[serde(default = "default_true")]
+    pub use_probabilistic_sizing: bool,
+
+    /// Fixed trade value in USD (0.0 = disabled, >0 = fixed dollar amount per trade)
+    #[serde(default = "default_fixed_trade_value")]
+    pub fixed_trade_value: f64,
+
+    /// Minimum whale trade size to copy (skip trades below this)
+    #[serde(default = "default_min_whale_shares")]
+    pub min_whale_shares_to_copy: f64,
+
+    /// Price increment for resubmit attempts
+    #[serde(default = "default_resubmit_price_increment")]
+    pub resubmit_price_increment: f64,
+
+    /// Order reply timeout
+    #[serde(default = "default_order_reply_timeout_secs")]
+    pub order_reply_timeout_secs: u64,
+
+    /// Book request timeout (milliseconds)
+    #[serde(default = "default_book_req_timeout_ms")]
+    pub book_req_timeout_ms: u64,
+
+    /// WebSocket ping timeout (seconds)
+    #[serde(default = "default_ws_ping_timeout_secs")]
+    pub ws_ping_timeout_secs: u64,
+
+    /// WebSocket reconnect delay (seconds)
+    #[serde(default = "default_ws_reconnect_delay_secs")]
+    pub ws_reconnect_delay_secs: u64,
+
+    /// GTD expiry seconds for live markets
+    #[serde(default = "default_gtd_expiry_live_secs")]
+    pub gtd_expiry_live_secs: u64,
+
+    /// GTD expiry seconds for closed markets
+    #[serde(default = "default_gtd_expiry_closed_secs")]
+    pub gtd_expiry_closed_secs: u64,
+
+    /// Percentage of trade size to copy (e.g., 2.0 = 2%)
+    #[serde(default = "default_copy_percentage")]
+    pub copy_percentage: f64,
+
+    /// Rate limit for API requests (requests per second)
+    #[serde(default = "default_rate_limit")]
+    pub rate_limit: u32,
+
+    /// Polling interval in seconds for checking new trades
+    #[serde(default = "default_poll_interval")]
+    pub poll_interval: u64,
+}
+
+impl Default for TradingConfig {
+    fn default() -> Self {
+        Self {
+            price_buffer: default_price_buffer(),
+            scaling_ratio: default_scaling_ratio(),
+            min_cash_value: default_min_cash_value(),
+            min_share_count: default_min_share_count(),
+            use_probabilistic_sizing: true,
+            fixed_trade_value: default_fixed_trade_value(),
+            min_whale_shares_to_copy: default_min_whale_shares(),
+            resubmit_price_increment: default_resubmit_price_increment(),
+            order_reply_timeout_secs: default_order_reply_timeout_secs(),
+            book_req_timeout_ms: default_book_req_timeout_ms(),
+            ws_ping_timeout_secs: default_ws_ping_timeout_secs(),
+            ws_reconnect_delay_secs: default_ws_reconnect_delay_secs(),
+            gtd_expiry_live_secs: default_gtd_expiry_live_secs(),
+            gtd_expiry_closed_secs: default_gtd_expiry_closed_secs(),
+            copy_percentage: default_copy_percentage(),
+            rate_limit: default_rate_limit(),
+            poll_interval: default_poll_interval(),
         }
-        
-        let funder_address = env::var("FUNDER_ADDRESS")
-            .context("FUNDER_ADDRESS env var is required. Add it to your .env file.\n\
-                     Format: 40-character hex address (can include 0x prefix)\n\
-                     This should match the wallet from your PRIVATE_KEY")?;
-        
-        // Validate funder address format
-        let addr_clean = funder_address.trim().strip_prefix("0x").unwrap_or(funder_address.trim());
-        if addr_clean.len() != 40 {
-            anyhow::bail!(
-                "FUNDER_ADDRESS must be exactly 40 hex characters (found {}).\n\
-                Current value: {}",
-                addr_clean.len(),
-                if addr_clean.len() > 20 { format!("{}...", &addr_clean[..20]) } else { addr_clean.to_string() }
-            );
-        }
-        if !addr_clean.chars().all(|c| c.is_ascii_hexdigit()) {
-            anyhow::bail!("FUNDER_ADDRESS contains invalid characters. Must be hexadecimal (0-9, a-f, A-F).");
-        }
-        
-        // WebSocket URL from either provider
-        let wss_url = if let Ok(key) = env::var("ALCHEMY_API_KEY") {
-            let key = key.trim();
-            if key.is_empty() || key == "your_alchemy_api_key_here" {
-                anyhow::bail!(
-                    "ALCHEMY_API_KEY is set but has placeholder value.\n\
-                    Get your API key from https://www.alchemy.com/ (free tier available)\n\
-                    Then add it to your .env file"
-                );
-            }
-            format!("wss://polygon-mainnet.g.alchemy.com/v2/{}", key)
-        } else if let Ok(key) = env::var("CHAINSTACK_API_KEY") {
-            let key = key.trim();
-            if key.is_empty() || key == "your_chainstack_api_key_here" {
-                anyhow::bail!(
-                    "CHAINSTACK_API_KEY is set but has placeholder value.\n\
-                    Get your API key from https://chainstack.com/ (free tier available)\n\
-                    Or use ALCHEMY_API_KEY instead (recommended for beginners)"
-                );
-            }
-            format!("wss://polygon-mainnet.core.chainstack.com/{}", key)
+    }
+}
+
+impl TradingConfig {
+    /// Returns true if this trade should be skipped (too small)
+    #[inline]
+    pub fn should_skip_trade(&self, whale_shares: f64) -> bool {
+        whale_shares < self.min_whale_shares_to_copy
+    }
+
+    /// Returns GTD expiry seconds based on market liveness
+    #[inline]
+    pub fn get_gtd_expiry_secs(&self, is_live: bool) -> u64 {
+        if is_live {
+            self.gtd_expiry_live_secs
         } else {
-            anyhow::bail!(
-                "WebSocket API key required!\n\
-                \n\
-                Set either ALCHEMY_API_KEY or CHAINSTACK_API_KEY in your .env file.\n\
-                \n\
-                Recommended (beginners): ALCHEMY_API_KEY\n\
-                1. Sign up at https://www.alchemy.com/\n\
-                2. Create app (Polygon Mainnet)\n\
-                3. Copy API key to .env file\n\
-                \n\
-                Alternative: CHAINSTACK_API_KEY\n\
-                1. Sign up at https://chainstack.com/\n\
-                2. Create Polygon node\n\
-                3. Copy API key to .env file\n\
-                \n\
-                Run 'cargo run --release --bin check_config' to validate your setup"
-            );
-        };
-        
-        // Validate TARGET_WHALE_ADDRESS (used by TARGET_TOPIC_HEX lazy static)
-        let target_whale = env::var("TARGET_WHALE_ADDRESS")
-            .context("TARGET_WHALE_ADDRESS env var is required. Add it to your .env file.\n\
-                     Format: 40-character hex address (no 0x prefix)\n\
-                     This is the whale address you want to copy trades from.\n\
-                     Find whale addresses on Polymarket leaderboards")?;
-        
-        let whale_clean = target_whale.trim().strip_prefix("0x").unwrap_or(target_whale.trim());
-        if whale_clean.is_empty() || whale_clean == "target_whale_address_here" {
-            anyhow::bail!(
-                "TARGET_WHALE_ADDRESS is set but has placeholder value.\n\
-                Replace 'target_whale_address_here' with the actual whale address you want to copy.\n\
-                Find whale addresses on Polymarket leaderboards or from successful traders."
-            );
+            self.gtd_expiry_closed_secs
         }
-        if whale_clean.len() != 40 {
-            anyhow::bail!(
-                "TARGET_WHALE_ADDRESS must be exactly 40 hex characters (found {}).\n\
-                Remove '0x' prefix if present. Current value: {}",
-                whale_clean.len(),
-                if whale_clean.len() > 20 { format!("{}...", &whale_clean[..20]) } else { whale_clean.to_string() }
-            );
-        }
-        if !whale_clean.chars().all(|c| c.is_ascii_hexdigit()) {
-            anyhow::bail!("TARGET_WHALE_ADDRESS contains invalid characters. Must be hexadecimal (0-9, a-f, A-F).");
-        }
-        
-        let enable_trading = env::var("ENABLE_TRADING")
-            .map(|v| v.eq_ignore_ascii_case("true") || v == "1")
-            .unwrap_or(true);
-        
-        let mock_trading = env::var("MOCK_TRADING")
-            .map(|v| v.eq_ignore_ascii_case("true") || v == "1")
-            .unwrap_or(false);
-        
-        Ok(Self {
-            private_key,
-            funder_address,
-            wss_url,
-            enable_trading,
-            mock_trading,
-            cb_large_trade_shares: env_parse("CB_LARGE_TRADE_SHARES", 1500.0),
-            cb_consecutive_trigger: env_parse("CB_CONSECUTIVE_TRIGGER", 2u8),
-            cb_sequence_window_secs: env_parse("CB_SEQUENCE_WINDOW_SECS", 30),
-            cb_min_depth_usd: env_parse("CB_MIN_DEPTH_USD", 200.0),
-            cb_trip_duration_secs: env_parse("CB_TRIP_DURATION_SECS", 120),
-        })
     }
-    
-    /// Convert to RiskGuardConfig for safety checks
-    pub fn risk_guard_config(&self) -> risk_guard::RiskGuardConfig {
-        risk_guard::RiskGuardConfig {
-            large_trade_shares: self.cb_large_trade_shares,
-            consecutive_trigger: self.cb_consecutive_trigger,
-            sequence_window: Duration::from_secs(self.cb_sequence_window_secs),
-            min_depth_beyond_usd: self.cb_min_depth_usd,
-            trip_duration: Duration::from_secs(self.cb_trip_duration_secs),
+
+    /// Returns order reply timeout as Duration
+    #[inline]
+    pub fn order_reply_timeout(&self) -> Duration {
+        Duration::from_secs(self.order_reply_timeout_secs)
+    }
+
+    /// Returns book request timeout as Duration
+    #[inline]
+    pub fn book_req_timeout(&self) -> Duration {
+        Duration::from_millis(self.book_req_timeout_ms)
+    }
+
+    /// Returns WebSocket ping timeout as Duration
+    #[inline]
+    pub fn ws_ping_timeout(&self) -> Duration {
+        Duration::from_secs(self.ws_ping_timeout_secs)
+    }
+
+    /// Returns WebSocket reconnect delay as Duration
+    #[inline]
+    pub fn ws_reconnect_delay(&self) -> Duration {
+        Duration::from_secs(self.ws_reconnect_delay_secs)
+    }
+}
+
+// ============================================================================
+// Risk Configuration
+// ============================================================================
+
+/// Risk management and circuit breaker configuration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RiskConfig {
+    /// Minimum share count to be considered a "large trade" for circuit breaker
+    #[serde(default = "default_large_trade_shares")]
+    pub large_trade_shares: f64,
+
+    /// Number of consecutive large trades needed to trigger circuit breaker
+    #[serde(default = "default_consecutive_trigger")]
+    pub consecutive_trigger: u8,
+
+    /// Time window in seconds for tracking consecutive trades
+    #[serde(default = "default_sequence_window_secs")]
+    pub sequence_window_secs: u64,
+
+    /// Minimum orderbook depth in USD required beyond our order size
+    #[serde(default = "default_min_depth_usd")]
+    pub min_depth_usd: f64,
+
+    /// Duration in seconds that circuit breaker stays tripped after activation
+    #[serde(default = "default_trip_duration_secs")]
+    pub trip_duration_secs: u64,
+}
+
+impl Default for RiskConfig {
+    fn default() -> Self {
+        Self {
+            large_trade_shares: default_large_trade_shares(),
+            consecutive_trigger: default_consecutive_trigger(),
+            sequence_window_secs: default_sequence_window_secs(),
+            min_depth_usd: default_min_depth_usd(),
+            trip_duration_secs: default_trip_duration_secs(),
         }
     }
 }
 
-/// Parse env var with default fallback
-fn env_parse<T: std::str::FromStr>(key: &str, default: T) -> T {
-    env::var(key)
-        .ok()
-        .and_then(|v| v.parse().ok())
-        .unwrap_or(default)
+impl RiskConfig {
+    /// Converts risk configuration to risk guard configuration.
+    pub fn to_risk_guard_config(&self) -> risk_guard::RiskGuardConfig {
+        risk_guard::RiskGuardConfig {
+            large_trade_shares: self.large_trade_shares,
+            consecutive_trigger: self.consecutive_trigger,
+            sequence_window: Duration::from_secs(self.sequence_window_secs),
+            min_depth_beyond_usd: self.min_depth_usd,
+            trip_duration: Duration::from_secs(self.trip_duration_secs),
+        }
+    }
+}
+
+// ============================================================================
+// AppConfig Implementation
+// ============================================================================
+
+impl Default for AppConfig {
+    fn default() -> Self {
+        Self {
+            bot: BotConfig::default(),
+            site: SiteConfig::default(),
+            trading: TradingConfig::default(),
+            risk: RiskConfig::default(),
+        }
+    }
+}
+
+impl AppConfig {
+    /// Loads configuration from both config.json and config.yaml files.
+    ///
+    /// Configuration is split into two files:
+    /// - `config.json`: Contains all non-sensitive configuration (bot settings, site endpoints, trading params, risk settings)
+    /// - `config.yaml`: Contains only sensitive credentials (private_key, funder_address)
+    ///
+    /// # Environment Variables
+    ///
+    /// - `CONFIG_JSON`: Path to JSON config file (defaults to "config.json")
+    /// - `CONFIG_YAML`: Path to YAML config file (defaults to "config.yaml")
+    ///
+    /// # Returns
+    ///
+    /// Returns the merged configuration or default configuration if files don't exist.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if config files exist but cannot be read or parsed.
+    pub fn load() -> Result<Self> {
+        let json_path = std::env::var("CONFIG_JSON").unwrap_or_else(|_| "config.json".to_string());
+        let yaml_path = std::env::var("CONFIG_YAML").unwrap_or_else(|_| "config.yaml".to_string());
+
+        // Load JSON config (non-sensitive settings)
+        let mut config = if Path::new(&json_path).exists() {
+            let content = fs::read_to_string(&json_path)?;
+            serde_json::from_str(&content)?
+        } else {
+            Self::default()
+        };
+
+        // Load YAML config (sensitive credentials only) and merge
+        if Path::new(&yaml_path).exists() {
+            let content = fs::read_to_string(&yaml_path)?;
+            // Try to parse as full AppConfig
+            match serde_yaml::from_str::<AppConfig>(&content) {
+                Ok(yaml_config) => {
+                    // Merge sensitive fields from YAML into the JSON config
+                    if !yaml_config.bot.private_key.is_empty() {
+                        config.bot.private_key = yaml_config.bot.private_key;
+                    }
+                    if yaml_config.bot.funder_address != default_zero_address() {
+                        config.bot.funder_address = yaml_config.bot.funder_address;
+                    }
+                }
+                Err(_) => {
+                    // Try parsing as just bot section with nested structure
+                    #[derive(Deserialize)]
+                    struct PartialConfig {
+                        #[serde(default)]
+                        bot: BotConfig,
+                    }
+                    if let Ok(partial) = serde_yaml::from_str::<PartialConfig>(&content) {
+                        if !partial.bot.private_key.is_empty() {
+                            config.bot.private_key = partial.bot.private_key;
+                        }
+                        if partial.bot.funder_address != default_zero_address() {
+                            config.bot.funder_address = partial.bot.funder_address;
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(config)
+    }
+
+    /// Converts risk configuration to risk guard configuration.
+    pub fn risk_guard_config(&self) -> risk_guard::RiskGuardConfig {
+        self.risk.to_risk_guard_config()
+    }
+}
+
+// ============================================================================
+// Default Value Helper Functions
+// ============================================================================
+
+fn default_zero_address() -> String {
+    "0x0000000000000000000000000000000000000000".to_string()
+}
+
+fn default_true() -> bool {
+    true
+}
+
+// Site defaults
+fn default_gamma_api_base() -> String {
+    "https://gamma-api.polymarket.com".to_string()
+}
+
+fn default_data_api_base() -> String {
+    "https://data-api.polymarket.com".to_string()
+}
+
+fn default_clob_api_base() -> String {
+    "https://clob.polymarket.com".to_string()
+}
+
+fn default_clob_wss_url() -> String {
+    "wss://clob.polymarket.com".to_string()
+}
+
+// Trading defaults
+fn default_price_buffer() -> f64 {
+    0.00
+}
+
+fn default_scaling_ratio() -> f64 {
+    1.00
+}
+
+fn default_min_cash_value() -> f64 {
+    0.00
+}
+
+fn default_min_share_count() -> f64 {
+    0.0
+}
+
+fn default_fixed_trade_value() -> f64 {
+    1.00
+}
+
+fn default_min_whale_shares() -> f64 {
+    0.0
+}
+
+fn default_resubmit_price_increment() -> f64 {
+    0.01
+}
+
+fn default_order_reply_timeout_secs() -> u64 {
+    10
+}
+
+fn default_book_req_timeout_ms() -> u64 {
+    2500
+}
+
+fn default_ws_ping_timeout_secs() -> u64 {
+    300
+}
+
+fn default_ws_reconnect_delay_secs() -> u64 {
+    3
+}
+
+fn default_gtd_expiry_live_secs() -> u64 {
+    61
+}
+
+fn default_gtd_expiry_closed_secs() -> u64 {
+    1800
+}
+
+// Risk defaults
+fn default_large_trade_shares() -> f64 {
+    1500.0
+}
+
+fn default_consecutive_trigger() -> u8 {
+    2
+}
+
+fn default_sequence_window_secs() -> u64 {
+    30
+}
+
+fn default_min_depth_usd() -> f64 {
+    200.0
+}
+
+fn default_trip_duration_secs() -> u64 {
+    120
+}
+
+// Additional TradingConfig defaults from config.json
+fn default_copy_percentage() -> f64 {
+    20.0
+}
+
+fn default_rate_limit() -> u32 {
+    25
+}
+
+fn default_poll_interval() -> u64 {
+    5
 }

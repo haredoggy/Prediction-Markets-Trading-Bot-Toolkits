@@ -3,6 +3,8 @@
 //! Executes copy trades on Polymarket based on detected position changes.
 //! Thread-safe for parallel execution; caches market_id by slug to reduce latency.
 
+use alloy::signers::k256::ecdsa::SigningKey;
+use alloy::signers::local::LocalSigner;
 use anyhow::{Context, Result};
 use polymarket_client_sdk::auth::Normal;
 use polymarket_client_sdk::auth::state::Authenticated;
@@ -16,7 +18,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
 
-use crate::config::AppConfig;
+use crate::config::settings::AppConfig;
 use crate::service::client::create_authenticated_clob_client;
 use crate::service::orders;
 use crate::ui::components::logs::{LogEntry, LogLevel};
@@ -28,6 +30,9 @@ use crate::ui::components::logs::{LogEntry, LogLevel};
 pub struct CopyTrader {
     /// Authenticated CLob client
     client: Client<Authenticated<Normal>>,
+
+    /// Signer for the client
+    signer: LocalSigner<SigningKey>,
 
     /// HTTP client for Gamma API requests
     http_client: HttpClient,
@@ -59,13 +64,16 @@ impl CopyTrader {
             .build()
             .context("Failed to create HTTP client")?;
 
+        let (client, signer) = create_authenticated_clob_client(
+            config.site.clob_api_base.clone(),
+            config.bot.private_key.clone(),
+            config.bot.funder_address.clone(),
+        )
+        .await?;
+
         Ok(Self {
-            client: create_authenticated_clob_client(
-                config.site.clob_api_base.clone(),
-                config.bot.private_key.clone(),
-                config.bot.funder_address.clone(),
-            )
-            .await?,
+            client,
+            signer,
             http_client,
             config: config.clone(),
             market_id_cache: Arc::new(Mutex::new(HashMap::new())),
@@ -109,15 +117,6 @@ impl CopyTrader {
                 return Some(market_id.clone());
             }
         }
-
-        // Fetch market from Gamma API using slug
-        self.log(
-            format!(
-                "get_market_id: Fetching market from Gamma API for slug: {}",
-                slug
-            ),
-            LogLevel::Info,
-        );
 
         // Use /markets endpoint with slug query parameter
         let url = format!("{}/markets?slug={}", self.config.site.gamma_api_base, slug);
@@ -210,13 +209,6 @@ impl CopyTrader {
             cache.insert(slug.to_string(), market_id.clone());
         }
 
-        self.log(
-            format!(
-                "get_market_id: Successfully resolved slug '{}' to market_id: {}",
-                slug, market_id
-            ),
-            LogLevel::Info,
-        );
         Some(market_id)
     }
 
@@ -231,19 +223,10 @@ impl CopyTrader {
     ///
     /// Order response on success, None otherwise
     pub async fn execute_trade(
-        &self,
+        &mut self,
         change: &HashMap<String, String>,
         market_id: Option<String>,
     ) -> Option<PostOrderResponse> {
-        // Log the incoming change for debugging
-        self.log(
-            format!(
-                "execute_trade called with change keys: {:?}",
-                change.keys().collect::<Vec<_>>()
-            ),
-            LogLevel::Info,
-        );
-
         // Extract change data with proper error handling
         let side = match change.get("type") {
             Some(t) => t.to_lowercase(),
@@ -317,21 +300,8 @@ impl CopyTrader {
             id
         } else {
             let slug_str = slug.map(|s| s.as_str());
-            self.log(
-                format!(
-                    "execute_trade: Looking up market_id for slug: {:?}",
-                    slug_str
-                ),
-                LogLevel::Info,
-            );
             match self.get_market_id(slug_str).await {
-                Some(id) => {
-                    self.log(
-                        format!("execute_trade: Found market_id: {}", id),
-                        LogLevel::Info,
-                    );
-                    id
-                }
+                Some(id) => id,
                 None => {
                     self.log(
                         format!(
@@ -383,8 +353,8 @@ impl CopyTrader {
             // Buy order - use USDC amount
             let usdc_amount = Decimal::try_from(our_size).unwrap_or_else(|_| Decimal::from(1u64)); // Fallback to $1.00 if conversion fails
             orders::buy_order(
-                &self.config.bot.private_key,
-                &self.config.bot.funder_address,
+                &self.client.clone(),
+                &mut self.signer,
                 asset_id,
                 usdc_amount,
                 Some(polymarket_client_sdk::clob::types::OrderType::FOK),
@@ -397,8 +367,8 @@ impl CopyTrader {
             // Create Decimal for 0.01 (market price for quick fill)
             let market_price = Decimal::from(1) / Decimal::from(100);
             orders::sell_order(
-                &self.config.bot.private_key,
-                &self.config.bot.funder_address,
+                &self.client.clone(),
+                &mut self.signer,
                 asset_id,
                 size_decimal,
                 market_price,

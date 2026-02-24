@@ -1,60 +1,23 @@
-use alloy::primitives::{Address, U256};
-use alloy::signers::{Signer as _, local::LocalSigner};
+use alloy::primitives::U256;
+use alloy::signers::k256::ecdsa::SigningKey;
+use alloy::signers::local::LocalSigner;
 use anyhow::{Result, anyhow};
 use chrono::DateTime;
-use polymarket_client_sdk::POLYGON;
+use polymarket_client_sdk::auth::Normal;
+use polymarket_client_sdk::auth::state::Authenticated;
 use polymarket_client_sdk::clob::Client;
 use polymarket_client_sdk::clob::types::response::PostOrderResponse;
-use polymarket_client_sdk::clob::types::{Amount, OrderType, Side, SignatureType};
+use polymarket_client_sdk::clob::types::{Amount, OrderType, Side};
 use polymarket_client_sdk::types::Decimal;
 use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::sync::{mpsc, oneshot};
-
-use crate::config::settings::ORDER_REPLY_TIMEOUT;
-use crate::models::{ParsedEvent, ResubmitRequest, WorkItem};
-
-// ============================================================================
-// Order Engine
-// ============================================================================
-
-#[derive(Clone)]
-pub struct OrderEngine {
-    pub tx: mpsc::Sender<WorkItem>,
-    #[allow(dead_code)]
-    pub resubmit_tx: mpsc::UnboundedSender<ResubmitRequest>,
-    pub enable_trading: bool,
-}
-
-impl OrderEngine {
-    pub async fn submit(&self, evt: ParsedEvent, is_live: Option<bool>) -> String {
-        if !self.enable_trading {
-            return "SKIPPED_DISABLED".into();
-        }
-
-        let (resp_tx, resp_rx) = oneshot::channel();
-        if let Err(e) = self.clone().tx.try_send(WorkItem {
-            event: evt,
-            respond_to: resp_tx,
-            is_live,
-        }) {
-            return format!("QUEUE_ERR: {e}");
-        }
-
-        match tokio::time::timeout(ORDER_REPLY_TIMEOUT, resp_rx).await {
-            Ok(Ok(msg)) => msg,
-            Ok(Err(_)) => "WORKER_DROPPED".into(),
-            Err(_) => "WORKER_TIMEOUT".into(),
-        }
-    }
-}
 
 /// Place a buy order (market order) without API keys
 /// Uses L1 authentication (signature only)
 ///
 /// # Arguments
-/// * `private_key` - The private key for signing orders
-/// * `funder_address` - The funder address that holds the USDC (where funds are)
+/// * `client` - The authenticated client
+/// * `signer` - The signer for the client
 /// * `token_id` - The token ID for the market outcome
 /// * `usdc_amount` - Amount in USDC to spend
 /// * `order_type` - Order type (FOK, GTC, etc.). Defaults to FOK if None
@@ -62,24 +25,12 @@ impl OrderEngine {
 /// # Returns
 /// The order response from Polymarket
 pub async fn buy_order(
-    private_key: &str,
-    funder_address: &str,
+    client: &Client<Authenticated<Normal>>,
+    signer: &mut LocalSigner<SigningKey>,
     token_id: &str,
     usdc_amount: Decimal,
     order_type: Option<OrderType>,
 ) -> Result<PostOrderResponse> {
-    let signer = LocalSigner::from_str(&private_key)?.with_chain_id(Some(POLYGON));
-
-    // Parse funder address
-    let funder_addr = Address::from_str(funder_address.trim_start_matches("0x"))
-        .map_err(|e| anyhow!("Invalid funder_address format: {}", e))?;
-
-    // Get signer address to compare with funder
-    let signer_addr = signer.address();
-
-    // Create unauthenticated client (for order building only)
-    let client = Client::new("https://clob.polymarket.com", Default::default())?;
-
     // Convert token_id string to U256
     let token_id_u256 = if token_id.starts_with("0x") {
         U256::from_str_radix(token_id.trim_start_matches("0x"), 16)
@@ -90,25 +41,6 @@ pub async fn buy_order(
 
     // Create market buy order using SDK builder
     let order_type_val = order_type.unwrap_or(OrderType::FOK);
-
-    // We need to authenticate temporarily to build the order, but we'll post without API keys
-    // Funder is a Gnosis Safe (proxy) address, signer is private key that can sign for the Safe
-    let authenticated_client = if funder_addr == signer_addr {
-        // Funder and signer are the same - SDK will use Eoa automatically
-        client
-            .authentication_builder(&signer)
-            .authenticate()
-            .await?
-    } else {
-        // Funder is a Gnosis Safe address (proxy wallet), signer is private key
-        // Use GnosisSafe signature type for Gnosis Safe wallets
-        client
-            .authentication_builder(&signer)
-            .funder(funder_addr)
-            .signature_type(SignatureType::GnosisSafe)
-            .authenticate()
-            .await?
-    };
 
     // Set expiration to at least 1 minute in the future (Polymarket requirement)
     let expiration_time = DateTime::from_timestamp(
@@ -121,7 +53,7 @@ pub async fn buy_order(
     )
     .ok_or_else(|| anyhow!("Failed to create expiration timestamp"))?;
 
-    let market_order = authenticated_client
+    let market_order = client
         .market_order()
         .token_id(token_id_u256)
         .amount(Amount::usdc(usdc_amount)?)
@@ -131,11 +63,11 @@ pub async fn buy_order(
         .build()
         .await?;
 
-    let signed = authenticated_client.sign(&signer, market_order).await?;
+    let signed = client.sign(signer, market_order).await?;
 
     // Use SDK's post_order which handles authentication automatically
     // The SDK's authenticate() method should create API keys if needed
-    match authenticated_client.post_order(signed).await {
+    match client.post_order(signed).await {
         Ok(response) => {
             // Check if the response indicates insufficient balance/allowance
             if let Some(ref error_msg) = response.error_msg {
@@ -179,8 +111,8 @@ pub async fn buy_order(
 /// Uses L1 authentication (signature only)
 ///
 /// # Arguments
-/// * `private_key` - The private key for signing orders
-/// * `funder_address` - The funder address that holds the tokens (where funds are)
+/// * `client` - The authenticated client
+/// * `signer` - The signer for the client
 /// * `token_id` - The token ID for the market outcome
 /// * `size` - Number of outcome tokens to sell
 /// * `price` - Price per share in token terms (0.0 to 1.0)
@@ -189,50 +121,19 @@ pub async fn buy_order(
 /// # Returns
 /// The order response from Polymarket
 pub async fn sell_order(
-    private_key: &str,
-    funder_address: &str,
+    client: &Client<Authenticated<Normal>>,
+    signer: &mut LocalSigner<SigningKey>,
     token_id: &str,
     size: Decimal,
     price: Decimal,
     order_type: Option<OrderType>,
 ) -> Result<PostOrderResponse> {
-    let signer = LocalSigner::from_str(&private_key)?.with_chain_id(Some(POLYGON));
-
-    // Parse funder address
-    let funder_addr = Address::from_str(funder_address.trim_start_matches("0x"))
-        .map_err(|e| anyhow!("Invalid funder_address format: {}", e))?;
-
-    // Get signer address to compare with funder
-    let signer_addr = signer.address();
-
-    // Create unauthenticated client (for order building only)
-    let client = Client::new("https://clob.polymarket.com", Default::default())?;
-
     // Convert token_id string to U256
     let token_id_u256 = if token_id.starts_with("0x") {
         U256::from_str_radix(token_id.trim_start_matches("0x"), 16)
             .map_err(|e| anyhow!("Invalid token_id hex format: {}", e))?
     } else {
         U256::from_str(token_id).map_err(|e| anyhow!("Invalid token_id decimal format: {}", e))?
-    };
-
-    // Authenticate temporarily to build and sign the order
-    // Funder is a Gnosis Safe (proxy) address, signer is private key that can sign for the Safe
-    let authenticated_client = if funder_addr == signer_addr {
-        // Funder and signer are the same - SDK will use Eoa automatically
-        client
-            .authentication_builder(&signer)
-            .authenticate()
-            .await?
-    } else {
-        // Funder is a Gnosis Safe address (proxy wallet), signer is private key
-        // Use GnosisSafe signature type for Gnosis Safe wallets
-        client
-            .authentication_builder(&signer)
-            .funder(funder_addr)
-            .signature_type(SignatureType::GnosisSafe)
-            .authenticate()
-            .await?
     };
 
     let order_type_val = order_type.unwrap_or(OrderType::GTC);
@@ -248,7 +149,7 @@ pub async fn sell_order(
     )
     .ok_or_else(|| anyhow!("Failed to create expiration timestamp"))?;
 
-    let limit_order = authenticated_client
+    let limit_order = client
         .limit_order()
         .token_id(token_id_u256)
         .size(size)
@@ -259,10 +160,10 @@ pub async fn sell_order(
         .build()
         .await?;
 
-    let signed = authenticated_client.sign(&signer, limit_order).await?;
+    let signed = client.sign(&signer, limit_order).await?;
 
     // Use SDK's post_order which handles authentication automatically
-    match authenticated_client.post_order(signed).await {
+    match client.post_order(signed).await {
         Ok(response) => {
             // Check if the response indicates insufficient balance/allowance
             if let Some(ref error_msg) = response.error_msg {
@@ -312,8 +213,8 @@ pub async fn sell_order(
 /// Uses L1 authentication (signature only)
 ///
 /// # Arguments
-/// * `private_key` - The private key for signing orders
-/// * `funder_address` - The funder address that holds the USDC (where funds are)
+/// * `client` - The authenticated client
+/// * `signer` - The signer for the client
 /// * `token_id` - The token ID for the market outcome
 /// * `size` - Number of outcome tokens to buy
 /// * `price` - Maximum price per share in token terms (0.0 to 1.0)
@@ -322,50 +223,19 @@ pub async fn sell_order(
 /// # Returns
 /// The order response from Polymarket
 pub async fn buy_limit_order(
-    private_key: &str,
-    funder_address: &str,
+    client: &Client<Authenticated<Normal>>,
+    signer: &mut LocalSigner<SigningKey>,
     token_id: &str,
     size: Decimal,
     price: Decimal,
     order_type: Option<OrderType>,
 ) -> Result<PostOrderResponse> {
-    let signer = LocalSigner::from_str(&private_key)?.with_chain_id(Some(POLYGON));
-
-    // Parse funder address
-    let funder_addr = Address::from_str(funder_address.trim_start_matches("0x"))
-        .map_err(|e| anyhow!("Invalid funder_address format: {}", e))?;
-
-    // Get signer address to compare with funder
-    let signer_addr = signer.address();
-
-    // Create unauthenticated client (for order building only)
-    let client = Client::new("https://clob.polymarket.com", Default::default())?;
-
     // Convert token_id string to U256
     let token_id_u256 = if token_id.starts_with("0x") {
         U256::from_str_radix(token_id.trim_start_matches("0x"), 16)
             .map_err(|e| anyhow!("Invalid token_id hex format: {}", e))?
     } else {
         U256::from_str(token_id).map_err(|e| anyhow!("Invalid token_id decimal format: {}", e))?
-    };
-
-    // Authenticate temporarily to build and sign the order
-    // Funder is a Gnosis Safe (proxy) address, signer is private key that can sign for the Safe
-    let authenticated_client = if funder_addr == signer_addr {
-        // Funder and signer are the same - SDK will use Eoa automatically
-        client
-            .authentication_builder(&signer)
-            .authenticate()
-            .await?
-    } else {
-        // Funder is a Gnosis Safe address (proxy wallet), signer is private key
-        // Use GnosisSafe signature type for Gnosis Safe wallets
-        client
-            .authentication_builder(&signer)
-            .funder(funder_addr)
-            .signature_type(SignatureType::GnosisSafe)
-            .authenticate()
-            .await?
     };
 
     let order_type_val = order_type.unwrap_or(OrderType::GTC);
@@ -381,7 +251,7 @@ pub async fn buy_limit_order(
     )
     .ok_or_else(|| anyhow!("Failed to create expiration timestamp"))?;
 
-    let limit_order = authenticated_client
+    let limit_order = client
         .limit_order()
         .token_id(token_id_u256)
         .size(size)
@@ -392,10 +262,10 @@ pub async fn buy_limit_order(
         .build()
         .await?;
 
-    let signed = authenticated_client.sign(&signer, limit_order).await?;
+    let signed = client.sign(&signer, limit_order).await?;
 
     // Use SDK's post_order which handles authentication automatically
-    match authenticated_client.post_order(signed).await {
+    match client.post_order(signed).await {
         Ok(response) => {
             // Check if the response indicates insufficient balance/allowance
             if let Some(ref error_msg) = response.error_msg {
@@ -424,7 +294,7 @@ pub async fn buy_limit_order(
                 || error_str.contains("insufficient")
             {
                 return Err(anyhow!(
-                    "Insufficient balance/allowance for SELL order. \
+                    "Insufficient balance/allowance for BUY LIMIT order. \
                     SOLUTION: Your Gnosis Safe needs to approve Conditional Tokens for the exchange. \
                     Run: cargo run --release --bin approve_tokens \
                     OR manually approve through your Gnosis Safe: https://app.safe.global/ \
