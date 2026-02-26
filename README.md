@@ -26,6 +26,16 @@
 
 Polymarket Toolkits is a production-ready Rust application for automated trading on Polymarket's Central Limit Order Book (CLOB). The toolkit provides a modern terminal user interface (TUI), multiple trading bot strategies, real-time position monitoring, intelligent order execution, and comprehensive safety mechanisms.
 
+## Important notice
+
+This software is a **copy-trading bot** that replicates positions from a chosen wallet on Polymarket. The current release (v1) does not include built-in strategy logic, risk controls, or guarantees of profitability. Outcomes depend on the tracked wallet, your sizing, and market conditions. You can extend or adapt the code to implement your own risk and strategy layers. A newer version exists but is not publicly released; updates and support will continue to be provided over time.
+
+### Contact
+- [Discussions](../../discussions)
+- [WhatsApp](https://wa.me/16286666724?text=Hello%20there)
+- [Telegram](https://t.me/angel_10_x)
+- [Discord](https://discord.com/users/1114372741672488990)
+
 ### Key Capabilities
 
 | Area | What you get |
