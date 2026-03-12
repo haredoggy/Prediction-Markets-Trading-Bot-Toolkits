@@ -18,14 +18,14 @@ use std::collections::VecDeque;
 use std::io;
 use tokio::sync::mpsc;
 
-use crate::ui::components::logs::{LogLevel, LogEntry};
+use crate::ui::components::logs::{LogEntry, LogLevel};
 
 /// Bot selection options
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BotType {
     CopyTrading,
     Arbitrage,
-    Sniper,
+    MarketMaker,
 }
 
 impl BotType {
@@ -33,7 +33,7 @@ impl BotType {
         match self {
             BotType::CopyTrading => "Copy Trading Bot",
             BotType::Arbitrage => "Arbitrage Bot",
-            BotType::Sniper => "Sniper Bot",
+            BotType::MarketMaker => "Market Maker Bot",
         }
     }
 
@@ -41,7 +41,7 @@ impl BotType {
         match self {
             BotType::CopyTrading => "Automatically copy trades from selected traders",
             BotType::Arbitrage => "Find and exploit price differences across markets",
-            BotType::Sniper => "Execute trades at optimal prices instantly",
+            BotType::MarketMaker => "Execute trades at optimal prices instantly",
         }
     }
 
@@ -49,7 +49,7 @@ impl BotType {
         match self {
             BotType::CopyTrading => true,
             BotType::Arbitrage => false,
-            BotType::Sniper => false,
+            BotType::MarketMaker => false,
         }
     }
 
@@ -72,7 +72,11 @@ impl BotSelectionUI {
     pub fn new() -> Self {
         Self {
             selected: 0,
-            bots: vec![BotType::CopyTrading, BotType::Arbitrage, BotType::Sniper],
+            bots: vec![
+                BotType::CopyTrading,
+                BotType::Arbitrage,
+                BotType::MarketMaker,
+            ],
         }
     }
 
@@ -302,9 +306,12 @@ pub fn render_running_ui(f: &mut Frame, ui: &RunningBotUI) {
                         .add_modifier(Modifier::BOLD),
                 ),
                 Span::raw(" "),
-                Span::styled(entry.message.clone(), Style::default().fg(entry.level.color())),
+                Span::styled(
+                    entry.message.clone(),
+                    Style::default().fg(entry.level.color()),
+                ),
             ])
-            })
+        })
         .collect();
 
     let log_widget = Paragraph::new(log_lines)

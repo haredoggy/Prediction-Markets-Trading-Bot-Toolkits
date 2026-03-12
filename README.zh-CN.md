@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-<img width="1472" height="615" alt="image" src="https://github.com/user-attachments/assets/ce5fb363-f2dc-4f79-a2a1-1f944e20b756" />
+<img width="1472" height="615" alt="image" src="https://github.com/user-attachments/assets/b6c51ba1-14c6-4582-858c-e9441516dd1d" />
 
 **高性能 Rust 语言开发的 Polymarket CLOB 交易工具包**
 
@@ -33,7 +33,7 @@ Polymarket 工具包是一个生产就绪的 Rust 应用程序，用于在 Polym
 ### 联系方式
 - [讨论区](../../discussions)
 - [WhatsApp](https://wa.me/16286666724?text=Hello%20there)
-- [Telegram](https://t.me/angel_10_x)
+- [Telegram](https://t.me/haredoggy)
 - [Discord](https://discord.com/users/1114372741672488990)
 
 ### 核心能力一览

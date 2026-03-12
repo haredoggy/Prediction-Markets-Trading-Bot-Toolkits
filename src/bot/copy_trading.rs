@@ -17,7 +17,7 @@ use crate::{
 
 pub async fn run_bot(app_config: AppConfig, log_tx: mpsc::UnboundedSender<LogEntry>) -> Result<()> {
     let _ = log_tx.send(LogEntry::new(
-        "Creating authenticated client...".to_string(),
+        "--- Polymarket Copy Trading Bot - Copy Trader ---".to_string(),
         LogLevel::Info,
     ));
 
@@ -112,7 +112,10 @@ pub async fn run_bot(app_config: AppConfig, log_tx: mpsc::UnboundedSender<LogEnt
                                         Ok(p) => p,
                                         Err(e) => {
                                             let _ = log_tx.send(LogEntry::new(
-                                                format!("Failed to acquire semaphore permit: {}", e),
+                                                format!(
+                                                    "Failed to acquire semaphore permit: {}",
+                                                    e
+                                                ),
                                                 LogLevel::Error,
                                             ));
                                             return;
@@ -125,9 +128,15 @@ pub async fn run_bot(app_config: AppConfig, log_tx: mpsc::UnboundedSender<LogEnt
                                             // Trade executed successfully (logs are handled inside execute_trade)
                                         }
                                         None => {
-                                            let title = change_clone.get("title").map(|s| s.as_str()).unwrap_or("unknown");
+                                            let title = change_clone
+                                                .get("title")
+                                                .map(|s| s.as_str())
+                                                .unwrap_or("unknown");
                                             let _ = log_tx.send(LogEntry::new(
-                                                format!("Trade execution returned None for {}", title),
+                                                format!(
+                                                    "Trade execution returned None for {}",
+                                                    title
+                                                ),
                                                 LogLevel::Warning,
                                             ));
                                         }

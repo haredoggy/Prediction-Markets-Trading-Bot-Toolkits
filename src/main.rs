@@ -34,20 +34,34 @@ async fn main() -> Result<()> {
             ));
 
             // Create bot task
-            let log_tx_clone = log_tx.clone();
             let bot_task =
-                async move { bot::copy_trading::run_bot(app_config, log_tx_clone).await };
+                async move { bot::copy_trading::run_bot(app_config, log_tx).await };
 
             // Run UI with bot
             run_bot_ui("Copy Trading Bot".to_string(), log_rx, bot_task).await?;
         }
         Some(BotType::Arbitrage) => {
             let app_config = AppConfig::load()?;
-            bot::arbitrage::run_bot(app_config).await?;
+
+            // Send initial log
+            let _ = log_tx.send(LogEntry::new(
+                "Initializing Arbitrage Bot...".to_string(),
+                LogLevel::Info,
+            ));
+            let bot_task =
+                async move { bot::arbitrage::run_bot(app_config, log_tx).await };
+            run_bot_ui("Arbitrage Bot".to_string(), log_rx, bot_task).await?;
         }
-        Some(BotType::Sniper) => {
+        Some(BotType::MarketMaker) => {
             let app_config = AppConfig::load()?;
-            bot::sniper::run_bot(app_config).await?;
+            // Send initial log
+            let _ = log_tx.send(LogEntry::new(
+                "Initializing Market Maker Bot...".to_string(),
+                LogLevel::Info,
+            ));
+            let bot_task =
+                async move { bot::market_maker::run_bot(app_config, log_tx).await };
+            run_bot_ui("Market Maker Bot".to_string(), log_rx, bot_task).await?;
         }
         None => {
             println!("No bot selected. Exiting.");
