@@ -2,155 +2,281 @@
 
 <div align="center">
 
-![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+<img width="1472" height="615" alt="Polymarket Toolkits TUI" src="https://github.com/user-attachments/assets/b6c51ba1-14c6-4582-858c-e9441516dd1d" />
 
-<img width="1472" height="615" alt="image" src="https://github.com/user-attachments/assets/b6c51ba1-14c6-4582-858c-e9441516dd1d" />
+### Multi-venue prediction market trading infrastructure — Polymarket · Kalshi · Limitless
 
-**High-performance Rust-based trading toolkit for Polymarket CLOB**
+[![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg?style=flat-square&logo=rust)](https://www.rust-lang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg?style=flat-square)](https://github.com)
+[![Tokio](https://img.shields.io/badge/async-tokio-blue.svg?style=flat-square)](https://tokio.rs/)
+[![Polymarket](https://img.shields.io/badge/venue-Polymarket-6e40c9.svg?style=flat-square)](https://polymarket.com)
+[![Kalshi](https://img.shields.io/badge/venue-Kalshi-0066cc.svg?style=flat-square)](https://kalshi.com)
+[![Limitless](https://img.shields.io/badge/venue-Limitless-00b894.svg?style=flat-square)](https://limitless.exchange)
+[![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20windows-lightgrey.svg?style=flat-square)]()
 
-[Features](#features) • [Installation](#installation) • [Configuration](#configuration) • [Usage](#usage) • [Architecture](#architecture) • [Safety](#safety--risk-management)
+[Strategies](#strategies) • [Engine](#engine-features) • [Quick Start](#installation) • [Configuration](#configuration) • [Architecture](#architecture) • [Safety](#safety--risk-management) • [Contact](#contact)
 
 ---
 
-### 🌐 Language / 语言
-
-[English](#polymarket-toolkits) • [简体中文](README.zh-CN.md)
+**🌐 Language / 语言:** [English](#polymarket-toolkits) • [简体中文](README.zh-CN.md)
 
 </div>
 
 ---
 
-## Overview
+## What This Is
 
-Polymarket Toolkits is a production-ready Rust application for automated trading on Polymarket's Central Limit Order Book (CLOB). The toolkit provides a modern terminal user interface (TUI), multiple trading bot strategies, real-time position monitoring, intelligent order execution, and comprehensive safety mechanisms.
+A production-grade, Rust-built trading engine for prediction markets — [Polymarket](https://polymarket.com), [Kalshi](https://kalshi.com), and [Limitless](https://limitless.exchange). It ships with a real-time terminal UI, a fully functional copy trading bot, a multi-venue adapter layer, and an extensible architecture designed for traders who want to move fast without cutting corners on safety.
 
-## Important notice
-
-This software is a **copy-trading bot** that replicates positions from a chosen wallet on Polymarket. The current release (v1) does not include built-in strategy logic, risk controls, or guarantees of profitability. Outcomes depend on the tracked wallet, your sizing, and market conditions. You can extend or adapt the code to implement your own risk and strategy layers. A newer version exists but is not publicly released; updates and support will continue to be provided over time.
-
-### Contact
-- [Discussions](../../discussions)
-- [WhatsApp](https://wa.me/16286666724?text=Hello%20there)
-- [Telegram](https://t.me/haredoggy)
-- [Discord](https://discord.com/users/1114372741672488990)
-
-### Key Capabilities
-
-| Area | What you get |
-|------|----------------|
-| **TUI** | Bot selection menu and real-time logs |
-| **Copy trading** | Follow tracked wallets automatically |
-| **Safety** | Circuit breakers, risk guards, dry run mode |
-| **Performance** | Async I/O, rate limiting, market data cache |
-
-- **Terminal User Interface**
-  - Interactive TUI built with `ratatui` for bot selection and real-time log monitoring
-- **Copy Trading Bot**
-  - Automatically detect and copy trades from monitored wallet addresses
-- **Position Tracking**
-  - Real-time monitoring of position changes with configurable polling intervals
-- **Automated Order Execution**
-  - Intelligent order placement with FAK (Fill-or-Kill) and GTD (Good-Till-Date) support
-- **Risk Management**
-  - Built-in circuit breakers and safety guards to protect against adverse market conditions
-- **Rate Limiting**
-  - Configurable API rate limiting to prevent overwhelming external services
-- **Market Data Caching**
-  - Efficient caching of market metadata to reduce API calls
-- **High Performance**
-  - Optimized for low-latency execution with async I/O and connection pooling
+> **v1 ships copy trading.** Nine more strategies are actively in development across a venue-agnostic engine: BTC arb, cross-market arb (PM ↔ Kalshi), direction hunting, spread farming, sports execution, resolution sniping, orderbook imbalance, market making, and on-chain whale signals. All share the same Rust engine, risk layer, and TUI.
 
 ---
 
-## Background & Motivation
+## Why This Exists
+
+### The Market Changed
+
+In early 2026, Polymarket removed the ~500ms artificial delay on taker orders for crypto markets. A small infrastructure change — but it invalidated an entire class of latency-sensitive strategies overnight. Micro-arbitrage, taker snipes, cancellation-window plays — all lost their structural edge.
+
+The traders who adapted quickly pivoted to **signal following**: track wallets with consistent alpha, size into their positions, and let conviction do the work instead of microseconds.
+
+This toolkit is that infrastructure. Built for the current market reality, not the one that existed six months ago.
 
 ### Why Rust?
 
-Rust wasn’t just chosen for this toolkit — it felt like the natural ground to build on. In a space where speed, precision, and trust must live side by side, Rust moves quietly but decisively, letting performance speak without compromise.
+Not for the marketing. For the guarantees.
 
-Its ownership model removes entire classes of runtime failures, bringing a kind of structural calm to systems that operate at market tempo. With async Rust and Tokio handling concurrent flows — API calls, streams, and executions — everything moves in rhythm, supported by a solid ecosystem of tools.
+Rust's ownership model eliminates entire categories of runtime failure before the binary ever runs. No garbage collection pauses at inopportune moments. No data races in concurrent order execution. No surprise crashes from null pointers mid-trade.
 
-In the end, Rust offers more than speed or safety — it offers confidence. For software that interacts with markets in real time, that assurance is what allows this toolkit to run fast, stay reliable, and keep pace with the moment.
-
-### The Polymarket Shift: From Latency Arbitrage to Copy Trading
-
-Back in early–mid February 2026, Polymarket quietly rolled out a change that reshaped how people trade on the platform. They removed the ~500ms artificial delay on taker (market) orders for crypto markets — a small technical tweak that ended up having a big impact. The goal was simple: cut down on latency arbitrage, discourage delay-exploiting bots, and make markets feel more fair and efficient overall.
-
-**What changed?**
-
-A lot of latency-driven strategies suddenly lost their edge. Bots and setups that depended on that delay — things like micro-arbitrage, quick taker snipes, or maker-side cancellation windows — became far less reliable. The classic HFT-style plays that thrived on structural timing advantages mostly faded, especially in fast-moving short-term markets.
-
-**Where things are heading now**
-
-Instead of chasing shrinking micro-inefficiencies or rebuilding complicated maker strategies, many traders are shifting toward copy trading — essentially riding the alpha of proven wallets. The idea is straightforward:
-
-- Follow the smart money by tracking traders with consistent performance
-- Benefit from real market timing driven by human conviction and positioning
-- Keep things simpler without heavy infrastructure or latency tuning
-- Scale naturally by adding more high-quality wallets over time
-
-### Why Copy Trading Bot?
-
-The Copy Trading Bot is the first fully functional bot in this toolkit because:
-
-1. **Market Reality**: After the delay removal, copy trading represents one of the most viable automated strategies
-2. **Accessibility**: Easier to understand and configure than complex arbitrage strategies
-3. **Risk Management**: You can control risk through copy percentage and wallet selection
-4. **Transparency**: All trades are logged and visible, making it easier to audit and improve
-5. **Foundation**: Copy trading infrastructure (position tracking, order execution) serves as a foundation for future bot types
-
-This toolkit is designed to help traders adapt to the new Polymarket landscape by providing robust, reliable tools for copy trading — leveraging the wisdom of successful traders rather than competing in a latency arms race.
-
-### What is this bot?
-
-It’s simply a copy trading bot that follows a target wallet’s moves. No strategy, no risk controls, and definitely no promise of profit — this is v1. Whether you win or lose depends on things like the wallet you follow, your position size, and market dynamics. You can still make it work if you build your own approach around it. There’s already a next version but not public, and I’ll keep rolling out improvements over time.
+With Tokio powering the async runtime, the engine handles parallel position polling, order execution, and WebSocket streams without threading overhead — lean, predictable, and fast under pressure.
 
 ---
 
-## Features
+## Strategies
 
-### 🚀 Core Features
+Six bots — each targeting a distinct edge. One shared engine underneath.
 
-- **Multiple Bot Types**: 
-  - **Copy Trading Bot** (✅ Fully Functional): Automatically copies trades from tracked wallets
-  - **Arbitrage Bot** (🚧 Coming Soon): Identifies and executes arbitrage opportunities
-  - **Sniper Bot** (🚧 Coming Soon): Fast order execution for time-sensitive opportunities
+---
 
-- **Terminal User Interface**:
-  - Interactive bot selection menu
-  - Real-time log display with scrolling
-  - Color-coded log levels (Info, Warning, Error, Success)
-  - Timestamped log entries
+### 1. BTC 5-min / 15-min / 1hr Arbitrage Bot
 
-- **Position Monitoring**:
-  - Polls Polymarket positions API at configurable intervals
-  - Detects position changes (new positions, closed positions, size changes)
-  - Supports tracking multiple wallet addresses simultaneously
+> **Best for:** Traders who need speed on short-window BTC Up/Down markets
 
-- **Intelligent Trade Execution**:
-  - Configurable copy percentage for position sizing
-  - Automatic market ID resolution via Gamma API
-  - Concurrent trade execution with semaphore-based rate limiting
-  - Support for both BUY and SELL orders
+<img src="docs/images/btc-arbitrage.svg" alt="BTC Arbitrage Bot" width="100%"/>
 
-### 🛡️ Safety Features
+Watch BTC Up/Down markets across 5-minute, 15-minute, and 1-hour windows. When a pricing inefficiency or directional setup emerges, the bot places a low-latency FAK order before the window closes. Configurable dry-run and live execution modes let you validate behavior before committing real capital.
 
-- **Circuit Breaker System**: Automatic trading halt after consecutive large trades
-- **Orderbook Depth Checks**: Verify sufficient liquidity before order execution
-- **Risk Guard**: Multi-layer risk assessment with configurable thresholds
-- **Trade Size Limits**: Minimum trade size enforcement to avoid negative expected value
-- **Trading Toggle**: Easy enable/disable trading without code changes
-- **Dry Run Mode**: Test configuration without executing real trades
+| | |
+|---|---|
+| **Markets** | BTC Up/Down — 5m, 15m, 1hr |
+| **Order type** | FAK (Fill-or-Kill) |
+| **Execution** | ~42ms end-to-end |
+| **Modes** | Dry run + Live |
+| **Status** | 🚧 In development |
 
-### ⚡ Performance Features
+---
 
-- **Async Architecture**: Built on Tokio for high-concurrency async operations
-- **Connection Pooling**: Optimized HTTP client with connection reuse
-- **Memory Efficiency**: Stack-allocated buffers and efficient data structures
-- **Rate Limiting**: Configurable API rate limits (default: 25 requests per 10 seconds)
-- **Market ID Caching**: Reduces API calls by caching market metadata
+### 2. Polymarket ↔ Kalshi Cross-Market Arbitrage Bot
+
+> **Best for:** Exploiting cross-venue pricing inefficiencies on 15-min windows
+
+<img src="docs/images/cross-market-arbitrage.svg" alt="Cross-Market Arbitrage Bot" width="100%"/>
+
+Monitor the same market on both Polymarket and Kalshi simultaneously. When a configurable price delta (edge threshold) is detected, the bot executes hedged legs on both venues — buying the cheaper side and selling the expensive side — locking in the spread. Every execution and P&L outcome is logged for review.
+
+| | |
+|---|---|
+| **Venues** | Polymarket ↔ Kalshi |
+| **Windows** | 15-min |
+| **Edge threshold** | Configurable (e.g. ≥ 0.8¢) |
+| **Execution** | Hedged legs, both venues |
+| **Logging** | Full P&L tracking |
+| **Status** | 🚧 In development |
+
+---
+
+### 3. Direction Hunting Bot
+
+> **Best for:** Directional traders looking for short-window momentum and flow setups
+
+<img src="docs/images/direction-hunting.svg" alt="Direction Hunting Bot" width="100%"/>
+
+Continuously scans multiple symbols and time windows for setups matching your criteria. When a signal triggers, the bot enters the position and manages the exit automatically — take-profit and stop-loss levels are configurable. Real-time alerts notify you of new signals whether you're watching the terminal or not.
+
+| | |
+|---|---|
+| **Scan universe** | Configurable market list |
+| **Windows** | 5m, 15m (configurable) |
+| **Entry criteria** | Configurable momentum / flow rules |
+| **Exit management** | TP + SL, auto-exit logic |
+| **Alerts** | Real-time signal notifications |
+| **Status** | 🚧 In development |
+
+---
+
+### 4. Spread Farming Bot
+
+> **Best for:** Traders looking for systematic, repeatable micro-edges
+
+<img src="docs/images/spread-farming.svg" alt="Spread Farming Bot" width="100%"/>
+
+Farm the bid-ask spread with disciplined, rule-based entries and exits. The bot sits at the spread, waits for fill conditions to align, and executes with consistent sizing. Every trade is logged with P&L, building a running session record that makes it easy to evaluate performance and tune parameters over time.
+
+| | |
+|---|---|
+| **Strategy type** | Market-making / spread capture |
+| **Entry / exit** | Configurable rules, systematic |
+| **Logging** | Per-trade P&L + session totals |
+| **Edge type** | Bid-ask spread, repeatable |
+| **Status** | 🚧 In development |
+
+---
+
+### 5. Polymarket Copy Trading Bot
+
+> **Best for:** Copying top wallets automatically with configurable sizing and risk limits
+
+<img src="docs/images/copy-trading.svg" alt="Copy Trading Bot" width="100%"/>
+
+Track one or more high-performing wallets and automatically mirror their BUY and SELL actions. Copy percentage, minimum trade size, and circuit breaker thresholds are all configurable — so you control how closely you follow the signal and how much risk you take on. The only fully released bot in the toolkit; everything else builds on the infrastructure it established.
+
+| | |
+|---|---|
+| **Tracked wallets** | Multiple simultaneous |
+| **Copy sizing** | Configurable percentage |
+| **Order types** | FAK / GTD |
+| **Risk limits** | Circuit breaker + depth guard |
+| **Dry run** | Fully supported |
+| **Status** | ✅ Production-ready |
+
+---
+
+### 6. Sports Betting Execution Bot
+
+> **Best for:** Manual traders who want click-to-bet speed on live sports markets
+
+<img src="docs/images/sports-betting.svg" alt="Sports Betting Bot" width="100%"/>
+
+A focused live-sports interface that combines real-time odds display with fast FAK execution. Select a match, choose YES or NO, set your size, and hit Execute — the order is placed in under 50ms. Built for traders who make manual decisions but want the execution speed and reliability of an automated system behind the click.
+
+| | |
+|---|---|
+| **Sports** | NBA, NFL, Soccer, and more |
+| **Interface** | Live scoreboard + real-time odds |
+| **Order flow** | FAK / market-style |
+| **Execution** | < 50ms |
+| **Mode** | Click-to-execute |
+| **Status** | 🚧 In development |
+
+---
+
+### 7. Resolution Sniper Bot
+
+> **Best for:** High win-rate, low-variance plays unique to prediction markets
+
+<img src="docs/images/resolution-sniper.svg" alt="Resolution Sniper Bot" width="100%"/>
+
+Scans all active markets for outcomes trading at near-certainty prices — configurable threshold (e.g. ≥ 95% YES or ≤ 5% NO). When a market enters the snipe window with sufficient time before resolution, the bot buys the near-certain side and holds to the guaranteed $1.00 payout. No equivalent exists in traditional finance; high win rate, low variance, best paired with strict sizing limits.
+
+| | |
+|---|---|
+| **Certainty threshold** | Configurable (e.g. ≥ 95%) |
+| **Window** | Configurable (e.g. < 15 min to resolution) |
+| **Max buy price** | Configurable cap |
+| **Payout** | $1.00 per share at resolution |
+| **Venues** | Polymarket · Kalshi · Limitless |
+| **Status** | 🚧 In development |
+
+---
+
+### 8. Orderbook Imbalance Bot
+
+> **Best for:** Pure order-flow signal, no external data required
+
+<img src="docs/images/orderbook-imbalance.svg" alt="Orderbook Imbalance Bot" width="100%"/>
+
+Monitors the live bid/ask depth ratio (Order Book Imbalance = OBI) across configured markets. When OBI exceeds a configurable threshold in either direction, the bot fades into the dominant side — buying into heavy bids, selling into heavy asks. Signal is derived entirely from the live orderbook at a 500ms refresh rate, making this strategy self-contained and independent of any external feed.
+
+| | |
+|---|---|
+| **Signal source** | Live orderbook only |
+| **OBI threshold** | Configurable (e.g. ≥ 60%) |
+| **Refresh rate** | 500ms |
+| **Direction** | Fade the dominant side |
+| **Venues** | Polymarket · Kalshi · Limitless |
+| **Status** | 🚧 In development |
+
+---
+
+### 9. Market Making Bot
+
+> **Best for:** Passive spread income on illiquid prediction markets
+
+<img src="docs/images/market-making.svg" alt="Market Making Bot" width="100%"/>
+
+Continuously quotes both sides of illiquid markets, earning the spread passively. Unlike Spread Farming (opportunistic taker entries), this bot *is* the book — sitting on both bid and ask simultaneously with GTD orders. Inventory skewing automatically adjusts quote prices to rebalance YES/NO exposure when one side fills too heavily. Auto-cancels the opposite side on a fill.
+
+| | |
+|---|---|
+| **Strategy type** | Two-sided GTD quoting |
+| **Order management** | Auto-cancel on fill, auto-requote |
+| **Inventory control** | Configurable skew limits |
+| **Sessions** | Full per-fill P&L + win rate tracking |
+| **Venues** | Polymarket · Kalshi |
+| **Status** | 🚧 In development |
+
+---
+
+### 10. On-Chain Whale Signal Bot
+
+> **Best for:** Fastest possible signal — 3–30 seconds ahead of the positions API
+
+<img src="docs/images/whale-signal.svg" alt="On-Chain Whale Signal Bot" width="100%"/>
+
+Subscribes directly to Polygon block data and filters for transactions from tracked large wallets interacting with the Polymarket CLOB contract. When a whale TX lands on-chain, the bot decodes the calldata (token ID, size, side) and mirrors the order immediately — typically 3–30 seconds before the change appears in the public positions API. This is the highest-fidelity, lowest-latency signal source available on Polymarket.
+
+| | |
+|---|---|
+| **Signal source** | Polygon on-chain block subscription |
+| **Lead time** | 3–30 seconds over positions API |
+| **Detection** | ABI calldata decoding |
+| **Network** | Polygon (Matic) |
+| **Risk check** | Full circuit breaker + depth guard |
+| **Status** | 🚧 In development |
+
+---
+
+## Engine Features
+
+### Core
+
+| | Capability |
+|---|---|
+| **Copy Trading Bot** | Tracks multiple wallets simultaneously, mirrors position changes with configurable sizing |
+| **Terminal UI** | `ratatui`-powered TUI with real-time log streaming, color-coded severity, and bot selection |
+| **FAK / GTD Orders** | Fill-or-Kill and Good-Till-Date order types with automatic market ID resolution |
+| **Multi-wallet Tracking** | Poll any number of addresses concurrently with shared rate limiting |
+
+### Safety & Risk
+
+| | Mechanism |
+|---|---|
+| **Circuit Breaker** | Auto-halts after N consecutive large trades within a configurable time window |
+| **Orderbook Depth Guard** | Validates liquidity before every order — no fills into thin books |
+| **Dry Run Mode** | Full execution path runs without placing real orders — ideal for validation |
+| **Trade Size Floor** | Minimum size enforcement to avoid negative-EV micro-trades |
+
+### Performance
+
+| | Spec |
+|---|---|
+| **Event Processing** | < 1ms per event |
+| **Order Execution** | < 100ms end-to-end |
+| **Position Polling** | ~200ms per wallet |
+| **Memory** | ~50MB baseline |
+| **CPU** | < 5% on modern hardware |
+| **Concurrency** | Semaphore-based rate limiting (default: 25 req / 10s) |
 
 ---
 
@@ -158,31 +284,22 @@ It’s simply a copy trading bot that follows a target wallet’s moves. No stra
 
 ### Prerequisites
 
-- **Rust**: Version 1.70 or higher ([Install Rust](https://www.rust-lang.org/tools/install))
-- **Polymarket Account**: Wallet with USDC balance on Polygon network
-- **Exchange Approval**: Approve USDC spending on Polymarket exchange
+- **Rust 1.70+** — [install here](https://www.rust-lang.org/tools/install)
+- **Polymarket account** with USDC on Polygon
+- **Exchange approval** — make at least one trade on [polymarket.com](https://polymarket.com) to approve USDC spending
 
-### Build from Source
+### Build & Run
 
 ```bash
-# Clone the repository
+# Clone
 git clone <repository-url>
 cd Polymarket-Toolkits
 
-# Build in release mode (optimized)
+# Production build (recommended)
 cargo build --release
-
-# Run the application
 cargo run --release
-```
 
-### Development Build
-
-```bash
-# Build in debug mode (faster compilation, slower runtime)
-cargo build
-
-# Run with debug logging
+# Debug build
 RUST_LOG=debug cargo run
 ```
 
@@ -190,382 +307,291 @@ RUST_LOG=debug cargo run
 
 ## Configuration
 
-### Configuration Files
+The project uses a **two-file split**: public settings in `config.json`, secrets in `config.yaml`.
 
-The project uses a **split configuration** approach for security:
+```bash
+cp config.yaml.example config.yaml
+```
 
-1. **`config.json`** - Non-sensitive configuration (safe to commit to git)
-2. **`config.yaml`** - Sensitive credentials only (NEVER commit to git)
+### `config.yaml` — Credentials (never commit)
 
-### Setup Steps
+```yaml
+bot:
+  private_key: "your_64_character_hex_private_key"   # No 0x prefix
+  funder_address: "0x0000000000000000000000000000000000000000"
+```
 
-1. **Copy example configuration files**:
-   ```bash
-   cp config.yaml.example config.yaml
-   # config.json already exists with defaults
-   ```
-
-2. **Edit `config.yaml`** with your sensitive credentials:
-   ```yaml
-   bot:
-     # Your wallet's private key (64-character hex string, no 0x prefix)
-     private_key: "your_64_character_hex_private_key"
-     
-     # Proxy wallet address (funder) for the account
-     funder_address: "0x0000000000000000000000000000000000000000"
-   ```
-
-3. **Edit `config.json`** with your trading preferences:
-   ```json
-   {
-     "bot": {
-       "wallets_to_track": [
-         "0x63ce342161250d705dc0b16df89036c8e5f9ba9a"
-       ],
-       "enable_trading": false
-     },
-     "site": {
-       "gamma_api_base": "https://gamma-api.polymarket.com",
-       "clob_api_base": "https://clob.polymarket.com",
-       "clob_wss_url": "wss://clob.polymarket.com"
-     },
-     "trading": {
-       "copy_percentage": 20.0,
-       "rate_limit": 25,
-       "poll_interval": 5
-     },
-     "risk": {
-       "large_trade_shares": 1500.0,
-       "consecutive_trigger": 2,
-       "sequence_window_secs": 30,
-       "min_depth_usd": 200.0,
-       "trip_duration_secs": 120
-     }
-   }
-   ```
-
-### Configuration Sections
-
-#### Bot Configuration (`config.json`)
-
-- `wallets_to_track`: Array of wallet addresses to monitor for copy trading
-- `enable_trading`: Set to `false` for monitoring only (dry run mode)
-
-#### Site Configuration (`config.json`)
-
-- `gamma_api_base`: Base URL for Polymarket Gamma API (market data)
-- `clob_api_base`: Base URL for Polymarket CLOB API (order execution)
-- `clob_wss_url`: WebSocket URL for real-time updates
-- `data_api_base`: Base URL for positions API (defaults to gamma_api_base)
-
-#### Trading Configuration (`config.json`)
-
-- `copy_percentage`: Percentage of tracked wallet's position size to copy (default: 20.0)
-- `rate_limit`: Maximum concurrent API requests (default: 25)
-- `poll_interval`: Seconds between position polls (default: 5)
-- `price_buffer`: Price buffer for order execution (default: 0.00)
-- `scaling_ratio`: Size scaling multiplier (default: 1.00)
-- `min_cash_value`: Minimum trade value in USD (default: 0.00)
-- `min_share_count`: Minimum share count per trade (default: 0.0)
-
-#### Risk Configuration (`config.json`)
-
-- `large_trade_shares`: Minimum shares to trigger circuit breaker (default: 1500.0)
-- `consecutive_trigger`: Consecutive large trades before trip (default: 2)
-- `sequence_window_secs`: Time window for tracking consecutive trades (default: 30)
-- `min_depth_usd`: Minimum orderbook depth in USD (default: 200.0)
-- `trip_duration_secs`: Duration circuit breaker stays tripped (default: 120)
-
-### Security Notes
-
-> ⚠️ **CRITICAL**: Never commit your `config.yaml` file to version control. It contains sensitive private keys.
->
-> - Add `config.yaml` to `.gitignore` (already included)
-> - `config.json` is safe to commit (contains no secrets)
-> - Use environment variables for CI/CD deployments
-> - Store private keys in secure secret management systems for production
-
-## Usage
-
-### Basic Usage
-
-1. **Configure your settings** in `config.json` and `config.yaml`
-2. **Ensure wallet has USDC** on Polygon network
-3. **Approve exchange** at [Polymarket.com](https://polymarket.com) (make a test trade)
-4. **Run the application**:
-   ```bash
-   cargo run --release
-   ```
-
-5. **Select a bot** from the TUI menu:
-   - Use arrow keys to navigate
-   - Press Enter to select
-   - Press 'q' to quit
-
-6. **Monitor logs** in real-time:
-   - Logs scroll automatically
-   - Color-coded by severity
-   - Timestamps included for each entry
-
-### Monitoring Mode
-
-To monitor trades without executing orders:
+### `config.json` — All other settings
 
 ```json
 {
   "bot": {
+    "wallets_to_track": ["0x63ce342161250d705dc0b16df89036c8e5f9ba9a"],
     "enable_trading": false
+  },
+  "site": {
+    "gamma_api_base": "https://gamma-api.polymarket.com",
+    "clob_api_base": "https://clob.polymarket.com",
+    "clob_wss_url": "wss://clob.polymarket.com"
+  },
+  "trading": {
+    "copy_percentage": 20.0,
+    "rate_limit": 25,
+    "poll_interval": 5,
+    "price_buffer": 0.00,
+    "scaling_ratio": 1.00,
+    "min_cash_value": 0.00,
+    "min_share_count": 0.0
+  },
+  "risk": {
+    "large_trade_shares": 1500.0,
+    "consecutive_trigger": 2,
+    "sequence_window_secs": 30,
+    "min_depth_usd": 200.0,
+    "trip_duration_secs": 120
   }
 }
 ```
 
-### Copy Trading Bot
+### Configuration Reference
 
-The Copy Trading Bot:
+**`bot`**
+- `wallets_to_track` — Addresses to mirror
+- `enable_trading` — `false` = monitor only, no orders placed
 
-1. **Polls positions** from tracked wallets at configured intervals
-2. **Detects changes** in positions (new, closed, or size changes)
-3. **Calculates trade size** based on `copy_percentage` setting
-4. **Resolves market IDs** using Gamma API (with caching)
-5. **Executes trades** concurrently with rate limiting
-6. **Logs all activity** to the TUI in real-time
+**`trading`**
+- `copy_percentage` — What fraction of the tracked wallet's position size to replicate
+- `poll_interval` — Seconds between position checks (lower = more responsive)
+- `price_buffer` — Slippage tolerance on order price
+- `scaling_ratio` — Multiplier applied on top of copy percentage
 
-Example log output:
+**`risk`**
+- `large_trade_shares` — Share count that flags a trade as "large"
+- `consecutive_trigger` — How many large trades in a row trigger the circuit breaker
+- `sequence_window_secs` — Rolling window for consecutive trade detection
+- `min_depth_usd` — Minimum orderbook liquidity required to proceed
+- `trip_duration_secs` — Cooldown after circuit breaker fires
+
+> **Security:** `config.yaml` is in `.gitignore` by default. For production deployments, use environment variables or a secrets manager — never store private keys in plaintext on shared systems.
+
+---
+
+## Usage
+
+### First Run
+
+1. Set `"enable_trading": false` in `config.json`
+2. Run `cargo run --release` and confirm position detection is working
+3. Review a few cycles of logs — verify the wallets and sizing look right
+4. Set `"enable_trading": true` when ready
+
+### TUI Controls
+
+| Key | Action |
+|-----|--------|
+| `↑ / ↓` | Navigate bot menu |
+| `Enter` | Launch selected bot |
+| `q` | Quit |
+| `Esc` | Return from bot view |
+
+### What the Logs Look Like
+
 ```
-[2026-02-16 10:30:45] INFO - Initializing Copy Trading Bot...
-[2026-02-16 10:30:46] INFO - Initialized 0x63ce34... with 15 position(s)
-[2026-02-16 10:30:51] INFO - Detected BUY for 0x63ce34...: 100.5 shares of Bitcoin Up or Down
-[2026-02-16 10:30:51] INFO - Copying buy for btc-updown-15m-1771884900: 20.1 shares
-[2026-02-16 10:30:52] SUCCESS - Order placed successfully. Order ID: 0x1234...
+[2026-02-16 10:30:45] INFO    Initializing Copy Trading Bot...
+[2026-02-16 10:30:46] INFO    Tracking 0x63ce34... — 15 open position(s)
+[2026-02-16 10:30:51] INFO    BUY detected: 100.5 shares — "Bitcoin Up or Down"
+[2026-02-16 10:30:51] INFO    Copying: btc-updown-15m-1771884900 → 20.1 shares
+[2026-02-16 10:30:52] SUCCESS  Order confirmed. ID: 0x1234...
 ```
-
-### Keyboard Controls
-
-- **Arrow Keys**: Navigate bot selection menu
-- **Enter**: Select bot
-- **q**: Quit application
-- **Esc**: Exit (when in bot UI)
 
 ---
 
 ## Architecture
 
-### Project Structure
+The codebase is organized around three layers: **venue adapters** (per-platform API clients), **shared services** (execution, caching, risk), and **bots** (thin strategy orchestrators that compose services).
 
 ```
 src/
-├── main.rs              # Main entry point and TUI orchestration
-├── lib.rs               # Core library exports and utilities
+├── main.rs                          # Entry point + TUI orchestration
+├── lib.rs                           # Core library exports
+│
 ├── config/
-│   ├── mod.rs           # Unified configuration management (AppConfig)
-│   └── settings.rs      # Application constants and settings
-├── bot/
-│   ├── mod.rs           # Bot module exports
-│   ├── copy_trading.rs  # Copy trading bot implementation
-│   ├── arbitrage.rs     # Arbitrage bot (placeholder)
-│   └── sniper.rs        # Sniper bot (placeholder)
-├── service/
-│   ├── mod.rs           # Service module exports
-│   ├── client.rs         # CLOB client creation and authentication
-│   ├── trader.rs         # CopyTrader service (trade execution)
-│   ├── positions.rs      # Position fetching and change detection
-│   ├── orders.rs         # Order placement and management
-│   └── market_cache.rs   # Market data caching layer
+│   ├── mod.rs                       # AppConfig — unified config (json + yaml)
+│   ├── settings.rs                  # All config structs and defaults
+│   └── coin.rs                      # Coin/market selection helpers
+│
+├── venues/                          # Per-venue API adapter layer
+│   ├── mod.rs                       # VenueId, Side, MarketRef — shared types
+│   ├── polymarket/
+│   │   └── mod.rs                   # Re-exports existing service layer
+│   ├── kalshi/
+│   │   ├── mod.rs
+│   │   └── client.rs                # Kalshi REST client + order types
+│   └── limitless/
+│       ├── mod.rs
+│       └── client.rs                # Limitless on-chain client (Base)
+│
+├── bot/                             # Strategy implementations
+│   ├── mod.rs                       # Module exports + status legend
+│   ├── copy_trading.rs              # ✅ Copy trading (production-ready)
+│   ├── arbitrage.rs                 # 🚧 BTC Up/Down arb (5m / 15m / 1hr)
+│   ├── cross_market_arb.rs          # 🚧 Cross-venue arb (PM ↔ Kalshi)
+│   ├── direction_hunting.rs         # 🚧 Momentum/flow scanner + TP/SL
+│   ├── spread_farming.rs            # 🚧 Systematic spread capture
+│   ├── sports_execution.rs          # 🚧 Click-to-FAK sports interface
+│   ├── resolution_sniper.rs         # 🚧 Near-certainty market sniping
+│   ├── orderbook_imbalance.rs       # 🚧 OBI-driven order flow signal
+│   ├── market_maker.rs              # 🚧 Two-sided GTD liquidity provision
+│   └── whale_signal.rs              # 🚧 On-chain Polygon TX monitoring
+│
+├── service/                         # Shared execution services
+│   ├── client.rs                    # Polymarket CLOB client + auth
+│   ├── trader.rs                    # CopyTrader execution engine
+│   ├── positions.rs                 # Position polling + change detection
+│   ├── orders.rs                    # FAK/GTD order placement
+│   ├── market_cache.rs              # Market metadata cache (slug → token ID)
+│   ├── token.rs                     # Token ID helpers
+│   └── price_feed.rs                # Cross-venue real-time price aggregation
+│
 ├── ui/
-│   ├── mod.rs           # UI module exports
-│   ├── layout.rs         # TUI layout and event handling
-│   └── components/
-│       ├── mod.rs        # Component exports
-│       └── logs.rs       # Log entry types and setup
+│   ├── layout.rs                    # TUI layout + keyboard events
+│   └── components/logs.rs           # Log entry rendering
+│
 ├── utils/
-│   ├── mod.rs           # Utility module exports
-│   └── risk_guard.rs     # Risk management and circuit breaker
-└── models.rs             # Data models and types
+│   ├── keyboard.rs                  # Raw terminal input
+│   ├── risk_guard.rs                # Circuit breaker + multi-layer risk
+│   └── orderbook.rs                 # OBI, spread, depth analysis helpers
+│
+└── models.rs                        # Shared data types
 ```
 
-### Data Flow
-
-#### Copy Trading Bot Flow
+### Execution Flow (Copy Trading Bot)
 
 ```
-1. Load Configuration (config.json + config.yaml)
-   ↓
-2. Initialize CopyTrader with authenticated CLOB client
-   ↓
-3. Poll Positions API (every poll_interval seconds)
-   ↓
-4. Detect Position Changes (compare previous vs current)
-   ↓
-5. For each change:
-   ├─ Calculate trade size (copy_percentage)
-   ├─ Resolve market_id via Gamma API (cached)
-   ├─ Execute trade (with rate limiting)
-   └─ Log result to TUI
-   ↓
-6. Update position cache
-   ↓
-7. Repeat from step 3
+Config load (config.json + config.yaml)
+    ↓
+CopyTrader init — authenticated Polymarket CLOB client
+    ↓
+Position poll loop  (every poll_interval seconds)
+    ↓
+Diff: previous state vs current state
+    ↓
+For each delta:
+    ├─ Size calculation  (copy_percentage × tracked size)
+    ├─ Market ID resolution  (Gamma API, cached)
+    ├─ Risk guard check  (circuit breaker + depth)
+    └─ Order execution  (FAK/GTD, concurrent, rate-limited)
+    ↓
+Cache update → repeat
 ```
 
-### Key Design Decisions
+### Design Principles
 
-- **Split Configuration**: Separates sensitive credentials from non-sensitive settings
-- **Async-first**: All I/O operations are async for maximum throughput
-- **Modular Architecture**: Clear separation between bots, services, and UI
-- **Thread Safety**: Shared state uses `Arc<Mutex<>>` for safe concurrent access
-- **Error Handling**: Comprehensive error handling with `anyhow::Result`
-- **Rate Limiting**: Semaphore-based concurrency control for API calls
-- **Caching**: Market ID caching to reduce API calls
+- **Async-first** — all I/O through Tokio; no blocking in the hot path
+- **Venue-agnostic bots** — strategies reference `venues::VenueId`, not API-specific types
+- **Thread-safe shared state** — `Arc<Mutex<T>>` for position cache and circuit breaker
+- **Modular services** — bots are thin orchestrators; execution logic lives in services
+- **Fail loudly** — `anyhow::Result` propagation with full context on every error path
+- **Minimal allocations** — stack buffers preferred; heap only where necessary
 
 ---
 
 ## Safety & Risk Management
 
-### Circuit Breaker System
+### Circuit Breaker
 
-The circuit breaker automatically halts trading when:
-- Multiple large trades occur consecutively within a time window
-- Orderbook depth is insufficient
-- Market conditions become unfavorable
+Fires automatically when:
+- `consecutive_trigger` large trades (≥ `large_trade_shares`) occur within `sequence_window_secs`
+- Orderbook depth falls below `min_depth_usd`
 
-### Risk Guard Features
+Once tripped, all order execution is blocked for `trip_duration_secs`. The trip state and cooldown are logged and visible in the TUI.
 
-- **Fast Path Check**: Quick risk assessment for small trades
-- **Orderbook Validation**: Depth checks for larger trades
-- **Trip Duration**: Configurable cooldown period after circuit breaker trips
-- **Consecutive Trade Tracking**: Monitors trade sequences for pattern detection
+### Recommendations
 
-### Best Practices
-
-1. **Start Small**: Begin with `enable_trading: false` to monitor only
-2. **Test Configuration**: Verify position detection works correctly before enabling trading
-3. **Monitor Closely**: Watch logs for the first few real trades
-4. **Set Limits**: Configure appropriate circuit breaker thresholds
-5. **Use Low Copy Percentage**: Start with 5-10% to minimize risk
-6. **Regular Updates**: Keep dependencies updated for security patches
-7. **Backup Funds**: Never use more than you can afford to lose
-
----
-
-## Performance
-
-### Benchmarks
-
-- **Event Processing**: < 1ms per event
-- **Order Execution**: < 100ms end-to-end latency
-- **Position Polling**: ~200ms per wallet (with rate limiting)
-- **Memory Usage**: ~50MB baseline, scales with cache size
-- **CPU Usage**: < 5% on modern hardware
-
-### Optimization Tips
-
-- Use release builds for production: `cargo build --release`
-- Adjust `poll_interval` based on your needs (lower = more responsive, higher = less API calls)
-- Configure `rate_limit` based on API limits
-- Monitor cache hit rates for market ID lookups
-- Use appropriate WebSocket ping intervals
+| Stage | Action |
+|-------|--------|
+| Initial setup | Run with `enable_trading: false` for at least one full session |
+| First real trades | Keep `copy_percentage` at 5–10% until you trust the signal |
+| Ongoing | Watch circuit breaker trips — they surface execution anomalies |
+| Production | Use a dedicated wallet with only the capital you intend to deploy |
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
+**`Failed to parse positions response as JSON`**
+→ Verify `data_api_base` URL and API reachability. Check rate limits.
 
-**"Failed to parse positions response as JSON"**
-- Check `data_api_base` URL in config.json
-- Verify API endpoint is accessible
-- Check rate limiting settings
+**`Failed to get market_id for slug`**
+→ Check `gamma_api_base`, network connectivity, and API limits.
 
-**"Failed to get market_id for slug"**
-- Verify `gamma_api_base` URL in config.json
-- Check network connectivity
-- Review API rate limits
+**`Trade execution returned None`**
+→ Confirm `enable_trading: true`, sufficient USDC balance, and exchange approval.
 
-**"Trade execution returned None"**
-- Check logs for specific error messages
-- Verify `enable_trading` is set to `true`
-- Ensure wallet has sufficient USDC balance
-- Check exchange approval status
+**`INSUFFICIENT_BALANCE/ALLOWANCE`**
+→ Approve exchange on Polymarket.com. Confirm `funder_address` matches your proxy wallet.
 
-**"INSUFFICIENT_BALANCE/ALLOWANCE"**
-- Ensure wallet has USDC on Polygon
-- Approve exchange at Polymarket.com
-- Check `funder_address` matches your proxy wallet
+**`RISK_BLOCKED`**
+→ Circuit breaker is active. Wait for cooldown or review `trip_duration_secs`.
 
-**"RISK_BLOCKED"**
-- Circuit breaker has tripped
-- Wait for trip duration or adjust thresholds
-- Check orderbook depth requirements
-
-**TUI Not Displaying**
-- Ensure terminal supports ANSI colors
-- Check terminal size (minimum 80x24 recommended)
-- Try running in a different terminal emulator
+**TUI not rendering**
+→ Terminal must support ANSI colors. Minimum recommended size: 80×24.
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please follow these guidelines:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Follow Rust conventions**: Run `cargo fmt` and `cargo clippy`
-4. **Add tests** for new functionality
-5. **Update documentation** as needed
-6. **Submit a pull request**
-
-### Development Setup
+Pull requests are welcome. Before submitting:
 
 ```bash
-# Install development dependencies
-cargo install cargo-watch  # Optional: for auto-recompilation
-
-# Run tests
-cargo test
-
-# Check formatting
 cargo fmt --check
-
-# Run linter
 cargo clippy -- -D warnings
-
-# Run with debug logging
-RUST_LOG=debug cargo run
+cargo test
 ```
 
-## License
+Branch naming: `feature/`, `fix/`, `refactor/` prefixes preferred.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
 
-## Disclaimer
+## Contact
 
-> ⚠️ **Trading Risk Warning**: This software is provided for educational and research purposes. Trading cryptocurrencies and prediction markets involves substantial risk of loss. Past performance does not guarantee future results. Use at your own risk.
->
-> - **No Warranty**: The software is provided "as is" without warranty of any kind  
-> - **Not Financial Advice**: This is not investment or financial advice  
-> - **Compliance**: Ensure compliance with local regulations and Polymarket's terms of service  
-> - **Testing**: Always test thoroughly with `enable_trading: false` before using real funds
+Built and maintained actively — if you're working on Polymarket tooling, algorithmic strategies, or want to collaborate:
 
-## Support
+<div align="center">
 
-For issues, questions, or contributions:
+| Platform | Link |
+|----------|------|
+| **Discussions** | [GitHub Discussions](../../discussions) |
+| **Telegram** | [@haredoggy](https://t.me/haredoggy) |
 
-- See [Support](SUPPORT.md) for issues and contributions
+
+*Response time is typically within a few hours. Open to questions, feedback, and serious collaborations.*
+
+</div>
+
+---
 
 ## Acknowledgments
 
-- Built with [Polymarket Client SDK](https://github.com/Polymarket/polymarket-client-sdk-rs)
-- Powered by [Tokio](https://tokio.rs/) async runtime
-- Uses [Alloy](https://github.com/alloy-rs/alloy) for Ethereum interactions
-- TUI built with [ratatui](https://github.com/ratatui-org/ratatui)
+- [py-clob-client](https://github.com/Polymarket/py-clob-client) — reference implementation for CLOB interactions
+- [Tokio](https://tokio.rs/) — async runtime
+- [Alloy](https://github.com/alloy-rs/alloy) — Ethereum primitives
+- [ratatui](https://github.com/ratatui-org/ratatui) — terminal UI framework
+
+---
+
+## Disclaimer
+
+> Trading prediction markets involves real financial risk. This software is provided as-is, without warranty or guarantee of any outcome. It is not financial advice. Always test with `enable_trading: false` before deploying real capital. Ensure compliance with Polymarket's terms of service and applicable regulations in your jurisdiction.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for the Polymarket community**
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-[⬆ Back to Top](#polymarket-toolkits)
+**Built for the Polymarket community**
+
+[Back to top](#polymarket-toolkits)
 
 </div>

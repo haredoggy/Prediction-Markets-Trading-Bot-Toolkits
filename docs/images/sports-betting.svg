@@ -1,0 +1,140 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="sportsBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a0a0a"/>
+      <stop offset="100%" stop-color="#1a0606"/>
+    </linearGradient>
+    <linearGradient id="btnGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f85149"/>
+      <stop offset="100%" stop-color="#c0392b"/>
+    </linearGradient>
+    <linearGradient id="yesGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a4a2a"/>
+      <stop offset="100%" stop-color="#0f2a18"/>
+    </linearGradient>
+    <linearGradient id="noGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a1010"/>
+      <stop offset="100%" stop-color="#1f0808"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 6</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Sports Betting Execution Bot  —  Click-to-Bet Speed</text>
+  <rect x="738" y="14" width="100" height="22" rx="4" fill="#2a0a0a"/>
+  <circle cx="752" cy="25" r="4" fill="#f85149"/>
+  <text x="762" y="29" fill="#f85149" font-size="10" font-weight="bold">LIVE SPORTS</text>
+
+  <!-- Live match scoreboards -->
+  <!-- Match 1 -->
+  <rect x="20" y="62" width="400" height="90" rx="5" fill="url(#sportsBg)" stroke="#4a1515" stroke-width="1"/>
+  <rect x="20" y="62" width="400" height="6" rx="5" fill="#f85149" opacity="0.7"/>
+
+  <rect x="30" y="74" width="56" height="16" rx="3" fill="#f85149" opacity="0.2"/>
+  <circle cx="40" cy="82" r="4" fill="#f85149"/>
+  <text x="49" y="86" fill="#f85149" font-size="9" font-weight="bold">LIVE</text>
+  <text x="100" y="86" fill="#8b949e" font-size="9">NBA  ·  Q3  38:14</text>
+
+  <text x="30" y="108" fill="#e6edf3" font-size="14" font-weight="bold">Lakers</text>
+  <text x="185" y="108" fill="#e6edf3" font-size="20" font-weight="bold" text-anchor="middle">88 – 92</text>
+  <text x="330" y="108" fill="#e6edf3" font-size="14" font-weight="bold" text-anchor="end">Celtics</text>
+  <text x="185" y="128" fill="#8b949e" font-size="10" text-anchor="middle">Lakers to win  ·  market closes in 24min</text>
+  <text x="185" y="144" fill="#8b949e" font-size="9" text-anchor="middle">Vol $18,400  ·  Spread tight</text>
+
+  <!-- Match 2 -->
+  <rect x="20" y="160" width="400" height="90" rx="5" fill="url(#sportsBg)" stroke="#4a1515" stroke-width="1" opacity="0.7"/>
+  <rect x="20" y="160" width="400" height="6" rx="5" fill="#f85149" opacity="0.4"/>
+  <rect x="30" y="172" width="56" height="16" rx="3" fill="#f85149" opacity="0.15"/>
+  <circle cx="40" cy="180" r="4" fill="#f85149" opacity="0.5"/>
+  <text x="49" y="184" fill="#f85149" font-size="9" opacity="0.7">LIVE</text>
+  <text x="100" y="184" fill="#8b949e" font-size="9">NFL  ·  Q2  04:22</text>
+  <text x="30" y="208" fill="#8b949e" font-size="14" font-weight="bold">Chiefs</text>
+  <text x="185" y="208" fill="#8b949e" font-size="18" font-weight="bold" text-anchor="middle">17 – 14</text>
+  <text x="330" y="208" fill="#8b949e" font-size="14" font-weight="bold" text-anchor="end">Bills</text>
+  <text x="185" y="228" fill="#8b949e" font-size="9" text-anchor="middle">Vol $9,200</text>
+  <text x="185" y="242" fill="#8b949e" font-size="8" text-anchor="middle">Select to trade</text>
+
+  <!-- Match 3 -->
+  <rect x="20" y="258" width="400" height="80" rx="5" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="30" y="282" fill="#8b949e" font-size="9">Soccer  ·  HT  45:00</text>
+  <text x="30" y="304" fill="#8b949e" font-size="13">Man City</text>
+  <text x="185" y="304" fill="#8b949e" font-size="16" font-weight="bold" text-anchor="middle">1 – 1</text>
+  <text x="330" y="304" fill="#8b949e" font-size="13" text-anchor="end">Arsenal</text>
+  <text x="185" y="326" fill="#8b949e" font-size="9" text-anchor="middle">Vol $6,100  ·  Halftime</text>
+
+  <!-- Right panel: execution interface -->
+  <line x1="434" y1="62" x2="434" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <text x="454" y="80" fill="#8b949e" font-size="10">EXECUTION  —  Lakers to win</text>
+  <line x1="434" y1="85" x2="860" y2="85" stroke="#21262d" stroke-width="1"/>
+
+  <!-- YES tile -->
+  <rect x="454" y="94" width="190" height="110" rx="6" fill="url(#yesGrad)" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="549" y="118" fill="#3fb950" font-size="12" font-weight="bold" text-anchor="middle">YES  —  Lakers Win</text>
+  <text x="549" y="142" fill="#3fb950" font-size="32" font-weight="bold" text-anchor="middle">0.46</text>
+  <text x="549" y="162" fill="#8b949e" font-size="10" text-anchor="middle">Implied: 46%</text>
+  <text x="549" y="178" fill="#8b949e" font-size="9" text-anchor="middle">Depth $4,200</text>
+  <!-- YES buy button -->
+  <rect x="460" y="188" width="178" height="30" rx="4" fill="#1a4a2a" stroke="#3fb950" stroke-width="1.2"/>
+  <text x="549" y="207" fill="#3fb950" font-size="12" font-weight="bold" text-anchor="middle">BUY YES</text>
+
+  <!-- NO tile -->
+  <rect x="658" y="94" width="190" height="110" rx="6" fill="url(#noGrad)" stroke="#f85149" stroke-width="1.5"/>
+  <text x="753" y="118" fill="#f85149" font-size="12" font-weight="bold" text-anchor="middle">NO  —  Celtics Win</text>
+  <text x="753" y="142" fill="#f85149" font-size="32" font-weight="bold" text-anchor="middle">0.54</text>
+  <text x="753" y="162" fill="#8b949e" font-size="10" text-anchor="middle">Implied: 54%</text>
+  <text x="753" y="178" fill="#8b949e" font-size="9" text-anchor="middle">Depth $5,800</text>
+  <!-- NO buy button -->
+  <rect x="664" y="188" width="178" height="30" rx="4" fill="#3a1010" stroke="#f85149" stroke-width="1.2"/>
+  <text x="753" y="207" fill="#f85149" font-size="12" font-weight="bold" text-anchor="middle">BUY NO</text>
+
+  <!-- Execute (main action) button -->
+  <rect x="454" y="232" width="394" height="46" rx="6" fill="url(#btnGrad)" stroke="#f85149" stroke-width="0.5"/>
+  <text x="651" y="252" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">⚡ EXECUTE  (FAK)</text>
+  <text x="651" y="270" fill="#ffaaaa" font-size="10" text-anchor="middle">Fill-or-Kill  ·  &lt;50ms  ·  Auto-confirm</text>
+
+  <!-- Order summary -->
+  <rect x="454" y="286" width="394" height="58" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="466" y="302" fill="#8b949e" font-size="9">SIDE</text>
+  <text x="466" y="318" fill="#3fb950" font-size="12" font-weight="bold">YES</text>
+  <text x="530" y="302" fill="#8b949e" font-size="9">SIZE (USD)</text>
+  <text x="530" y="318" fill="#e6edf3" font-size="12" font-weight="bold">$50.00</text>
+  <text x="614" y="302" fill="#8b949e" font-size="9">PRICE</text>
+  <text x="614" y="318" fill="#e6edf3" font-size="12" font-weight="bold">0.460</text>
+  <text x="686" y="302" fill="#8b949e" font-size="9">EXEC TIME</text>
+  <text x="686" y="318" fill="#f85149" font-size="12" font-weight="bold">&lt;50ms</text>
+  <text x="762" y="302" fill="#8b949e" font-size="9">TYPE</text>
+  <text x="762" y="318" fill="#e6edf3" font-size="12" font-weight="bold">FAK</text>
+  <text x="466" y="336" fill="#8b949e" font-size="9">Est. payout if correct:  $108.70  (+$58.70)</text>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">EXEC LATENCY</text>
+  <text x="36" y="398" fill="#f85149" font-size="16" font-weight="bold">&lt;50ms</text>
+
+  <line x1="160" y1="365" x2="160" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="176" y="378" fill="#8b949e" font-size="9">LIVE MARKETS</text>
+  <text x="176" y="398" fill="#e6edf3" font-size="16" font-weight="bold">NBA · NFL · Soccer</text>
+
+  <line x1="420" y1="365" x2="420" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="436" y="378" fill="#8b949e" font-size="9">ORDER FLOW</text>
+  <text x="436" y="398" fill="#e6edf3" font-size="16" font-weight="bold">FAK / Market</text>
+
+  <line x1="640" y1="365" x2="640" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="656" y="378" fill="#8b949e" font-size="9">INTERFACE</text>
+  <text x="656" y="398" fill="#3fb950" font-size="16" font-weight="bold">Click → Execute ✓</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

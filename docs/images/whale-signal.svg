@@ -1,0 +1,149 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="whalePulse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bc8cff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#bc8cff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="chainFlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#bc8cff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#bc8cff" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="txBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e1130"/>
+      <stop offset="100%" stop-color="#140c22"/>
+    </linearGradient>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#bc8cff" opacity="0.9"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 10</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">On-Chain Whale Signal Bot  —  Trade Before the API</text>
+  <rect x="742" y="14" width="100" height="22" rx="4" fill="#1e1130"/>
+  <text x="755" y="29" fill="#bc8cff" font-size="10" font-weight="bold">CHAIN WATCHING</text>
+
+  <!-- Left: chain monitor panel -->
+  <text x="32" y="78" fill="#8b949e" font-size="10">POLYGON MEMPOOL  —  CLOB CONTRACT MONITOR</text>
+  <line x1="20" y1="83" x2="430" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Monitored wallets -->
+  <text x="32" y="98" fill="#8b949e" font-size="9">TRACKED WALLETS  (Polygon on-chain)</text>
+  <line x1="20" y1="103" x2="430" y2="103" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Wallet 1 - just fired -->
+  <rect x="20" y="104" width="410" height="42" fill="url(#txBg)" rx="2"/>
+  <rect x="20" y="104" width="3" height="42" fill="#bc8cff" rx="1"/>
+  <circle cx="44" cy="117" r="6" fill="#bc8cff" opacity="0.2"/>
+  <circle cx="44" cy="117" r="3.5" fill="#bc8cff"/>
+  <text x="58" y="115" fill="#e6edf3" font-size="11" font-weight="bold">0x63ce…ba9a</text>
+  <text x="58" y="129" fill="#8b949e" font-size="9">Interacted CLOB contract  ·  0.00 sec ago</text>
+  <rect x="310" y="108" width="110" height="30" rx="3" fill="#1e1130" stroke="#bc8cff" stroke-width="0.8"/>
+  <text x="318" y="119" fill="#bc8cff" font-size="9" font-weight="bold">TX DETECTED</text>
+  <text x="318" y="131" fill="#bc8cff" font-size="9">$4,200 →CLOB</text>
+
+  <!-- Wallet 2 - watching -->
+  <rect x="20" y="150" width="410" height="38" fill="#161b22" rx="2"/>
+  <rect x="20" y="150" width="3" height="38" fill="#bc8cff" opacity="0.3" rx="1"/>
+  <circle cx="44" cy="169" r="5" fill="#8b949e" opacity="0.3"/>
+  <text x="58" y="164" fill="#8b949e" font-size="11">0xf9a1…3c72</text>
+  <text x="58" y="178" fill="#8b949e" font-size="9">Last seen: 8m 22s ago  ·  idle</text>
+  <text x="358" y="172" fill="#8b949e" font-size="9">watching</text>
+
+  <!-- Wallet 3 -->
+  <rect x="20" y="192" width="410" height="38" fill="#161b22" rx="2"/>
+  <rect x="20" y="192" width="3" height="38" fill="#bc8cff" opacity="0.3" rx="1"/>
+  <circle cx="44" cy="211" r="5" fill="#8b949e" opacity="0.3"/>
+  <text x="58" y="206" fill="#8b949e" font-size="11">0xa72b…88e1</text>
+  <text x="58" y="220" fill="#8b949e" font-size="9">Last seen: 23m 05s ago  ·  idle</text>
+  <text x="358" y="214" fill="#8b949e" font-size="9">watching</text>
+
+  <!-- Signal advantage -->
+  <line x1="20" y1="234" x2="430" y2="234" stroke="#30363d" stroke-width="1"/>
+  <rect x="20" y="238" width="410" height="56" rx="4" fill="#1e1130" stroke="#bc8cff" stroke-width="0.8"/>
+  <text x="32" y="256" fill="#bc8cff" font-size="10" font-weight="bold">SPEED ADVANTAGE</text>
+  <text x="32" y="272" fill="#8b949e" font-size="9">On-chain detection fires before positions API</text>
+
+  <!-- Timeline bars -->
+  <text x="32"  y="288" fill="#8b949e" font-size="9">On-chain TX visible:</text>
+  <rect x="200" y="280" width="30" height="8" rx="2" fill="#bc8cff"/>
+  <text x="234" y="288" fill="#bc8cff" font-size="9">~0s</text>
+
+  <text x="32"  y="300" fill="#8b949e" font-size="9">Positions API lag:</text>
+  <rect x="200" y="292" width="200" height="8" rx="2" fill="#30363d"/>
+  <rect x="200" y="292" width="200" height="8" rx="2" fill="#8b949e" opacity="0.6"/>
+  <text x="404" y="300" fill="#8b949e" font-size="9">3–30s+</text>
+
+  <!-- Divider -->
+  <line x1="444" y1="62" x2="444" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Right: signal flow diagram -->
+  <text x="464" y="78" fill="#8b949e" font-size="10">SIGNAL PIPELINE</text>
+  <line x1="444" y1="83" x2="860" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Flow: polygon → decode → signal → execute -->
+  <!-- Step 1 -->
+  <rect x="464" y="96" width="360" height="36" rx="5" fill="url(#txBg)" stroke="#bc8cff" stroke-width="1.2"/>
+  <text x="644" y="112" fill="#bc8cff" font-size="11" font-weight="bold" text-anchor="middle">① Polygon block subscription</text>
+  <text x="644" y="126" fill="#8b949e" font-size="9" text-anchor="middle">WebSocket — every new block on Polygon</text>
+
+  <!-- Arrow -->
+  <line x1="644" y1="132" x2="644" y2="148" stroke="#bc8cff" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- Step 2 -->
+  <rect x="464" y="148" width="360" height="36" rx="5" fill="url(#txBg)" stroke="#bc8cff" stroke-width="1"/>
+  <text x="644" y="164" fill="#bc8cff" font-size="11" font-weight="bold" text-anchor="middle">② Filter CLOB contract interactions</text>
+  <text x="644" y="178" fill="#8b949e" font-size="9" text-anchor="middle">Match watched wallets → decode calldata</text>
+
+  <!-- Arrow -->
+  <line x1="644" y1="184" x2="644" y2="200" stroke="#bc8cff" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- Step 3 -->
+  <rect x="464" y="200" width="360" height="36" rx="5" fill="url(#txBg)" stroke="#bc8cff" stroke-width="1"/>
+  <text x="644" y="216" fill="#bc8cff" font-size="11" font-weight="bold" text-anchor="middle">③ Decode: token ID · size · side</text>
+  <text x="644" y="230" fill="#8b949e" font-size="9" text-anchor="middle">Reconstruct order intent from ABI calldata</text>
+
+  <!-- Arrow -->
+  <line x1="644" y1="236" x2="644" y2="252" stroke="#bc8cff" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- Step 4 -->
+  <rect x="464" y="252" width="360" height="36" rx="5" fill="#0f2a18" stroke="#3fb950" stroke-width="1.2"/>
+  <text x="644" y="268" fill="#3fb950" font-size="11" font-weight="bold" text-anchor="middle">④ Execute mirror order (ahead of API)</text>
+  <text x="644" y="282" fill="#8b949e" font-size="9" text-anchor="middle">FAK  ·  configurable sizing  ·  full risk check</text>
+
+  <!-- Timing callout -->
+  <rect x="464" y="298" width="360" height="44" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="475" y="316" fill="#8b949e" font-size="9">LEAD TIME OVER COPY TRADING</text>
+  <text x="475" y="334" fill="#bc8cff" font-size="16" font-weight="bold">3s – 30s+</text>
+  <text x="640" y="316" fill="#8b949e" font-size="9">NETWORK</text>
+  <text x="640" y="334" fill="#e6edf3" font-size="14" font-weight="bold">Polygon</text>
+
+  <!-- Bottom stats -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36"  y="378" fill="#8b949e" font-size="9">SIGNAL SOURCE</text>
+  <text x="36"  y="398" fill="#bc8cff" font-size="14" font-weight="bold">On-chain TX</text>
+  <line x1="200" y1="365" x2="200" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="216" y="378" fill="#8b949e" font-size="9">LEAD TIME</text>
+  <text x="216" y="398" fill="#e6edf3" font-size="15" font-weight="bold">3s – 30s+</text>
+  <line x1="380" y1="365" x2="380" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="396" y="378" fill="#8b949e" font-size="9">NETWORK</text>
+  <text x="396" y="398" fill="#e6edf3" font-size="15" font-weight="bold">Polygon (Matic)</text>
+  <line x1="590" y1="365" x2="590" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="606" y="378" fill="#8b949e" font-size="9">DETECTION</text>
+  <text x="606" y="398" fill="#3fb950" font-size="15" font-weight="bold">Block subscription ✓</text>
+  <line x1="800" y1="365" x2="800" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="816" y="378" fill="#8b949e" font-size="9">RISK CHECK</text>
+  <text x="816" y="398" fill="#3fb950" font-size="14" font-weight="bold">Full ✓</text>
+
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

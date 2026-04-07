@@ -1,0 +1,160 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#39d9d9" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#39d9d9" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="walletBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0e2a2a"/>
+      <stop offset="100%" stop-color="#0a1a1a"/>
+    </linearGradient>
+    <linearGradient id="myWalletBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a2a1a"/>
+      <stop offset="100%" stop-color="#061a0f"/>
+    </linearGradient>
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#39d9d9" opacity="0.9"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3fb950" opacity="0.9"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 5</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Polymarket Copy Trading Bot  —  Mirror Smart Wallets</text>
+  <rect x="756" y="14" width="84" height="22" rx="4" fill="#0e2a2a"/>
+  <text x="770" y="29" fill="#39d9d9" font-size="10" font-weight="bold">3 WALLETS ON</text>
+
+  <!-- SOURCE WALLETS section (left column) -->
+  <text x="32" y="80" fill="#8b949e" font-size="10">TRACKED WALLETS</text>
+  <line x1="20" y1="85" x2="320" y2="85" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Wallet 1 (active, sending signal) -->
+  <rect x="20" y="90" width="300" height="70" rx="5" fill="url(#walletBg)" stroke="#39d9d9" stroke-width="1.2"/>
+  <rect x="20" y="90" width="4" height="70" rx="2" fill="#39d9d9"/>
+  <text x="38" y="108" fill="#8b949e" font-size="9">WALLET 1</text>
+  <text x="38" y="124" fill="#39d9d9" font-size="11" font-weight="bold">0x63ce…ba9a</text>
+  <text x="38" y="140" fill="#8b949e" font-size="9">30d PnL</text>
+  <text x="38" y="152" fill="#3fb950" font-size="13" font-weight="bold">+$4,820</text>
+  <!-- Signal pulse -->
+  <circle cx="290" cy="125" r="8" fill="#39d9d9" opacity="0.15"/>
+  <circle cx="290" cy="125" r="5" fill="#39d9d9" opacity="0.4"/>
+  <circle cx="290" cy="125" r="2.5" fill="#39d9d9"/>
+  <text x="270" y="152" fill="#39d9d9" font-size="9">SIGNAL</text>
+
+  <!-- Wallet 2 -->
+  <rect x="20" y="170" width="300" height="70" rx="5" fill="url(#walletBg)" stroke="#30363d" stroke-width="1"/>
+  <rect x="20" y="170" width="4" height="70" rx="2" fill="#39d9d9" opacity="0.4"/>
+  <text x="38" y="188" fill="#8b949e" font-size="9">WALLET 2</text>
+  <text x="38" y="204" fill="#8b949e" font-size="11">0xf9a1…3c72</text>
+  <text x="38" y="220" fill="#8b949e" font-size="9">30d PnL</text>
+  <text x="38" y="232" fill="#3fb950" font-size="13" font-weight="bold">+$2,310</text>
+  <text x="255" y="232" fill="#8b949e" font-size="9">watching</text>
+
+  <!-- Wallet 3 -->
+  <rect x="20" y="250" width="300" height="70" rx="5" fill="url(#walletBg)" stroke="#30363d" stroke-width="1"/>
+  <rect x="20" y="250" width="4" height="70" rx="2" fill="#39d9d9" opacity="0.4"/>
+  <text x="38" y="268" fill="#8b949e" font-size="9">WALLET 3</text>
+  <text x="38" y="284" fill="#8b949e" font-size="11">0xa72b…88e1</text>
+  <text x="38" y="300" fill="#8b949e" font-size="9">30d PnL</text>
+  <text x="38" y="312" fill="#3fb950" font-size="13" font-weight="bold">+$1,740</text>
+  <text x="255" y="312" fill="#8b949e" font-size="9">watching</text>
+
+  <!-- Center: Bot engine -->
+  <!-- Flow lines from wallet 1 -->
+  <line x1="322" y1="125" x2="440" y2="175" stroke="#39d9d9" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowCyan)" opacity="0.8"/>
+  <line x1="322" y1="205" x2="440" y2="185" stroke="#39d9d9" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+  <line x1="322" y1="285" x2="440" y2="195" stroke="#39d9d9" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+
+  <!-- Bot engine box -->
+  <rect x="440" y="130" width="160" height="130" rx="6" fill="#0e1f1f" stroke="#39d9d9" stroke-width="1.5"/>
+  <text x="520" y="152" fill="#39d9d9" font-size="10" font-weight="bold" text-anchor="middle">COPY ENGINE</text>
+  <line x1="450" y1="158" x2="590" y2="158" stroke="#39d9d9" stroke-width="0.5" opacity="0.4"/>
+  <text x="520" y="176" fill="#8b949e" font-size="9" text-anchor="middle">Detect change</text>
+  <text x="520" y="190" fill="#8b949e" font-size="9" text-anchor="middle">Size by copy %</text>
+  <text x="520" y="204" fill="#8b949e" font-size="9" text-anchor="middle">Risk check</text>
+  <text x="520" y="218" fill="#8b949e" font-size="9" text-anchor="middle">Resolve market ID</text>
+  <text x="520" y="232" fill="#8b949e" font-size="9" text-anchor="middle">Execute order</text>
+  <text x="520" y="248" fill="#3fb950" font-size="10" font-weight="bold" text-anchor="middle">→ Log to TUI</text>
+
+  <!-- Signal label on flow -->
+  <rect x="338" y="108" width="95" height="22" rx="3" fill="#0e2a2a" stroke="#39d9d9" stroke-width="0.8"/>
+  <text x="345" y="123" fill="#39d9d9" font-size="10" font-weight="bold">BUY 100.5 sh</text>
+
+  <!-- Arrow from engine to my wallet -->
+  <line x1="602" y1="195" x2="690" y2="195" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <rect x="608" y="178" width="72" height="22" rx="3" fill="#0a2a14" stroke="#3fb950" stroke-width="0.8"/>
+  <text x="616" y="193" fill="#3fb950" font-size="10" font-weight="bold">20.1 shares</text>
+  <text x="616" y="206" fill="#8b949e" font-size="9">20% copy</text>
+
+  <!-- MY WALLET section (right) -->
+  <rect x="692" y="90" width="172" height="270" rx="6" fill="url(#myWalletBg)" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="778" y="110" fill="#3fb950" font-size="10" font-weight="bold" text-anchor="middle">MY WALLET</text>
+  <line x1="702" y1="116" x2="854" y2="116" stroke="#3fb950" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- My positions -->
+  <text x="706" y="132" fill="#8b949e" font-size="9">POSITIONS</text>
+
+  <rect x="702" y="136" width="152" height="30" rx="3" fill="#0f2a18" opacity="0.8"/>
+  <text x="710" y="150" fill="#e6edf3" font-size="10">BTC Up 15m</text>
+  <text x="710" y="162" fill="#3fb950" font-size="10">+20.1 sh  ▲</text>
+
+  <rect x="702" y="170" width="152" height="30" rx="3" fill="#0f2a18" opacity="0.6"/>
+  <text x="710" y="184" fill="#e6edf3" font-size="10">SOL Up 5m</text>
+  <text x="710" y="196" fill="#3fb950" font-size="10">+14.8 sh  ▲</text>
+
+  <rect x="702" y="204" width="152" height="30" rx="3" fill="#1a0f0a" opacity="0.6"/>
+  <text x="710" y="218" fill="#e6edf3" font-size="10">ETH Down 15m</text>
+  <text x="710" y="230" fill="#f85149" font-size="10">+8.2 sh  ▼</text>
+
+  <line x1="702" y1="238" x2="854" y2="238" stroke="#30363d" stroke-width="0.8"/>
+
+  <text x="706" y="254" fill="#8b949e" font-size="9">COPY %</text>
+  <text x="706" y="270" fill="#e6edf3" font-size="14" font-weight="bold">20%</text>
+  <text x="756" y="254" fill="#8b949e" font-size="9">BALANCE</text>
+  <text x="756" y="270" fill="#e6edf3" font-size="14" font-weight="bold">$480</text>
+
+  <text x="706" y="292" fill="#8b949e" font-size="9">CIRCUIT BREAKER</text>
+  <rect x="702" y="296" width="152" height="20" rx="3" fill="#0f2a18"/>
+  <text x="710" y="310" fill="#3fb950" font-size="10" font-weight="bold">ARMED  ·  Ready</text>
+
+  <text x="706" y="334" fill="#8b949e" font-size="9">RISK GUARD</text>
+  <rect x="702" y="338" width="152" height="20" rx="3" fill="#0f2a18"/>
+  <text x="710" y="352" fill="#3fb950" font-size="10" font-weight="bold">Active  ·  All checks ✓</text>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">TRACKED WALLETS</text>
+  <text x="36" y="398" fill="#39d9d9" font-size="16" font-weight="bold">3</text>
+
+  <line x1="130" y1="365" x2="130" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="146" y="378" fill="#8b949e" font-size="9">COPY PERCENTAGE</text>
+  <text x="146" y="398" fill="#e6edf3" font-size="16" font-weight="bold">Configurable</text>
+
+  <line x1="380" y1="365" x2="380" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="396" y="378" fill="#8b949e" font-size="9">ORDER TYPES</text>
+  <text x="396" y="398" fill="#e6edf3" font-size="16" font-weight="bold">FAK / GTD</text>
+
+  <line x1="560" y1="365" x2="560" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="576" y="378" fill="#8b949e" font-size="9">RISK LIMITS</text>
+  <text x="576" y="398" fill="#3fb950" font-size="16" font-weight="bold">Multi-layer ✓</text>
+
+  <line x1="740" y1="365" x2="740" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="756" y="378" fill="#8b949e" font-size="9">DRY RUN</text>
+  <text x="756" y="398" fill="#3fb950" font-size="16" font-weight="bold">Supported ✓</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

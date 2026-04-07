@@ -9,6 +9,7 @@ use sha2::Sha256;
 
 pub mod utils;
 pub mod config;
+pub mod venues;
 pub mod service;
 pub mod models;
 pub mod bot;

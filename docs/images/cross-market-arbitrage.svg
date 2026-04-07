@@ -1,0 +1,158 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="leftPanel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a1040" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1a1040" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="rightPanel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d1f2d" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0d1f2d" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="edgePulse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bc8cff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#bc8cff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#bc8cff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 2</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Polymarket ↔ Kalshi Cross-Market Arbitrage Bot</text>
+  <rect x="730" y="14" width="100" height="22" rx="4" fill="#1e1130"/>
+  <text x="742" y="29" fill="#bc8cff" font-size="10" font-weight="bold">15‑min windows</text>
+
+  <!-- Left panel: Polymarket -->
+  <rect x="20" y="62" width="340" height="288" fill="url(#leftPanel)" rx="6"/>
+  <rect x="20" y="62" width="340" height="288" fill="none" stroke="#3d2a6e" stroke-width="1" rx="6"/>
+
+  <!-- PM logo area -->
+  <rect x="32" y="72" width="130" height="26" rx="4" fill="#2a1a50"/>
+  <circle cx="47" cy="85" r="7" fill="#bc8cff" opacity="0.8"/>
+  <text x="60" y="89" fill="#e6edf3" font-size="12" font-weight="bold">POLYMARKET</text>
+
+  <text x="32" y="120" fill="#8b949e" font-size="10">Market</text>
+  <text x="32" y="136" fill="#e6edf3" font-size="12">BTC Up/Down – 15m</text>
+
+  <text x="32" y="162" fill="#8b949e" font-size="10">YES price</text>
+  <text x="32" y="182" fill="#3fb950" font-size="28" font-weight="bold">0.534</text>
+  <text x="130" y="182" fill="#3fb950" font-size="14">USDC</text>
+
+  <text x="32" y="206" fill="#8b949e" font-size="10">NO price</text>
+  <text x="32" y="226" fill="#f85149" font-size="22" font-weight="bold">0.468</text>
+
+  <!-- Order book mini PM -->
+  <text x="32" y="252" fill="#8b949e" font-size="10">Order Book (USD)</text>
+  <rect x="32" y="258" width="80" height="8" rx="2" fill="#3fb950" opacity="0.7"/>
+  <rect x="32" y="270" width="60" height="8" rx="2" fill="#3fb950" opacity="0.5"/>
+  <rect x="32" y="282" width="95" height="8" rx="2" fill="#3fb950" opacity="0.35"/>
+  <text x="120" y="265" fill="#3fb950" font-size="9">$840</text>
+  <text x="120" y="277" fill="#3fb950" font-size="9">$620</text>
+  <text x="120" y="289" fill="#3fb950" font-size="9">$980</text>
+  <rect x="32" y="296" width="70" height="8" rx="2" fill="#f85149" opacity="0.6"/>
+  <rect x="32" y="308" width="50" height="8" rx="2" fill="#f85149" opacity="0.4"/>
+  <text x="120" y="303" fill="#f85149" font-size="9">$710</text>
+  <text x="120" y="315" fill="#f85149" font-size="9">$480</text>
+
+  <!-- Spread badge PM -->
+  <rect x="200" y="256" width="148" height="70" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="214" y="272" fill="#8b949e" font-size="9">Spread</text>
+  <text x="214" y="288" fill="#bc8cff" font-size="14" font-weight="bold">0.066</text>
+  <text x="214" y="304" fill="#8b949e" font-size="9">Depth (YES)</text>
+  <text x="214" y="320" fill="#e6edf3" font-size="12">$2,440</text>
+
+  <!-- Right panel: Kalshi -->
+  <rect x="520" y="62" width="340" height="288" fill="url(#rightPanel)" rx="6"/>
+  <rect x="520" y="62" width="340" height="288" fill="none" stroke="#1c3a4a" stroke-width="1" rx="6"/>
+
+  <!-- Kalshi logo area -->
+  <rect x="532" y="72" width="110" height="26" rx="4" fill="#0d2535"/>
+  <rect x="546" y="78" width="14" height="14" rx="2" fill="#58a6ff" opacity="0.8"/>
+  <text x="566" y="89" fill="#e6edf3" font-size="12" font-weight="bold">KALSHI</text>
+
+  <text x="532" y="120" fill="#8b949e" font-size="10">Market</text>
+  <text x="532" y="136" fill="#e6edf3" font-size="12">BTC-UP-15M</text>
+
+  <text x="532" y="162" fill="#8b949e" font-size="10">YES price</text>
+  <text x="532" y="182" fill="#3fb950" font-size="28" font-weight="bold">0.518</text>
+  <text x="630" y="182" fill="#3fb950" font-size="14">USD</text>
+
+  <text x="532" y="206" fill="#8b949e" font-size="10">NO price</text>
+  <text x="532" y="226" fill="#f85149" font-size="22" font-weight="bold">0.484</text>
+
+  <!-- Order book mini Kalshi -->
+  <text x="532" y="252" fill="#8b949e" font-size="10">Order Book (USD)</text>
+  <rect x="532" y="258" width="72" height="8" rx="2" fill="#3fb950" opacity="0.7"/>
+  <rect x="532" y="270" width="55" height="8" rx="2" fill="#3fb950" opacity="0.5"/>
+  <rect x="532" y="282" width="88" height="8" rx="2" fill="#3fb950" opacity="0.35"/>
+  <text x="628" y="265" fill="#3fb950" font-size="9">$760</text>
+  <text x="628" y="277" fill="#3fb950" font-size="9">$570</text>
+  <text x="628" y="289" fill="#3fb950" font-size="9">$880</text>
+  <rect x="532" y="296" width="65" height="8" rx="2" fill="#f85149" opacity="0.6"/>
+  <rect x="532" y="308" width="45" height="8" rx="2" fill="#f85149" opacity="0.4"/>
+  <text x="628" y="303" fill="#f85149" font-size="9">$660</text>
+  <text x="628" y="315" fill="#f85149" font-size="9">$440</text>
+
+  <!-- Center: Delta / Edge panel -->
+  <rect x="374" y="62" width="132" height="288" fill="url(#edgePulse)" rx="4"/>
+  <rect x="374" y="62" width="132" height="288" fill="none" stroke="#3d2a6e" stroke-width="0.5" rx="4"/>
+
+  <text x="440" y="98" fill="#8b949e" font-size="10" text-anchor="middle">PRICE DELTA</text>
+  <text x="440" y="126" fill="#bc8cff" font-size="26" font-weight="bold" text-anchor="middle">Δ 1.6¢</text>
+
+  <rect x="388" y="136" width="104" height="26" rx="4" fill="#2a1a50"/>
+  <text x="440" y="153" fill="#bc8cff" font-size="12" font-weight="bold" text-anchor="middle">EDGE FOUND</text>
+
+  <!-- Arrows -->
+  <!-- BUY PM arrow -->
+  <line x1="363" y1="182" x2="372" y2="182" stroke="#3fb950" stroke-width="2"/>
+  <polygon points="370,178 378,182 370,186" fill="#3fb950"/>
+  <!-- SELL Kalshi arrow -->
+  <line x1="517" y1="182" x2="508" y2="182" stroke="#f85149" stroke-width="2"/>
+  <polygon points="510,178 502,182 510,186" fill="#f85149"/>
+
+  <text x="440" y="200" fill="#3fb950" font-size="10" text-anchor="middle" font-weight="bold">BUY YES</text>
+  <text x="440" y="214" fill="#8b949e" font-size="9" text-anchor="middle">Polymarket</text>
+  <line x1="410" y1="222" x2="470" y2="222" stroke="#30363d" stroke-width="1"/>
+  <text x="440" y="238" fill="#f85149" font-size="10" text-anchor="middle" font-weight="bold">SELL YES</text>
+  <text x="440" y="252" fill="#8b949e" font-size="9" text-anchor="middle">Kalshi</text>
+
+  <text x="440" y="278" fill="#8b949e" font-size="9" text-anchor="middle">Threshold</text>
+  <text x="440" y="296" fill="#e6edf3" font-size="13" font-weight="bold" text-anchor="middle">≥ 0.8¢</text>
+  <text x="440" y="316" fill="#8b949e" font-size="9" text-anchor="middle">Both legs logged</text>
+  <text x="440" y="332" fill="#8b949e" font-size="9" text-anchor="middle">+ P&amp;L tracked</text>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">VENUES</text>
+  <text x="36" y="398" fill="#bc8cff" font-size="15" font-weight="bold">PM ↔ Kalshi</text>
+
+  <line x1="180" y1="365" x2="180" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="196" y="378" fill="#8b949e" font-size="9">WINDOWS</text>
+  <text x="196" y="398" fill="#e6edf3" font-size="15" font-weight="bold">15‑min</text>
+
+  <line x1="340" y1="365" x2="340" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="356" y="378" fill="#8b949e" font-size="9">EDGE THRESHOLD</text>
+  <text x="356" y="398" fill="#e6edf3" font-size="15" font-weight="bold">Configurable</text>
+
+  <line x1="560" y1="365" x2="560" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="576" y="378" fill="#8b949e" font-size="9">EXECUTION</text>
+  <text x="576" y="398" fill="#3fb950" font-size="15" font-weight="bold">Hedged legs ✓</text>
+
+  <line x1="760" y1="365" x2="760" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="776" y="378" fill="#8b949e" font-size="9">LOGGING</text>
+  <text x="776" y="398" fill="#3fb950" font-size="15" font-weight="bold">Full ✓</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

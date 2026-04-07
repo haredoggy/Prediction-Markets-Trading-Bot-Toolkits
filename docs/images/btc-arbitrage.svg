@@ -1,0 +1,134 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="winGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0.02"/>
+    </linearGradient>
+    <clipPath id="chartClip1">
+      <rect x="60" y="70" width="780" height="250"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+
+  <!-- Window chrome -->
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+
+  <!-- Title -->
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 1</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">BTC 5‑min / 15‑min / 1hr Arbitrage Bot</text>
+
+  <!-- Window badges -->
+  <rect x="508" y="14" width="42" height="22" rx="4" fill="#1c2a3a"/>
+  <text x="520" y="29" fill="#58a6ff" font-size="11" font-weight="bold">5m</text>
+  <rect x="558" y="14" width="48" height="22" rx="4" fill="#1c2a3a"/>
+  <text x="570" y="29" fill="#58a6ff" font-size="11" font-weight="bold">15m</text>
+  <rect x="614" y="14" width="44" height="22" rx="4" fill="#21262d"/>
+  <text x="626" y="29" fill="#8b949e" font-size="11">1hr</text>
+
+  <!-- LIVE badge -->
+  <rect x="776" y="14" width="52" height="22" rx="4" fill="#1a2f1a"/>
+  <circle cx="789" cy="25" r="3.5" fill="#3fb950"/>
+  <text x="797" y="29" fill="#3fb950" font-size="10" font-weight="bold">LIVE</text>
+
+  <!-- Grid lines -->
+  <line x1="60" y1="95"  x2="820" y2="95"  stroke="#21262d" stroke-width="1"/>
+  <line x1="60" y1="140" x2="820" y2="140" stroke="#21262d" stroke-width="1"/>
+  <line x1="60" y1="185" x2="820" y2="185" stroke="#21262d" stroke-width="1"/>
+  <line x1="60" y1="230" x2="820" y2="230" stroke="#21262d" stroke-width="1"/>
+  <line x1="60" y1="275" x2="820" y2="275" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Y-axis labels -->
+  <text x="12" y="99"  fill="#8b949e" font-size="9">48.4k</text>
+  <text x="12" y="144" fill="#8b949e" font-size="9">47.9k</text>
+  <text x="12" y="189" fill="#8b949e" font-size="9">47.4k</text>
+  <text x="12" y="234" fill="#8b949e" font-size="9">46.9k</text>
+  <text x="12" y="279" fill="#8b949e" font-size="9">46.4k</text>
+
+  <!-- Price area fill -->
+  <polygon clip-path="url(#chartClip1)"
+    points="60,252 110,238 160,222 210,232 260,210 310,195 360,205 410,182 460,168 510,152 560,162 610,138 660,148 710,125 760,132 810,110 820,110 820,320 60,320"
+    fill="url(#bg1)"/>
+
+  <!-- Price line -->
+  <polyline clip-path="url(#chartClip1)"
+    points="60,252 110,238 160,222 210,232 260,210 310,195 360,205 410,182 460,168 510,152 560,162 610,138 660,148 710,125 760,132 810,110"
+    fill="none" stroke="#58a6ff" stroke-width="2.2"/>
+
+  <!-- 5-min window highlight -->
+  <rect x="460" y="70" width="150" height="250" fill="url(#winGrad)" rx="2"/>
+  <line x1="460" y1="70" x2="460" y2="320" stroke="#58a6ff" stroke-width="1" stroke-dasharray="5,3" opacity="0.6"/>
+  <line x1="610" y1="70" x2="610" y2="320" stroke="#58a6ff" stroke-width="1" stroke-dasharray="5,3" opacity="0.6"/>
+  <text x="480" y="340" fill="#58a6ff" font-size="10">← 5‑min window →</text>
+
+  <!-- Candles (inside 5min window) -->
+  <!-- UP candle -->
+  <line x1="490" y1="142" x2="490" y2="178" stroke="#3fb950" stroke-width="1.5"/>
+  <rect x="484" y="152" width="12" height="18" fill="#3fb950" rx="1"/>
+  <!-- DOWN candle -->
+  <line x1="520" y1="148" x2="520" y2="172" stroke="#f85149" stroke-width="1.5"/>
+  <rect x="514" y="154" width="12" height="14" fill="#f85149" rx="1"/>
+  <!-- UP candle -->
+  <line x1="550" y1="138" x2="550" y2="168" stroke="#3fb950" stroke-width="1.5"/>
+  <rect x="544" y="148" width="12" height="14" fill="#3fb950" rx="1"/>
+  <!-- DOWN candle -->
+  <line x1="580" y1="144" x2="580" y2="178" stroke="#f85149" stroke-width="1.5"/>
+  <rect x="574" y="155" width="12" height="16" fill="#f85149" rx="1"/>
+
+  <!-- BUY signal annotation -->
+  <circle cx="510" cy="152" r="7" fill="none" stroke="#3fb950" stroke-width="1.8"/>
+  <circle cx="510" cy="152" r="2.5" fill="#3fb950"/>
+  <line x1="510" y1="144" x2="510" y2="110" stroke="#3fb950" stroke-width="1" stroke-dasharray="3,2"/>
+  <rect x="468" y="92" width="100" height="22" rx="3" fill="#1a2f1a" stroke="#3fb950" stroke-width="0.5"/>
+  <text x="476" y="107" fill="#3fb950" font-size="10" font-weight="bold">▲ ARBIT SIGNAL</text>
+
+  <!-- Fast execute marker -->
+  <rect x="628" y="128" width="96" height="22" rx="3" fill="#2a2310" stroke="#d29922" stroke-width="0.5"/>
+  <text x="636" y="143" fill="#d29922" font-size="10">⚡ FAK  ~42ms</text>
+
+  <!-- X-axis time labels -->
+  <text x="110" y="340" fill="#8b949e" font-size="9" text-anchor="middle">09:50</text>
+  <text x="260" y="340" fill="#8b949e" font-size="9" text-anchor="middle">09:55</text>
+  <text x="410" y="340" fill="#8b949e" font-size="9" text-anchor="middle">10:00</text>
+  <text x="535" y="348" fill="#58a6ff" font-size="9" text-anchor="middle">10:05</text>
+  <text x="710" y="340" fill="#8b949e" font-size="9" text-anchor="middle">10:10</text>
+  <text x="810" y="340" fill="#8b949e" font-size="9" text-anchor="middle">10:12</text>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">EXEC LATENCY</text>
+  <text x="36" y="398" fill="#58a6ff" font-size="16" font-weight="bold">~42ms</text>
+
+  <line x1="160" y1="365" x2="160" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="176" y="378" fill="#8b949e" font-size="9">TIME WINDOWS</text>
+  <text x="176" y="398" fill="#e6edf3" font-size="15" font-weight="bold">5m · 15m · 1hr</text>
+
+  <line x1="360" y1="365" x2="360" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="376" y="378" fill="#8b949e" font-size="9">ORDER TYPES</text>
+  <text x="376" y="398" fill="#e6edf3" font-size="15" font-weight="bold">FAK / GTD</text>
+
+  <line x1="530" y1="365" x2="530" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="546" y="378" fill="#8b949e" font-size="9">MODES</text>
+  <text x="546" y="398" fill="#3fb950" font-size="15" font-weight="bold">Dry Run ✓  Live ✓</text>
+
+  <line x1="740" y1="365" x2="740" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="756" y="378" fill="#8b949e" font-size="9">ASSET</text>
+  <text x="756" y="398" fill="#e6edf3" font-size="15" font-weight="bold">BTC</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

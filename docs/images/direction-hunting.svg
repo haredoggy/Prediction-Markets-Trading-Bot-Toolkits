@@ -1,0 +1,169 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d29922" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#d29922" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="trigGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d29922" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#d29922" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="chartFill3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d29922" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#d29922" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 3</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Direction Hunting Bot  —  Momentum &amp; Flow Setups</text>
+  <rect x="760" y="14" width="84" height="22" rx="4" fill="#2a1f08"/>
+  <text x="774" y="29" fill="#d29922" font-size="10" font-weight="bold">SCANNING…</text>
+
+  <!-- Left: scanner list -->
+  <rect x="20" y="62" width="380" height="295" fill="#0d1117" rx="0"/>
+  <rect x="20" y="62" width="380" height="1" fill="#30363d"/>
+
+  <!-- Column headers -->
+  <text x="32" y="80" fill="#8b949e" font-size="10">MARKET</text>
+  <text x="238" y="80" fill="#8b949e" font-size="10">MOMENTUM</text>
+  <text x="330" y="80" fill="#8b949e" font-size="10">STATUS</text>
+  <line x1="20" y1="85" x2="400" y2="85" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Row 1 – scanning -->
+  <rect x="20" y="86" width="380" height="34" fill="url(#scanGrad)"/>
+  <text x="32" y="108" fill="#e6edf3" font-size="11">BTC Up/Down 5m</text>
+  <rect x="238" y="94" width="60" height="8" rx="2" fill="#d29922" opacity="0.6"/>
+  <rect x="238" y="94" width="42" height="8" rx="2" fill="#d29922" opacity="0.9"/>
+  <rect x="322" y="94" width="66" height="16" rx="3" fill="#2a1f08"/>
+  <text x="330" y="106" fill="#d29922" font-size="10">SCANNING</text>
+
+  <!-- Row 2 – quiet -->
+  <rect x="20" y="120" width="380" height="34" fill="none"/>
+  <line x1="20" y1="120" x2="400" y2="120" stroke="#21262d" stroke-width="1"/>
+  <text x="32" y="142" fill="#8b949e" font-size="11">ETH Up/Down 5m</text>
+  <rect x="238" y="128" width="60" height="8" rx="2" fill="#30363d"/>
+  <rect x="238" y="128" width="18" height="8" rx="2" fill="#58a6ff" opacity="0.5"/>
+  <rect x="322" y="128" width="52" height="16" rx="3" fill="#21262d"/>
+  <text x="332" y="140" fill="#8b949e" font-size="10">QUIET</text>
+
+  <!-- Row 3 – TRIGGERED (highlighted) -->
+  <line x1="20" y1="154" x2="400" y2="154" stroke="#30363d" stroke-width="1"/>
+  <rect x="20" y="154" width="380" height="38" fill="url(#trigGrad)" rx="2"/>
+  <rect x="20" y="154" width="3" height="38" fill="#d29922" rx="1"/>
+  <text x="32" y="176" fill="#e6edf3" font-size="11" font-weight="bold">SOL Up/Down 15m</text>
+  <rect x="238" y="162" width="60" height="8" rx="2" fill="#d29922" opacity="0.4"/>
+  <rect x="238" y="162" width="58" height="8" rx="2" fill="#d29922" opacity="0.95"/>
+  <rect x="316" y="160" width="78" height="22" rx="3" fill="#2a1f08" stroke="#d29922" stroke-width="0.8"/>
+  <text x="324" y="175" fill="#d29922" font-size="11" font-weight="bold">⚡ TRIGGERED</text>
+
+  <!-- Row 4 – quiet -->
+  <line x1="20" y1="192" x2="400" y2="192" stroke="#21262d" stroke-width="1"/>
+  <text x="32" y="213" fill="#8b949e" font-size="11">MATIC Up/Down 5m</text>
+  <rect x="238" y="200" width="60" height="8" rx="2" fill="#30363d"/>
+  <rect x="238" y="200" width="28" height="8" rx="2" fill="#58a6ff" opacity="0.4"/>
+  <rect x="322" y="200" width="52" height="16" rx="3" fill="#21262d"/>
+  <text x="332" y="212" fill="#8b949e" font-size="10">QUIET</text>
+
+  <!-- Row 5 – building -->
+  <line x1="20" y1="226" x2="400" y2="226" stroke="#21262d" stroke-width="1"/>
+  <text x="32" y="247" fill="#8b949e" font-size="11">LINK Up/Down 15m</text>
+  <rect x="238" y="234" width="60" height="8" rx="2" fill="#30363d"/>
+  <rect x="238" y="234" width="40" height="8" rx="2" fill="#58a6ff" opacity="0.6"/>
+  <rect x="322" y="234" width="64" height="16" rx="3" fill="#1c2a3a"/>
+  <text x="330" y="246" fill="#58a6ff" font-size="10">BUILDING</text>
+
+  <!-- Row 6 -->
+  <line x1="20" y1="260" x2="400" y2="260" stroke="#21262d" stroke-width="1"/>
+  <text x="32" y="281" fill="#8b949e" font-size="11">AVAX Up/Down 5m</text>
+  <rect x="238" y="268" width="60" height="8" rx="2" fill="#30363d"/>
+  <rect x="238" y="268" width="10" height="8" rx="2" fill="#f85149" opacity="0.5"/>
+  <rect x="322" y="268" width="52" height="16" rx="3" fill="#21262d"/>
+  <text x="332" y="280" fill="#8b949e" font-size="10">QUIET</text>
+
+  <!-- Scan count -->
+  <line x1="20" y1="294" x2="400" y2="294" stroke="#30363d" stroke-width="1"/>
+  <text x="32" y="314" fill="#8b949e" font-size="10">Scanning 6 of 12 markets  ·  1 triggered</text>
+  <rect x="298" y="302" width="94" height="20" rx="3" fill="#2a1f08"/>
+  <text x="308" y="316" fill="#d29922" font-size="10" font-weight="bold">1 ACTIVE SIGNAL</text>
+
+  <!-- Divider -->
+  <line x1="408" y1="62" x2="408" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Right: signal detail + chart -->
+  <text x="424" y="80" fill="#8b949e" font-size="10">SIGNAL DETAIL  —  SOL Up/Down 15m</text>
+  <line x1="408" y1="85" x2="860" y2="85" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Mini sparkline chart -->
+  <polyline
+    points="424,200 454,192 484,185 514,190 544,178 574,165 604,170 634,155 664,148 694,140 724,132 754,125 784,118 814,112 844,106"
+    fill="none" stroke="#d29922" stroke-width="2"/>
+  <polygon
+    points="424,200 454,192 484,185 514,190 544,178 574,165 604,170 634,155 664,148 694,140 724,132 754,125 784,118 814,112 844,106 844,240 424,240"
+    fill="url(#chartFill3)"/>
+
+  <!-- TP line -->
+  <line x1="424" y1="100" x2="844" y2="100" stroke="#3fb950" stroke-width="1" stroke-dasharray="6,3"/>
+  <rect x="726" y="92" width="64" height="16" rx="2" fill="#1a2f1a"/>
+  <text x="732" y="104" fill="#3fb950" font-size="10" font-weight="bold">TP  0.72</text>
+
+  <!-- Entry line -->
+  <line x1="424" y1="148" x2="844" y2="148" stroke="#d29922" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>
+  <rect x="726" y="140" width="76" height="16" rx="2" fill="#2a1f08"/>
+  <text x="732" y="152" fill="#d29922" font-size="10" font-weight="bold">ENTRY  0.63</text>
+
+  <!-- SL line -->
+  <line x1="424" y1="220" x2="844" y2="220" stroke="#f85149" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+  <rect x="726" y="212" width="64" height="16" rx="2" fill="#2a1500"/>
+  <text x="732" y="224" fill="#f85149" font-size="10" font-weight="bold">SL  0.54</text>
+
+  <!-- Signal details -->
+  <rect x="424" y="250" width="200" height="90" fill="#161b22" rx="4" stroke="#30363d" stroke-width="1"/>
+  <text x="436" y="268" fill="#8b949e" font-size="10">Direction</text>
+  <text x="436" y="284" fill="#3fb950" font-size="14" font-weight="bold">▲ LONG YES</text>
+  <text x="436" y="302" fill="#8b949e" font-size="10">Entry</text>
+  <text x="436" y="318" fill="#e6edf3" font-size="13" font-weight="bold">0.630</text>
+  <text x="436" y="332" fill="#8b949e" font-size="10">R:R  1 : 2.4</text>
+
+  <rect x="638" y="250" width="200" height="90" fill="#161b22" rx="4" stroke="#30363d" stroke-width="1"/>
+  <text x="650" y="268" fill="#8b949e" font-size="10">Take Profit</text>
+  <text x="650" y="284" fill="#3fb950" font-size="14" font-weight="bold">0.720</text>
+  <text x="650" y="302" fill="#8b949e" font-size="10">Stop Loss</text>
+  <text x="650" y="318" fill="#f85149" font-size="14" font-weight="bold">0.540</text>
+  <text x="650" y="332" fill="#8b949e" font-size="10">Auto-exit logic ✓</text>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">MARKETS SCANNED</text>
+  <text x="36" y="398" fill="#d29922" font-size="16" font-weight="bold">12</text>
+
+  <line x1="130" y1="365" x2="130" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="146" y="378" fill="#8b949e" font-size="9">ACTIVE SIGNALS</text>
+  <text x="146" y="398" fill="#e6edf3" font-size="16" font-weight="bold">1</text>
+
+  <line x1="260" y1="365" x2="260" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="276" y="378" fill="#8b949e" font-size="9">ENTRY CRITERIA</text>
+  <text x="276" y="398" fill="#e6edf3" font-size="14" font-weight="bold">Configurable</text>
+
+  <line x1="500" y1="365" x2="500" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="516" y="378" fill="#8b949e" font-size="9">EXIT MANAGEMENT</text>
+  <text x="516" y="398" fill="#3fb950" font-size="14" font-weight="bold">TP + SL  Auto-exit ✓</text>
+
+  <line x1="750" y1="365" x2="750" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="766" y="378" fill="#8b949e" font-size="9">ALERTS</text>
+  <text x="766" y="398" fill="#3fb950" font-size="14" font-weight="bold">Live ✓</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

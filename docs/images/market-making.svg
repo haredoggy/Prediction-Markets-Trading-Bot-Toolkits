@@ -1,0 +1,162 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="mmBidGrad" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="mmAskGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f85149" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f85149" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="invGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3fb950"/>
+      <stop offset="60%" stop-color="#3fb950"/>
+      <stop offset="60%" stop-color="#21262d"/>
+      <stop offset="100%" stop-color="#21262d"/>
+    </linearGradient>
+    <linearGradient id="pnlUp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 9</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Market Making Bot  —  Two-Sided Liquidity Provision</text>
+  <rect x="748" y="14" width="94" height="22" rx="4" fill="#0f2a18"/>
+  <text x="760" y="29" fill="#3fb950" font-size="10" font-weight="bold">QUOTING LIVE</text>
+
+  <!-- Left: book visualization -->
+  <text x="32" y="78" fill="#8b949e" font-size="10">LIVE BOOK  —  SOL Up/Down 15m  (Polymarket)</text>
+  <line x1="20" y1="83" x2="420" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- BID side -->
+  <text x="32" y="98" fill="#3fb950" font-size="9">BID SIDE</text>
+  <text x="230" y="98" fill="#8b949e" font-size="9" text-anchor="end">PRICE</text>
+  <text x="320" y="98" fill="#8b949e" font-size="9" text-anchor="end">DEPTH</text>
+  <line x1="20" y1="102" x2="420" y2="102" stroke="#21262d" stroke-width="1"/>
+
+  <rect x="20" y="103" width="400" height="22" fill="url(#mmBidGrad)"/>
+  <rect x="20" y="103" width="200" height="22" fill="#3fb950" opacity="0.12"/>
+  <text x="32" y="118" fill="#3fb950" font-size="11" font-weight="bold">████████████████████</text>
+  <text x="230" y="118" fill="#3fb950" font-size="11" text-anchor="end">0.536</text>
+  <text x="320" y="118" fill="#3fb950" font-size="11" text-anchor="end">$2,100</text>
+
+  <rect x="20" y="125" width="400" height="22" fill="url(#mmBidGrad)" opacity="0.7"/>
+  <!-- ★ BOT BID ORDER -->
+  <rect x="20" y="125" width="400" height="22" fill="#3fb950" opacity="0.04"/>
+  <text x="32" y="140" fill="#3fb950" font-size="11">█████████████████</text>
+  <text x="230" y="140" fill="#3fb950" font-size="11" text-anchor="end">0.532</text>
+  <text x="320" y="140" fill="#3fb950" font-size="11" text-anchor="end">$1,700</text>
+  <rect x="328" y="128" width="82" height="16" rx="3" fill="#1a3a2a" stroke="#3fb950" stroke-width="0.8"/>
+  <text x="336" y="140" fill="#3fb950" font-size="9" font-weight="bold">★ BOT BID</text>
+
+  <rect x="20" y="147" width="400" height="22" fill="url(#mmBidGrad)" opacity="0.5"/>
+  <text x="32" y="162" fill="#3fb950" font-size="11" opacity="0.7">█████████████</text>
+  <text x="230" y="162" fill="#3fb950" font-size="11" text-anchor="end">0.528</text>
+  <text x="320" y="162" fill="#3fb950" font-size="11" text-anchor="end">$1,390</text>
+
+  <!-- Mid price -->
+  <rect x="20" y="169" width="400" height="18" fill="#1a1a2a"/>
+  <text x="32"  y="181" fill="#e6edf3" font-size="10" font-weight="bold">MID  0.548</text>
+  <text x="155" y="181" fill="#8b949e" font-size="10">BOT SPREAD  0.028</text>
+  <text x="335" y="181" fill="#d29922" font-size="10" font-weight="bold">EARNING SPREAD</text>
+
+  <!-- ASK side -->
+  <line x1="20" y1="187" x2="420" y2="187" stroke="#30363d" stroke-width="1"/>
+  <text x="32" y="201" fill="#f85149" font-size="9">ASK SIDE</text>
+
+  <!-- ★ BOT ASK ORDER -->
+  <rect x="20" y="203" width="400" height="22" fill="url(#mmAskGrad)"/>
+  <rect x="20" y="203" width="400" height="22" fill="#f85149" opacity="0.04"/>
+  <text x="32" y="218" fill="#f85149" font-size="11" font-weight="bold">██████████████████</text>
+  <text x="230" y="218" fill="#f85149" font-size="11" text-anchor="end">0.560</text>
+  <text x="320" y="218" fill="#f85149" font-size="11" text-anchor="end">$1,820</text>
+  <rect x="328" y="206" width="82" height="16" rx="3" fill="#3a1010" stroke="#f85149" stroke-width="0.8"/>
+  <text x="336" y="218" fill="#f85149" font-size="9" font-weight="bold">★ BOT ASK</text>
+
+  <rect x="20" y="225" width="400" height="22" fill="url(#mmAskGrad)" opacity="0.7"/>
+  <text x="32" y="240" fill="#f85149" font-size="11" opacity="0.7">███████████████</text>
+  <text x="230" y="240" fill="#f85149" font-size="11" text-anchor="end">0.565</text>
+  <text x="320" y="240" fill="#f85149" font-size="11" text-anchor="end">$1,510</text>
+
+  <rect x="20" y="247" width="400" height="22" fill="url(#mmAskGrad)" opacity="0.5"/>
+  <text x="32" y="262" fill="#f85149" font-size="11" opacity="0.5">█████████████</text>
+  <text x="230" y="262" fill="#f85149" font-size="11" text-anchor="end">0.571</text>
+  <text x="320" y="262" fill="#f85149" font-size="11" text-anchor="end">$1,240</text>
+
+  <!-- Inventory bar -->
+  <line x1="20" y1="270" x2="420" y2="270" stroke="#30363d" stroke-width="1"/>
+  <text x="32" y="285" fill="#8b949e" font-size="9">INVENTORY</text>
+  <rect x="32" y="290" width="370" height="10" rx="2" fill="#21262d"/>
+  <rect x="32" y="290" width="222" height="10" rx="2" fill="url(#invGrad)"/>
+  <text x="32"  y="318" fill="#3fb950" font-size="9">YES: 62%</text>
+  <text x="230" y="318" fill="#8b949e" font-size="9" text-anchor="middle">target 50/50</text>
+  <text x="404" y="318" fill="#f85149" font-size="9" text-anchor="end">NO: 38%</text>
+  <text x="32"  y="334" fill="#8b949e" font-size="9">Skewing ask to reduce YES exposure</text>
+
+  <!-- Divider -->
+  <line x1="434" y1="62" x2="434" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Right: stats and P&L -->
+  <text x="454" y="78" fill="#8b949e" font-size="10">SESSION STATS</text>
+  <line x1="434" y1="83" x2="860" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- P&L sparkline -->
+  <polyline
+    points="454,250 490,244 526,238 562,242 598,234 634,228 670,220 706,214 742,208 778,200 814,193 850,185"
+    fill="none" stroke="#3fb950" stroke-width="2.2"/>
+  <polygon
+    points="454,250 490,244 526,238 562,242 598,234 634,228 670,220 706,214 742,208 778,200 814,193 850,185 850,300 454,300"
+    fill="url(#pnlUp)"/>
+
+  <!-- Grid -->
+  <line x1="454" y1="185" x2="850" y2="185" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="454" y1="215" x2="850" y2="215" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="454" y1="245" x2="850" y2="245" stroke="#21262d" stroke-width="0.5"/>
+
+  <!-- P&L display -->
+  <rect x="454" y="92" width="380" height="78" rx="4" fill="#0f2a18" stroke="#3fb950" stroke-width="0.8"/>
+  <text x="464" y="110" fill="#8b949e" font-size="9">SESSION P&amp;L</text>
+  <text x="464" y="134" fill="#3fb950" font-size="28" font-weight="bold">+$12.48</text>
+  <text x="464" y="154" fill="#8b949e" font-size="9">Fills: 34  ·  Spread earned: 34 × avg $0.37</text>
+  <text x="464" y="166" fill="#8b949e" font-size="9">Win rate: 91%  (31 spread-earn  ·  3 inventory adj)</text>
+
+  <!-- Bot order status -->
+  <rect x="454" y="306" width="182" height="38" rx="4" fill="#161b22" stroke="#3fb950" stroke-width="0.8"/>
+  <text x="466" y="322" fill="#8b949e" font-size="9">ACTIVE BID ORDER</text>
+  <text x="466" y="337" fill="#3fb950" font-size="12" font-weight="bold">0.532  ·  GTD  ·  $200</text>
+
+  <rect x="646" y="306" width="188" height="38" rx="4" fill="#161b22" stroke="#f85149" stroke-width="0.8"/>
+  <text x="658" y="322" fill="#8b949e" font-size="9">ACTIVE ASK ORDER</text>
+  <text x="658" y="337" fill="#f85149" font-size="12" font-weight="bold">0.560  ·  GTD  ·  $200</text>
+
+  <!-- Bottom stats -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36"  y="378" fill="#8b949e" font-size="9">SESSION P&amp;L</text>
+  <text x="36"  y="398" fill="#3fb950" font-size="16" font-weight="bold">+$12.48</text>
+  <line x1="160" y1="365" x2="160" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="176" y="378" fill="#8b949e" font-size="9">FILLS</text>
+  <text x="176" y="398" fill="#e6edf3" font-size="16" font-weight="bold">34</text>
+  <line x1="280" y1="365" x2="280" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="296" y="378" fill="#8b949e" font-size="9">ORDER TYPE</text>
+  <text x="296" y="398" fill="#e6edf3" font-size="16" font-weight="bold">GTD  two-sided</text>
+  <line x1="510" y1="365" x2="510" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="526" y="378" fill="#8b949e" font-size="9">INVENTORY MGMT</text>
+  <text x="526" y="398" fill="#3fb950" font-size="15" font-weight="bold">Auto-skew ✓</text>
+  <line x1="720" y1="365" x2="720" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="736" y="378" fill="#8b949e" font-size="9">CANCEL ON FILL</text>
+  <text x="736" y="398" fill="#3fb950" font-size="15" font-weight="bold">Auto ✓</text>
+
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

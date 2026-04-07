@@ -1,0 +1,171 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="bidGrad" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="askGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f85149" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#f85149" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="pnlGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 4</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Spread Farming Bot  —  Systematic Micro-Edge Capture</text>
+  <rect x="756" y="14" width="84" height="22" rx="4" fill="#0f2a18"/>
+  <text x="770" y="29" fill="#3fb950" font-size="10" font-weight="bold">P&amp;L LIVE +$4.20</text>
+
+  <!-- Order book: BID side (left) -->
+  <text x="32" y="78" fill="#8b949e" font-size="10">BIDS (BUY)</text>
+  <text x="220" y="78" fill="#8b949e" font-size="10" text-anchor="end">SIZE (USD)</text>
+  <line x1="20" y1="83" x2="390" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Bid rows -->
+  <rect x="20" y="84" width="370" height="24" fill="url(#bidGrad)"/>
+  <text x="32" y="100" fill="#3fb950" font-size="12" font-weight="bold">0.535</text>
+  <rect x="112" y="90" width="198" height="10" rx="2" fill="#3fb950" opacity="0.75"/>
+  <text x="316" y="100" fill="#3fb950" font-size="11" text-anchor="end">$1,840</text>
+
+  <rect x="20" y="108" width="370" height="24" fill="url(#bidGrad)" opacity="0.7"/>
+  <text x="32" y="124" fill="#3fb950" font-size="12">0.530</text>
+  <rect x="112" y="114" width="160" height="10" rx="2" fill="#3fb950" opacity="0.55"/>
+  <text x="316" y="124" fill="#3fb950" font-size="11" text-anchor="end">$1,480</text>
+
+  <rect x="20" y="132" width="370" height="24" fill="url(#bidGrad)" opacity="0.5"/>
+  <text x="32" y="148" fill="#3fb950" font-size="12">0.525</text>
+  <rect x="112" y="138" width="120" height="10" rx="2" fill="#3fb950" opacity="0.4"/>
+  <text x="316" y="148" fill="#3fb950" font-size="11" text-anchor="end">$1,110</text>
+
+  <rect x="20" y="156" width="370" height="24" fill="url(#bidGrad)" opacity="0.35"/>
+  <text x="32" y="172" fill="#3fb950" font-size="12" opacity="0.7">0.520</text>
+  <rect x="112" y="162" width="80" height="10" rx="2" fill="#3fb950" opacity="0.3"/>
+  <text x="316" y="172" fill="#3fb950" font-size="11" opacity="0.7" text-anchor="end">$740</text>
+
+  <rect x="20" y="180" width="370" height="24" fill="url(#bidGrad)" opacity="0.2"/>
+  <text x="32" y="196" fill="#3fb950" font-size="12" opacity="0.5">0.515</text>
+  <rect x="112" y="186" width="50" height="10" rx="2" fill="#3fb950" opacity="0.2"/>
+  <text x="316" y="196" fill="#3fb950" font-size="11" opacity="0.5" text-anchor="end">$462</text>
+
+  <!-- Center: spread highlight -->
+  <line x1="20" y1="208" x2="860" y2="208" stroke="#30363d" stroke-width="1"/>
+  <rect x="20" y="208" width="840" height="40" fill="#161b22"/>
+
+  <!-- Bot position indicator in center -->
+  <rect x="380" y="212" width="120" height="32" rx="4" fill="#0f2a18" stroke="#3fb950" stroke-width="1.2"/>
+  <text x="440" y="226" fill="#3fb950" font-size="10" text-anchor="middle" font-weight="bold">BOT POSITION</text>
+  <text x="440" y="240" fill="#3fb950" font-size="11" text-anchor="middle">SPREAD 0.026</text>
+
+  <!-- Mid price -->
+  <text x="32" y="230" fill="#8b949e" font-size="10">MID PRICE</text>
+  <text x="32" y="244" fill="#e6edf3" font-size="16" font-weight="bold">0.548</text>
+  <text x="160" y="230" fill="#8b949e" font-size="10">SPREAD</text>
+  <text x="160" y="244" fill="#d29922" font-size="16" font-weight="bold">0.026</text>
+  <text x="280" y="230" fill="#8b949e" font-size="10">EDGE</text>
+  <text x="280" y="244" fill="#3fb950" font-size="16" font-weight="bold">1.3%</text>
+
+  <!-- Ask side (right of center label context) -->
+  <line x1="20" y1="248" x2="860" y2="248" stroke="#30363d" stroke-width="1"/>
+
+  <!-- ASK side labels -->
+  <text x="32" y="266" fill="#8b949e" font-size="10">ASKS (SELL)</text>
+  <text x="220" y="266" fill="#8b949e" font-size="10" text-anchor="end">SIZE (USD)</text>
+
+  <rect x="20" y="268" width="370" height="24" fill="url(#askGrad)" opacity="0.9"/>
+  <text x="32" y="284" fill="#f85149" font-size="12" font-weight="bold">0.561</text>
+  <rect x="112" y="274" width="175" height="10" rx="2" fill="#f85149" opacity="0.7"/>
+  <text x="316" y="284" fill="#f85149" font-size="11" text-anchor="end">$1,620</text>
+
+  <rect x="20" y="292" width="370" height="24" fill="url(#askGrad)" opacity="0.6"/>
+  <text x="32" y="308" fill="#f85149" font-size="12" opacity="0.8">0.566</text>
+  <rect x="112" y="298" width="130" height="10" rx="2" fill="#f85149" opacity="0.5"/>
+  <text x="316" y="308" fill="#f85149" font-size="11" opacity="0.8" text-anchor="end">$1,200</text>
+
+  <rect x="20" y="316" width="370" height="24" fill="url(#askGrad)" opacity="0.4"/>
+  <text x="32" y="332" fill="#f85149" font-size="12" opacity="0.6">0.572</text>
+  <rect x="112" y="322" width="90" height="10" rx="2" fill="#f85149" opacity="0.35"/>
+  <text x="316" y="332" fill="#f85149" font-size="11" opacity="0.6" text-anchor="end">$830</text>
+
+  <!-- Divider: orderbook / P&L chart -->
+  <line x1="400" y1="62" x2="400" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Right: P&L chart + trade log -->
+  <text x="420" y="78" fill="#8b949e" font-size="10">SESSION P&amp;L  —  Running</text>
+  <line x1="400" y1="83" x2="860" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- P&L mini chart -->
+  <polyline
+    points="420,260 455,252 490,244 525,248 560,235 595,222 630,215 665,206 700,195 735,185 770,178 805,168 840,155"
+    fill="none" stroke="#3fb950" stroke-width="2.2"/>
+  <polygon
+    points="420,260 455,252 490,244 525,248 560,235 595,222 630,215 665,206 700,195 735,185 770,178 805,168 840,155 840,320 420,320"
+    fill="url(#pnlGrad)"/>
+
+  <!-- P&L annotations -->
+  <rect x="688" y="87" width="160" height="68" rx="4" fill="#161b22" stroke="#3fb950" stroke-width="0.8"/>
+  <text x="700" y="104" fill="#8b949e" font-size="10">Session P&amp;L</text>
+  <text x="700" y="124" fill="#3fb950" font-size="22" font-weight="bold">+$4.20</text>
+  <text x="700" y="144" fill="#8b949e" font-size="10">Trades: 18  ·  Win rate: 78%</text>
+
+  <!-- Trade log -->
+  <text x="420" y="172" fill="#8b949e" font-size="10">RECENT TRADES</text>
+  <line x1="400" y1="177" x2="860" y2="177" stroke="#21262d" stroke-width="1"/>
+
+  <rect x="420" y="180" width="430" height="22" fill="#0f2a18" opacity="0.4"/>
+  <text x="430" y="195" fill="#3fb950" font-size="10">▲ ENTRY  0.535   EXIT  0.558   +$0.38   [SOL 15m]</text>
+
+  <line x1="400" y1="202" x2="860" y2="202" stroke="#21262d" stroke-width="1"/>
+  <text x="430" y="217" fill="#3fb950" font-size="10">▲ ENTRY  0.530   EXIT  0.549   +$0.29   [BTC 5m]</text>
+
+  <line x1="400" y1="224" x2="860" y2="224" stroke="#21262d" stroke-width="1"/>
+  <text x="430" y="239" fill="#f85149" font-size="10">▼ ENTRY  0.542   EXIT  0.530   -$0.18   [ETH 5m]</text>
+
+  <line x1="400" y1="246" x2="860" y2="246" stroke="#21262d" stroke-width="1"/>
+  <text x="430" y="261" fill="#3fb950" font-size="10">▲ ENTRY  0.528   EXIT  0.552   +$0.44   [BTC 5m]</text>
+
+  <!-- Grid lines for P&L chart -->
+  <line x1="420" y1="160" x2="840" y2="160" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="420" y1="190" x2="840" y2="190" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="420" y1="220" x2="840" y2="220" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="420" y1="250" x2="840" y2="250" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="420" y1="280" x2="840" y2="280" stroke="#21262d" stroke-width="0.5"/>
+
+  <!-- Bottom stats bar -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+
+  <text x="36" y="378" fill="#8b949e" font-size="9">SESSION P&amp;L</text>
+  <text x="36" y="398" fill="#3fb950" font-size="16" font-weight="bold">+$4.20</text>
+
+  <line x1="150" y1="365" x2="150" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="166" y="378" fill="#8b949e" font-size="9">TRADES</text>
+  <text x="166" y="398" fill="#e6edf3" font-size="16" font-weight="bold">18</text>
+
+  <line x1="280" y1="365" x2="280" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="296" y="378" fill="#8b949e" font-size="9">WIN RATE</text>
+  <text x="296" y="398" fill="#3fb950" font-size="16" font-weight="bold">78%</text>
+
+  <line x1="420" y1="365" x2="420" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="436" y="378" fill="#8b949e" font-size="9">SPREAD THRESHOLD</text>
+  <text x="436" y="398" fill="#e6edf3" font-size="15" font-weight="bold">Configurable</text>
+
+  <line x1="660" y1="365" x2="660" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="676" y="378" fill="#8b949e" font-size="9">ENTRY / EXIT RULES</text>
+  <text x="676" y="398" fill="#3fb950" font-size="15" font-weight="bold">Systematic ✓</text>
+
+  <!-- Watermark -->
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>

@@ -1,0 +1,159 @@
+<svg width="880" height="420" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <linearGradient id="heavyBidGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.12"/>
+    </linearGradient>
+    <linearGradient id="lightAskGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f85149" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#f85149" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="ratioFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3fb950"/>
+      <stop offset="72%" stop-color="#3fb950"/>
+      <stop offset="72%" stop-color="#f85149"/>
+      <stop offset="100%" stop-color="#f85149"/>
+    </linearGradient>
+    <linearGradient id="signalGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="880" height="420" fill="#0d1117" rx="10"/>
+
+  <!-- Header -->
+  <rect width="880" height="52" fill="#161b22" rx="10"/>
+  <rect y="42" width="880" height="10" fill="#161b22"/>
+  <rect y="51" width="880" height="1" fill="#30363d"/>
+  <circle cx="28" cy="26" r="6" fill="#f85149" opacity="0.9"/>
+  <circle cx="48" cy="26" r="6" fill="#d29922" opacity="0.9"/>
+  <circle cx="68" cy="26" r="6" fill="#3fb950" opacity="0.9"/>
+  <text x="92" y="20" fill="#8b949e" font-size="11">strategy 8</text>
+  <text x="92" y="36" fill="#e6edf3" font-size="14" font-weight="bold">Orderbook Imbalance Bot  —  Trade the Pressure</text>
+  <rect x="748" y="14" width="94" height="22" rx="4" fill="#1c2a3a"/>
+  <text x="760" y="29" fill="#58a6ff" font-size="10" font-weight="bold">IMBALANCE: 72%</text>
+
+  <!-- Left: live order book -->
+  <text x="32" y="78" fill="#8b949e" font-size="10">LIVE ORDER BOOK  —  BTC Up/Down 5m  (Polymarket)</text>
+  <line x1="20" y1="83" x2="420" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- BIDS (heavy side) -->
+  <text x="32"  y="98" fill="#3fb950" font-size="9" font-weight="bold">BIDS ← HEAVY</text>
+  <text x="280" y="98" fill="#8b949e" font-size="9">PRICE</text>
+  <text x="340" y="98" fill="#8b949e" font-size="9">USD</text>
+  <line x1="20" y1="102" x2="420" y2="102" stroke="#21262d" stroke-width="1"/>
+
+  <!-- bid rows -->
+  <rect x="20" y="103" width="400" height="22" fill="url(#heavyBidGrad)"/>
+  <rect x="20" y="103" width="240" height="22" rx="0" fill="#3fb950" opacity="0.18"/>
+  <text x="32"  y="118" fill="#3fb950" font-size="11" font-weight="bold">████████████████████████</text>
+  <text x="280" y="118" fill="#3fb950" font-size="11">0.542</text>
+  <text x="340" y="118" fill="#3fb950" font-size="11">$3,240</text>
+
+  <rect x="20" y="125" width="400" height="22" fill="url(#heavyBidGrad)" opacity="0.7"/>
+  <rect x="20" y="125" width="190" height="22" rx="0" fill="#3fb950" opacity="0.14"/>
+  <text x="32"  y="140" fill="#3fb950" font-size="11">███████████████████</text>
+  <text x="280" y="140" fill="#3fb950" font-size="11">0.538</text>
+  <text x="340" y="140" fill="#3fb950" font-size="11">$2,560</text>
+
+  <rect x="20" y="147" width="400" height="22" fill="url(#heavyBidGrad)" opacity="0.5"/>
+  <rect x="20" y="147" width="145" height="22" rx="0" fill="#3fb950" opacity="0.10"/>
+  <text x="32"  y="162" fill="#3fb950" font-size="11" opacity="0.8">███████████████</text>
+  <text x="280" y="162" fill="#3fb950" font-size="11">0.534</text>
+  <text x="340" y="162" fill="#3fb950" font-size="11">$1,950</text>
+
+  <rect x="20" y="169" width="400" height="22" fill="url(#heavyBidGrad)" opacity="0.3"/>
+  <text x="32"  y="184" fill="#3fb950" font-size="11" opacity="0.5">██████████</text>
+  <text x="280" y="184" fill="#3fb950" font-size="11">0.530</text>
+  <text x="340" y="184" fill="#3fb950" font-size="11">$1,340</text>
+
+  <!-- Mid price bar -->
+  <rect x="20" y="191" width="400" height="18" fill="#161b22"/>
+  <text x="32"  y="203" fill="#e6edf3" font-size="10" font-weight="bold">MID  0.548</text>
+  <text x="160" y="203" fill="#8b949e" font-size="10">Spread  0.022</text>
+  <text x="310" y="203" fill="#58a6ff" font-size="10" font-weight="bold">OBI  +72%</text>
+
+  <!-- ASKS (light side) -->
+  <line x1="20" y1="209" x2="420" y2="209" stroke="#30363d" stroke-width="1"/>
+  <text x="32"  y="223" fill="#f85149" font-size="9">ASKS ← LIGHT</text>
+
+  <rect x="20" y="225" width="400" height="22" fill="url(#lightAskGrad)"/>
+  <rect x="20" y="225" width="80" height="22" rx="0" fill="#f85149" opacity="0.12"/>
+  <text x="32"  y="240" fill="#f85149" font-size="11" opacity="0.7">████████</text>
+  <text x="280" y="240" fill="#f85149" font-size="11">0.560</text>
+  <text x="340" y="240" fill="#f85149" font-size="11">$1,080</text>
+
+  <rect x="20" y="247" width="400" height="22" fill="url(#lightAskGrad)" opacity="0.7"/>
+  <text x="32"  y="262" fill="#f85149" font-size="11" opacity="0.5">██████</text>
+  <text x="280" y="262" fill="#f85149" font-size="11">0.565</text>
+  <text x="340" y="262" fill="#f85149" font-size="11">$810</text>
+
+  <rect x="20" y="269" width="400" height="22" fill="url(#lightAskGrad)" opacity="0.5"/>
+  <text x="32"  y="284" fill="#f85149" font-size="11" opacity="0.35">████</text>
+  <text x="280" y="284" fill="#f85149" font-size="11">0.571</text>
+  <text x="340" y="284" fill="#f85149" font-size="11">$540</text>
+
+  <!-- Totals bar -->
+  <line x1="20" y1="291" x2="420" y2="291" stroke="#30363d" stroke-width="1"/>
+  <text x="32"  y="306" fill="#3fb950" font-size="10">Total BID liquidity: $9,090</text>
+  <text x="32"  y="320" fill="#f85149" font-size="10">Total ASK liquidity: $2,430</text>
+  <text x="32"  y="338" fill="#8b949e" font-size="9">Ratio  3.74 : 1  ·  Bids dominating</text>
+
+  <!-- Divider -->
+  <line x1="434" y1="62" x2="434" y2="357" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Right: signal panel -->
+  <text x="454" y="78" fill="#8b949e" font-size="10">SIGNAL ANALYSIS</text>
+  <line x1="434" y1="83" x2="860" y2="83" stroke="#21262d" stroke-width="1"/>
+
+  <!-- OBI gauge -->
+  <text x="654" y="104" fill="#8b949e" font-size="10" text-anchor="middle">ORDER BOOK IMBALANCE</text>
+  <rect x="474" y="110" width="360" height="22" rx="4" fill="#21262d"/>
+  <rect x="474" y="110" width="259" height="22" rx="4" fill="url(#ratioFill)"/>
+  <text x="654" y="146" fill="#58a6ff" font-size="28" font-weight="bold" text-anchor="middle">+72%</text>
+  <text x="474" y="165" fill="#3fb950" font-size="9">Bid-heavy</text>
+  <text x="834" y="165" fill="#f85149" font-size="9" text-anchor="end">Ask-heavy</text>
+
+  <!-- Signal box -->
+  <rect x="454" y="172" width="380" height="46" rx="5" fill="url(#signalGlow)" stroke="#58a6ff" stroke-width="1.2"/>
+  <text x="644" y="193" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">▲ BUY SIGNAL DETECTED</text>
+  <text x="644" y="210" fill="#8b949e" font-size="10" text-anchor="middle">OBI &gt; threshold (60%)  ·  Bid pressure dominates</text>
+
+  <!-- Trade plan -->
+  <rect x="454" y="226" width="182" height="82" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="466" y="244" fill="#8b949e" font-size="9">DIRECTION</text>
+  <text x="466" y="260" fill="#3fb950" font-size="14" font-weight="bold">FADE → LONG</text>
+  <text x="466" y="278" fill="#8b949e" font-size="9">ENTRY</text>
+  <text x="466" y="294" fill="#e6edf3" font-size="14" font-weight="bold">0.548 (mid)</text>
+
+  <rect x="646" y="226" width="188" height="82" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="658" y="244" fill="#8b949e" font-size="9">OBI THRESHOLD</text>
+  <text x="658" y="260" fill="#e6edf3" font-size="14" font-weight="bold">≥ 60%</text>
+  <text x="658" y="278" fill="#8b949e" font-size="9">WINDOW REFRESH</text>
+  <text x="658" y="294" fill="#e6edf3" font-size="14" font-weight="bold">500ms</text>
+
+  <!-- Venues bar -->
+  <rect x="454" y="316" width="380" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="644" y="334" fill="#8b949e" font-size="10" text-anchor="middle">Venues: Polymarket · Kalshi · Limitless  ·  No external data feeds required</text>
+
+  <!-- Bottom stats -->
+  <rect y="357" width="880" height="63" fill="#161b22" rx="0"/>
+  <rect y="363" width="880" height="1" fill="#30363d"/>
+  <text x="36"  y="378" fill="#8b949e" font-size="9">CURRENT OBI</text>
+  <text x="36"  y="398" fill="#58a6ff" font-size="16" font-weight="bold">+72%</text>
+  <line x1="150" y1="365" x2="150" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="166" y="378" fill="#8b949e" font-size="9">SIGNAL</text>
+  <text x="166" y="398" fill="#3fb950" font-size="16" font-weight="bold">▲ LONG</text>
+  <line x1="300" y1="365" x2="300" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="316" y="378" fill="#8b949e" font-size="9">THRESHOLD</text>
+  <text x="316" y="398" fill="#e6edf3" font-size="16" font-weight="bold">≥ 60%</text>
+  <line x1="470" y1="365" x2="470" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="486" y="378" fill="#8b949e" font-size="9">REFRESH RATE</text>
+  <text x="486" y="398" fill="#e6edf3" font-size="16" font-weight="bold">500ms</text>
+  <line x1="650" y1="365" x2="650" y2="412" stroke="#30363d" stroke-width="1"/>
+  <text x="666" y="378" fill="#8b949e" font-size="9">DATA SOURCE</text>
+  <text x="666" y="398" fill="#3fb950" font-size="15" font-weight="bold">Live orderbook only ✓</text>
+
+  <text x="868" y="416" fill="#8b949e" font-size="9" opacity="0.45" text-anchor="end">@haredoggy</text>
+</svg>
