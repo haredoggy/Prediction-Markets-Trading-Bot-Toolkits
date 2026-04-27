@@ -4,7 +4,7 @@ use anyhow::{Context, Result};
 use reqwest::Client;
 use serde_json;
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock};
 use std::time::{Duration, Instant};
 use tokio::sync::Mutex;
 
@@ -64,11 +64,24 @@ impl RateLimiter {
     }
 }
 
-// Global rate limiter: 25 requests per 10 seconds
-static RATE_LIMITER: once_cell::sync::Lazy<Arc<Mutex<RateLimiter>>> =
-    once_cell::sync::Lazy::new(|| {
-        Arc::new(Mutex::new(RateLimiter::new(25, Duration::from_secs(10))))
-    });
+// Global rate limiter. Lazily initialized to (25 req / 10s) on first use if
+// `init_rate_limiter` is not called explicitly at startup.
+static RATE_LIMITER: OnceLock<Arc<Mutex<RateLimiter>>> = OnceLock::new();
+
+/// Initialize the global rate limiter with the configured request budget.
+///
+/// Call this once at startup, before any `fetch_positions_for_wallet` call.
+/// Subsequent calls are ignored (the limiter is initialized exactly once).
+pub fn init_rate_limiter(max_requests: u32, window_secs: u64) {
+    let _ = RATE_LIMITER.set(Arc::new(Mutex::new(RateLimiter::new(
+        max_requests,
+        Duration::from_secs(window_secs),
+    ))));
+}
+
+fn rate_limiter() -> &'static Arc<Mutex<RateLimiter>> {
+    RATE_LIMITER.get_or_init(|| Arc::new(Mutex::new(RateLimiter::new(25, Duration::from_secs(10)))))
+}
 
 /// Fetch current positions for a wallet from Polymarket data API.
 ///
@@ -91,9 +104,9 @@ pub async fn fetch_positions_for_wallet(
     wallet_address: &str,
     api_base_url: &str,
 ) -> Result<Vec<HashMap<String, String>>> {
-    // Enforce rate limit: 25 requests per 10 seconds
+    // Enforce rate limit (configured at startup via init_rate_limiter)
     {
-        let mut limiter = RATE_LIMITER.lock().await;
+        let mut limiter = rate_limiter().lock().await;
         limiter.wait_if_needed().await;
     }
 

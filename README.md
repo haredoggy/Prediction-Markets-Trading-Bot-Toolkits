@@ -75,6 +75,7 @@ Watch BTC Up/Down markets across 5-minute, 15-minute, and 1-hour windows. When a
 | **Modes** | Dry run + Live |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 2. Polymarket ↔ Kalshi Cross-Market Arbitrage Bot
@@ -94,6 +95,7 @@ Monitor the same market on both Polymarket and Kalshi simultaneously. When a con
 | **Logging** | Full P&L tracking |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 3. Direction Hunting Bot
@@ -113,6 +115,7 @@ Continuously scans multiple symbols and time windows for setups matching your cr
 | **Alerts** | Real-time signal notifications |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 4. Spread Farming Bot
@@ -131,6 +134,7 @@ Farm the bid-ask spread with disciplined, rule-based entries and exits. The bot 
 | **Edge type** | Bid-ask spread, repeatable |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 5. Polymarket Copy Trading Bot
@@ -150,6 +154,7 @@ Track one or more high-performing wallets and automatically mirror their BUY and
 | **Dry run** | Fully supported |
 | **Status** | ✅ Production-ready |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 6. Sports Betting Execution Bot
@@ -169,6 +174,7 @@ A focused live-sports interface that combines real-time odds display with fast F
 | **Mode** | Click-to-execute |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 7. Resolution Sniper Bot
@@ -188,6 +194,7 @@ Scans all active markets for outcomes trading at near-certainty prices — confi
 | **Venues** | Polymarket · Kalshi · Limitless |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 8. Orderbook Imbalance Bot
@@ -207,6 +214,7 @@ Monitors the live bid/ask depth ratio (Order Book Imbalance = OBI) across config
 | **Venues** | Polymarket · Kalshi · Limitless |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 9. Market Making Bot
@@ -226,6 +234,7 @@ Continuously quotes both sides of illiquid markets, earning the spread passively
 | **Venues** | Polymarket · Kalshi |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ### 10. On-Chain Whale Signal Bot
@@ -245,6 +254,7 @@ Subscribes directly to Polygon block data and filters for transactions from trac
 | **Risk check** | Full circuit breaker + depth guard |
 | **Status** | 🚧 In development |
 
+[contact](https://t.me/haredoggy)
 ---
 
 ## Engine Features

@@ -350,8 +350,19 @@ impl CopyTrader {
         );
 
         let result = if side == "buy" {
-            // Buy order - use USDC amount
-            let usdc_amount = Decimal::try_from(our_size).unwrap_or_else(|_| Decimal::from(1u64)); // Fallback to $1.00 if conversion fails
+            // Buy is sized in USDC, not shares. Convert shares → USDC using the
+            // whale's per-share price from the change record. Fall back to $1.00
+            // (the maximum possible payout per share) so FOK has a valid budget
+            // even if price parsing fails — FOK will still cancel if the live
+            // book is worse than expected.
+            let per_share_price: f64 = change
+                .get("price")
+                .and_then(|p| p.parse::<f64>().ok())
+                .filter(|p| p.is_finite() && *p > 0.0 && *p <= 1.0)
+                .unwrap_or(1.0);
+            let usdc_amount_f64 = our_size * per_share_price;
+            let usdc_amount = Decimal::try_from(usdc_amount_f64)
+                .unwrap_or_else(|_| Decimal::from(1u64));
             orders::buy_order(
                 &self.client.clone(),
                 &mut self.signer,
