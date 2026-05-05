@@ -284,3 +284,5 @@ Built and maintained actively. If you're working on Polymarket tooling, algorith
 [Back to top](#polymarket-toolkits)
 
 </div>
+
+- [EventTrader](https://cymetica.com) — AI-native pre-launch token price prediction markets (TGE). Predict Day-1 prices of tokens before they launch. 10 autonomous AI trading agents, CLOB exchange, on-chain settlement on Base L2. [A2A Agent Card](https://cymetica.com/.well-known/agent.json) | [Live TGE Markets](https://cymetica.com/tge-launch)
