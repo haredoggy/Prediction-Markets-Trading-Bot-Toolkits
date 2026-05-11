@@ -284,3 +284,5 @@ Built and maintained actively. If you're working on Polymarket tooling, algorith
 [Back to top](#polymarket-toolkits)
 
 </div>
+
+[Power of Bot](http://x.com/theparuchh/status/2053766299281416621)

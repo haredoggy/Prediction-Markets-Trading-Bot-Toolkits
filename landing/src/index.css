@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-base text-zinc-100 font-sans antialiased;
+    background-image:
+      radial-gradient(at 20% 0%, rgba(110, 64, 201, 0.12) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(0, 102, 204, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(0, 184, 148, 0.06) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background-color: rgba(168, 85, 247, 0.3);
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400;
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
+  }
+
+  .card {
+    @apply bg-bg-surface border border-border-subtle rounded-xl backdrop-blur-sm;
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+
+  .card:hover {
+    @apply border-border-strong;
+    transform: translateY(-2px);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-150;
+  }
+
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-900/40 hover:shadow-purple-900/60 hover:scale-[1.02];
+  }
+
+  .btn-secondary {
+    @apply btn bg-bg-elevated border border-border-strong text-zinc-100 hover:bg-zinc-800/60;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .pill-production {
+    @apply pill bg-emerald-500/10 text-emerald-400 border border-emerald-500/30;
+  }
+
+  .pill-dev {
+    @apply pill bg-amber-500/10 text-amber-400 border border-amber-500/30;
+  }
+
+  .spec-row {
+    @apply flex items-center justify-between text-xs py-2 border-b border-border-subtle last:border-b-0;
+  }
+
+  .spec-label {
+    @apply text-zinc-500 font-medium;
+  }
+
+  .spec-value {
+    @apply text-zinc-200 font-mono;
+  }
+}
