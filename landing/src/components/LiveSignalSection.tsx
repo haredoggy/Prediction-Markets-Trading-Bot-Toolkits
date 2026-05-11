@@ -4,6 +4,7 @@ import {
   CandlestickSeries,
   type UTCTimestamp,
 } from 'lightweight-charts';
+import { useT } from '../messages';
 
 const SYMBOL = 'btcusdt';
 const INTERVAL = '1m';
@@ -21,6 +22,7 @@ interface Candle {
 }
 
 export function LiveSignalSection() {
+  const t = useT();
   const containerRef = useRef<HTMLDivElement>(null);
   const prevPriceRef = useRef<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
@@ -177,13 +179,13 @@ export function LiveSignalSection() {
           <div>
             <div className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
               <StatusPill status={status} />
-              Live signal
+              {t.liveSignal.eyebrow}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              BTC/USDT — the market the bots watch
+              {t.liveSignal.headline}
             </h2>
             <p className="mt-2 text-sm text-zinc-400">
-              Real-time spot price, streamed directly from the order book.
+              {t.liveSignal.sub}
             </p>
           </div>
 
@@ -196,10 +198,10 @@ export function LiveSignalSection() {
 
         <div className="mt-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 text-xs text-zinc-500 max-w-4xl">
           <p className="leading-relaxed">
-            Source: <span className="text-zinc-400">Binance spot WebSocket</span>. Polymarket&apos;s BTC Up/Down
-            markets resolve against <span className="text-zinc-400">Chainlink price feeds</span>, which
-            aggregate from Binance, Coinbase, Kraken, and other major venues — so what you see here
-            is a faithful real-time proxy for the price the bots trade against.
+            {t.liveSignal.footnote({
+              source: <span className="text-zinc-400">Binance spot WebSocket</span>,
+              chainlink: <span className="text-zinc-400">Chainlink price feeds</span>,
+            })}
           </p>
           <a
             href="https://www.tradingview.com/lightweight-charts/"
@@ -207,7 +209,7 @@ export function LiveSignalSection() {
             rel="noreferrer"
             className="flex-shrink-0 text-zinc-500 hover:text-zinc-300 transition-colors whitespace-nowrap"
           >
-            Charts by TradingView
+            {t.liveSignal.attribution}
           </a>
         </div>
       </div>
@@ -224,6 +226,7 @@ function PriceTicker({
   direction: TickDir;
   change24h: number | null;
 }) {
+  const t = useT();
   const tickColor =
     direction === 'up'
       ? 'text-emerald-400'
@@ -240,7 +243,7 @@ function PriceTicker({
 
   return (
     <div className="font-mono text-right">
-      <div className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] mb-1">BTC / USDT</div>
+      <div className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] mb-1">{t.liveSignal.pair}</div>
       <div className={`text-3xl md:text-5xl font-bold tabular-nums transition-colors duration-150 ${tickColor}`}>
         {price === null
           ? '—'
@@ -252,7 +255,7 @@ function PriceTicker({
       {change24h !== null && (
         <div className={`text-sm font-semibold mt-1 ${changeColor}`}>
           {change24h >= 0 ? '+' : ''}
-          {change24h.toFixed(2)}% <span className="text-zinc-500 font-normal">· session</span>
+          {change24h.toFixed(2)}% <span className="text-zinc-500 font-normal">{t.liveSignal.sessionLabel}</span>
         </div>
       )}
     </div>
@@ -260,11 +263,12 @@ function PriceTicker({
 }
 
 function StatusPill({ status }: { status: ConnStatus }) {
+  const t = useT();
   if (status === 'live') {
     return (
       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        Live
+        {t.liveSignal.statusLive}
       </span>
     );
   }
@@ -272,14 +276,14 @@ function StatusPill({ status }: { status: ConnStatus }) {
     return (
       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-[10px] font-bold text-rose-400 uppercase tracking-wider">
         <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-        Offline
+        {t.liveSignal.statusOffline}
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-      Connecting
+      {t.liveSignal.statusConnecting}
     </span>
   );
 }

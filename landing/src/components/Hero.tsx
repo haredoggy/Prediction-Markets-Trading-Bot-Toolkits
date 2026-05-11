@@ -1,46 +1,47 @@
 import { TELEGRAM_URL, GITHUB_URL } from '../bots';
+import { useT } from '../messages';
 
 export function Hero() {
+  const t = useT();
   return (
     <section id="top" className="relative pt-20 pb-24 overflow-hidden">
       <div className="container-x relative">
         <div className="flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-medium text-purple-300 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-            10 strategies · one battle-tested engine
+            {t.hero.badge}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-5xl">
-            Prediction markets,
+            {t.hero.headlineLine1}
             <br />
-            <span className="gradient-text">traded at machine speed.</span>
+            <span className="gradient-text">{t.hero.headlineLine2}</span>
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed">
-            Ten production-grade Rust trading bots for{' '}
-            <span className="text-brand-polymarket font-semibold">Polymarket</span>,{' '}
-            <span className="text-brand-kalshi font-semibold">Kalshi</span>, and{' '}
-            <span className="text-brand-limitless font-semibold">Limitless</span>.
-            Copy trading, cross-venue arb, whale signals, market making — all sharing one risk layer, one execution core.
+            {t.hero.description({
+              polymarket: <span className="text-brand-polymarket font-semibold">Polymarket</span>,
+              kalshi: <span className="text-brand-kalshi font-semibold">Kalshi</span>,
+              limitless: <span className="text-brand-limitless font-semibold">Limitless</span>,
+            })}
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a href={TELEGRAM_URL} target="_blank" rel="noreferrer" className="btn-primary text-base px-6 py-3">
               <TelegramIcon />
-              <span>Talk on Telegram</span>
+              <span>{t.hero.ctaTelegram}</span>
               <ArrowIcon />
             </a>
             <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn-secondary text-base px-6 py-3">
               <GitHubIcon />
-              <span>View on GitHub</span>
+              <span>{t.hero.ctaGithub}</span>
             </a>
           </div>
 
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-border-subtle rounded-2xl overflow-hidden max-w-4xl w-full">
-            <Stat label="Order execution" value="< 100ms" unit="end-to-end" />
-            <Stat label="Event processing" value="< 1ms" unit="per event" />
-            <Stat label="Memory baseline" value="~50MB" unit="resident" />
-            <Stat label="CPU under load" value="< 5%" unit="modern hw" />
+            {t.hero.stats.map((stat) => (
+              <Stat key={stat.label} label={stat.label} value={stat.value} unit={stat.unit} />
+            ))}
           </div>
         </div>
       </div>

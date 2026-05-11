@@ -1,6 +1,9 @@
 import { TELEGRAM_URL, GITHUB_URL } from '../bots';
+import { useLang } from '../i18n';
+import { useT } from '../messages';
 
 export function Nav() {
+  const t = useT();
   return (
     <header className="sticky top-0 z-50 backdrop-blur-lg bg-bg-base/70 border-b border-border-subtle">
       <nav className="container-x flex items-center justify-between h-16">
@@ -12,24 +15,53 @@ export function Nav() {
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-          <a href="#strategies" className="hover:text-white transition-colors">Strategies</a>
-          <a href="#engine" className="hover:text-white transition-colors">Engine</a>
-          <a href="#safety" className="hover:text-white transition-colors">Safety</a>
-          <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+          <a href="#strategies" className="hover:text-white transition-colors">{t.nav.strategies}</a>
+          <a href="#engine" className="hover:text-white transition-colors">{t.nav.engine}</a>
+          <a href="#safety" className="hover:text-white transition-colors">{t.nav.safety}</a>
+          <a href="#contact" className="hover:text-white transition-colors">{t.nav.contact}</a>
         </div>
 
         <div className="flex items-center gap-2">
-          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn-secondary hidden sm:inline-flex">
+          <LangToggle />
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn-secondary hidden sm:inline-flex" aria-label={t.nav.github}>
             <GitHubIcon />
-            <span>GitHub</span>
+            <span className="hidden lg:inline">{t.nav.github}</span>
           </a>
           <a href={TELEGRAM_URL} target="_blank" rel="noreferrer" className="btn-primary">
             <TelegramIcon />
-            <span>Telegram</span>
+            <span>{t.nav.telegram}</span>
           </a>
         </div>
       </nav>
     </header>
+  );
+}
+
+function LangToggle() {
+  const { lang, setLang } = useLang();
+  return (
+    <div className="hidden sm:inline-flex items-center rounded-lg border border-border-subtle bg-bg-elevated p-0.5 text-xs font-semibold">
+      <button
+        type="button"
+        onClick={() => setLang('en')}
+        aria-pressed={lang === 'en'}
+        className={`px-2.5 py-1 rounded-md transition-colors ${
+          lang === 'en' ? 'bg-bg-base text-white' : 'text-zinc-500 hover:text-zinc-200'
+        }`}
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        onClick={() => setLang('zh')}
+        aria-pressed={lang === 'zh'}
+        className={`px-2.5 py-1 rounded-md transition-colors ${
+          lang === 'zh' ? 'bg-bg-base text-white' : 'text-zinc-500 hover:text-zinc-200'
+        }`}
+      >
+        中文
+      </button>
+    </div>
   );
 }
 

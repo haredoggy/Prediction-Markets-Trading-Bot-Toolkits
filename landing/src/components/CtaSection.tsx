@@ -1,35 +1,35 @@
 import { TELEGRAM_URL, GITHUB_URL } from '../bots';
+import { useT } from '../messages';
 
 export function CtaSection() {
+  const t = useT();
   return (
     <section id="contact" className="py-24 border-t border-border-subtle">
       <div className="container-x">
         <div className="relative card p-10 md:p-16 overflow-hidden bg-gradient-to-br from-purple-500/5 via-bg-surface to-pink-500/5">
           <div className="relative max-w-3xl">
-            <div className="text-sm font-semibold text-pink-400 uppercase tracking-wider mb-3">Get started</div>
+            <div className="text-sm font-semibold text-pink-400 uppercase tracking-wider mb-3">{t.cta.eyebrow}</div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-5">
-              Ready to put a bot to work?
+              {t.cta.headline}
             </h2>
             <p className="text-lg text-zinc-400 leading-relaxed mb-8">
-              Telegram for direct conversation, scope discussion, or paid setup.
-              GitHub for the open-source repo, configuration docs, and the live codebase.
-              Response time on Telegram is typically a few hours.
+              {t.cta.description}
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a href={TELEGRAM_URL} target="_blank" rel="noreferrer" className="btn-primary text-base px-7 py-3.5">
                 <TelegramIcon />
-                <span>@haredoggy on Telegram</span>
+                <span>{t.cta.ctaTelegram}</span>
               </a>
               <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn-secondary text-base px-7 py-3.5">
                 <GitHubIcon />
-                <span>Browse the repo</span>
+                <span>{t.cta.ctaGithub}</span>
               </a>
             </div>
 
             <div className="mt-10 pt-8 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <Pillar title="Open source" body="MIT licensed. Read the code, fork it, build on it." />
-              <Pillar title="Actively maintained" body="The repo ships fixes and strategy upgrades regularly." />
-              <Pillar title="Direct line" body="No support tickets. You talk to the person who wrote the bot." />
+              {t.cta.pillars.map((pillar) => (
+                <Pillar key={pillar.title} title={pillar.title} body={pillar.body} />
+              ))}
             </div>
           </div>
 
