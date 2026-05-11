@@ -8,3 +8,5 @@ test-ledger
 .yarn
 
 config.yaml
+
+.env
