@@ -100,7 +100,7 @@ Monitors the same market on both venues. When a configurable price delta is dete
 
 > Short-window momentum and flow setups.
 
-<img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/f18aa0ee-a357-41c7-bdb1-c2b9006ebc06" /><img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/0b793b61-8274-445b-b610-bc7cc7b601b9" />
+<img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/f18aa0ee-a357-41c7-bdb1-c2b9006ebc06" />
 
 🎯 **Define the edge once — let the engine grind 24/7.** Entries, TP, and SL are fully automated, so you keep your weekends and the bot keeps the screen.
 
