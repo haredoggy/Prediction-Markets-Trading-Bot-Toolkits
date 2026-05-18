@@ -1,0 +1,48 @@
+{
+  "bot": {
+    "wallets_to_track": ["0x63ce342161250d705dc0b16df89036c8e5f9ba9a"],
+    "enable_trading": false,
+    "mock_trading": true
+  },
+  "site": {
+    "gamma_api_base": "https://gamma-api.polymarket.com",
+    "data_api_base": "https://data-api.polymarket.com",
+    "clob_api_base": "https://clob.polymarket.com",
+    "clob_wss_url": "wss://ws-subscriptions-clob.polymarket.com/ws/market",
+    "polygon_rpc_url": "https://polygon-rpc.com",
+    "polygon_ws_url": "wss://polygon-rpc.com"
+  },
+  "strategy": {
+    "copy_strategy": "PERCENTAGE",
+    "copy_size": 20.0,
+    "trade_multiplier": 1.0,
+    "min_order_size_usd": 5.0,
+    "max_order_size_usd": 500.0,
+    "min_whale_shares_to_copy": 10.0,
+    "adaptive_threshold_usd": 1000.0,
+    "adaptive_min_percent": 5.0,
+    "adaptive_max_percent": 30.0
+  },
+  "trading": {
+    "rate_limit": 25,
+    "rate_window_secs": 10,
+    "poll_interval_secs": 5,
+    "price_buffer": 0.005,
+    "fee_rate_bps": 0,
+    "order_expiration_secs": 60
+  },
+  "risk": {
+    "large_trade_shares": 1500.0,
+    "consecutive_trigger": 2,
+    "sequence_window_secs": 30,
+    "min_depth_usd": 200.0,
+    "trip_duration_secs": 120
+  },
+  "exchange": {
+    "ctf_exchange_address": "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E",
+    "neg_risk_exchange_address": "0xC5d563A36AE78145C45a50134d48A1215220f80a",
+    "chain_id": 137,
+    "domain_name": "Polymarket CTF Exchange",
+    "domain_version": "1"
+  }
+}

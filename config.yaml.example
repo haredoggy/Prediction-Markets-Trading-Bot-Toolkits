@@ -1,0 +1,17 @@
+# Polymarket Toolkits — credentials file.
+# Copy to `config.yaml` and fill in. NEVER commit this file.
+# Prefer environment variables or a secrets manager in production.
+
+bot:
+  # Your trading wallet private key — 64 hex chars, no 0x prefix.
+  private_key: "0000000000000000000000000000000000000000000000000000000000000000"
+
+  # Your Polymarket proxy/funder address. Find it on polymarket.com
+  # under your profile → "Deposit" — the address USDC was sent to.
+  funder_address: "0x0000000000000000000000000000000000000000"
+
+  # Optional: pre-issued CLOB API credentials (L2 auth).
+  # If unset, the bot will create them on startup via the L1 EIP-712 flow.
+  # api_key: ""
+  # api_secret: ""
+  # api_passphrase: ""
