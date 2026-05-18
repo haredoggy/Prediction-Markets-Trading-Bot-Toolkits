@@ -3,6 +3,7 @@
 <div align="center">
 
 <img width="1472" height="615" alt="Polymarket Toolkits TUI" src="https://github.com/user-attachments/assets/b6c51ba1-14c6-4582-858c-e9441516dd1d" />
+<img width="1224" height="843" alt="image" src="https://github.com/user-attachments/assets/66d9cb72-e14a-414f-93e5-600fb1d3f49f" />
 
 ### Multi-venue prediction market trading infrastructure — Polymarket · Kalshi · Limitless
 
@@ -27,6 +28,7 @@ A complete suite of ten production-grade trading bots, each engineered around a 
 
 
 ### 1. Copy Trading
+<img width="1843" height="879" alt="image" src="https://github.com/user-attachments/assets/57d64038-9567-4bf9-8954-a83e737ca416" />
 
 > Mirror top wallets automatically with configurable sizing and risk limits.
 
@@ -48,6 +50,11 @@ Tracks one or more high-performing wallets and mirrors BUY/SELL actions. Copy pe
 
 ### 2. BTC 5-min / 15-min / 1hr Arbitrage
 
+<p align="center">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/11df1045-7782-4085-bf7c-cae6d381273f" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/246c962b-a54e-497d-a40d-3812d447f4c1" />
+</p>
+
 > Speed on short-window BTC Up/Down markets.
 
 ⚡ **42ms end-to-end — the bot is in the order book before you'd finish reading the market title.** Human reflexes don't compete here.
@@ -66,6 +73,7 @@ Watches BTC Up/Down windows. When a pricing inefficiency or directional setup em
 ---
 
 ### 3. Polymarket ↔ Kalshi Cross-Market Arbitrage
+<img width="1543" height="654" alt="image" src="https://github.com/user-attachments/assets/2108db5d-369d-4f80-9e6e-2b03e63e291a" />
 
 > Cross-venue pricing inefficiencies on 15-min windows.
 
@@ -122,7 +130,7 @@ Farms the bid-ask spread with rule-based entries and exits. Sits at the spread, 
 ---
 
 ### 6. Sports Betting Execution
-
+<img width="1175" height="852" alt="image" src="https://github.com/user-attachments/assets/174ed883-5153-4114-87b8-5e4e76a20cbc" />
 > Click-to-bet speed on live sports markets.
 
 🏆 **Click. Filled. Done — in under 50ms.** Beat the line move that costs every other manual bettor their edge before they've even confirmed the order.
