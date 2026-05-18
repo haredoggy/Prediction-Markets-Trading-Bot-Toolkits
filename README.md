@@ -121,6 +121,8 @@ Continuously scans symbols and time windows for setups matching your criteria. O
 
 > Systematic, repeatable micro-edges.
 
+<img width="1052" height="798" alt="image" src="https://github.com/user-attachments/assets/6b231a2d-2e39-422e-b929-87f676289b58" />
+
 📈 **A thousand 0.5¢ wins compound into one big number.** Disciplined, repeatable, boring in the best way — the kind of edge that survives every market regime.
 
 Farms the bid-ask spread with rule-based entries and exits. Sits at the spread, waits for fill conditions to align, executes with consistent sizing. Per-trade and session P&L.
@@ -136,8 +138,10 @@ Farms the bid-ask spread with rule-based entries and exits. Sits at the spread, 
 ---
 
 ### 6. Sports Betting Execution
-<img width="1175" height="852" alt="image" src="https://github.com/user-attachments/assets/174ed883-5153-4114-87b8-5e4e76a20cbc" />
+
 > Click-to-bet speed on live sports markets.
+
+<img width="1175" height="852" alt="image" src="https://github.com/user-attachments/assets/174ed883-5153-4114-87b8-5e4e76a20cbc" />
 
 🏆 **Click. Filled. Done — in under 50ms.** Beat the line move that costs every other manual bettor their edge before they've even confirmed the order.
 
@@ -156,6 +160,8 @@ A focused live-sports interface that combines real-time odds with fast FAK execu
 ### 7. Resolution Sniper
 
 > High win-rate, low-variance plays unique to prediction markets.
+
+<img width="1052" height="798" alt="image" src="https://github.com/user-attachments/assets/6b231a2d-2e39-422e-b929-87f676289b58" />
 
 🎯 **95%+ probabilities at 95¢ → ride to the guaranteed $1.00 payout.** The closest thing to free money that any market has ever offered — and it doesn't exist outside prediction markets.
 
@@ -176,6 +182,8 @@ Scans active markets for outcomes trading at near-certainty (e.g. ≥ 95% YES or
 
 > Pure order-flow signal, no external data required.
 
+<img width="1017" height="789" alt="image" src="https://github.com/user-attachments/assets/05d3e6c5-ec26-420a-9cd6-a95ca6d0fff8" />
+
 📊 **No subscriptions, no external feeds, no broken APIs.** The signal *is* the order book — self-contained, bulletproof, and impossible to front-run because nobody else can see what you see.
 
 Monitors live bid/ask depth ratio (OBI). When OBI exceeds threshold, the bot fades into the dominant side. Signal derives entirely from the live orderbook at 500ms refresh — self-contained, no external feeds.
@@ -195,6 +203,8 @@ Monitors live bid/ask depth ratio (OBI). When OBI exceeds threshold, the bot fad
 
 > Passive spread income on illiquid prediction markets.
 
+<img width="1013" height="784" alt="image" src="https://github.com/user-attachments/assets/97c31543-317b-4619-8421-8e9510c05e84" />
+
 💰 **Be the house, not the gambler.** Quote both sides, earn the spread on every single fill — direction-agnostic income that scales with volume, not with luck.
 
 Continuously quotes both sides with GTD orders. Inventory skewing rebalances quote prices when one side fills too heavily. Auto-cancels the opposite leg on fill.
@@ -213,6 +223,8 @@ Continuously quotes both sides with GTD orders. Inventory skewing rebalances quo
 ### 10. On-Chain Whale Signal
 
 > Fastest possible signal — 3–30 seconds ahead of the positions API.
+
+<img width="791" height="449" alt="image" src="https://github.com/user-attachments/assets/c549cd4b-f40a-4253-a4b7-601cce44160b" />
 
 ⚡ **3–30 seconds ahead of every other tracker on the planet.** Direct from Polygon block data — you see the whale's order before the public positions API even acknowledges it exists.
 
