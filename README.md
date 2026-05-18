@@ -28,9 +28,11 @@ A complete suite of ten production-grade trading bots, each engineered around a 
 
 
 ### 1. Copy Trading
-<img width="1843" height="879" alt="image" src="https://github.com/user-attachments/assets/57d64038-9567-4bf9-8954-a83e737ca416" />
 
 > Mirror top wallets automatically with configurable sizing and risk limits.
+
+<img width="1843" height="879" alt="image" src="https://github.com/user-attachments/assets/57d64038-9567-4bf9-8954-a83e737ca416" />
+
 
 🎯 **Outsource alpha to wallets that already proved they have it.** Zero research, zero chart-watching, zero second-guessing — the bot copies, you compound.
 
@@ -50,12 +52,12 @@ Tracks one or more high-performing wallets and mirrors BUY/SELL actions. Copy pe
 
 ### 2. BTC 5-min / 15-min / 1hr Arbitrage
 
+> Speed on short-window BTC Up/Down markets.
+
 <p align="center">
   <img width="49%" alt="image" src="https://github.com/user-attachments/assets/11df1045-7782-4085-bf7c-cae6d381273f" />
   <img width="49%" alt="image" src="https://github.com/user-attachments/assets/246c962b-a54e-497d-a40d-3812d447f4c1" />
 </p>
-
-> Speed on short-window BTC Up/Down markets.
 
 ⚡ **42ms end-to-end — the bot is in the order book before you'd finish reading the market title.** Human reflexes don't compete here.
 
@@ -73,9 +75,11 @@ Watches BTC Up/Down windows. When a pricing inefficiency or directional setup em
 ---
 
 ### 3. Polymarket ↔ Kalshi Cross-Market Arbitrage
-<img width="1543" height="654" alt="image" src="https://github.com/user-attachments/assets/2108db5d-369d-4f80-9e6e-2b03e63e291a" />
 
 > Cross-venue pricing inefficiencies on 15-min windows.
+
+<img width="1543" height="654" alt="image" src="https://github.com/user-attachments/assets/2108db5d-369d-4f80-9e6e-2b03e63e291a" />
+
 
 💰 **Lock the spread, not the direction.** Both legs hedged — your P&L is the price gap itself, regardless of where the underlying actually goes.
 
@@ -95,6 +99,8 @@ Monitors the same market on both venues. When a configurable price delta is dete
 ### 4. Direction Hunting
 
 > Short-window momentum and flow setups.
+
+<img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/f18aa0ee-a357-41c7-bdb1-c2b9006ebc06" /><img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/0b793b61-8274-445b-b610-bc7cc7b601b9" />
 
 🎯 **Define the edge once — let the engine grind 24/7.** Entries, TP, and SL are fully automated, so you keep your weekends and the bot keeps the screen.
 
