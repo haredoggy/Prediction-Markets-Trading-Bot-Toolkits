@@ -3,6 +3,7 @@
 <div align="center">
 
 <img width="1472" height="615" alt="Polymarket 工具包 TUI" src="https://github.com/user-attachments/assets/b6c51ba1-14c6-4582-858c-e9441516dd1d" />
+<img width="1224" height="843" alt="image" src="https://github.com/user-attachments/assets/66d9cb72-e14a-414f-93e5-600fb1d3f49f" />
 
 ### 多平台预测市场交易基础设施 — Polymarket · Kalshi · Limitless
 
@@ -30,6 +31,9 @@
 
 > 自动镜像顶级钱包的交易，仓位规模与风险限制可配置。
 
+<img width="1843" height="879" alt="image" src="https://github.com/user-attachments/assets/57d64038-9567-4bf9-8954-a83e737ca416" />
+
+
 🎯 **把研究外包给已经被证明拥有 alpha 的钱包。** 无需自研、无需盯盘、无需反复纠结——机器人复制，你做复利。
 
 跟踪一个或多个高表现钱包，自动镜像其 BUY/SELL 动作。复制比例、最小交易额、熔断阈值全部可配置。这是目前唯一完全发布的机器人，其他所有策略都是在它建立的基础设施之上构建的。
@@ -50,6 +54,11 @@
 
 > 短窗口 BTC 涨跌市场上的速度型策略。
 
+<p align="center">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/11df1045-7782-4085-bf7c-cae6d381273f" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/246c962b-a54e-497d-a40d-3812d447f4c1" />
+</p>
+
 ⚡ **端到端 42ms——你还没读完市场标题，机器人就已经在订单簿里了。** 这里不是人类反应能跟得上的地方。
 
 监控 BTC 涨跌窗口。一旦出现定价偏差或方向性机会，机器人会在窗口关闭前以低延迟下达 FAK 订单。支持空跑与实盘两种模式。
@@ -68,6 +77,9 @@
 ### 3. Polymarket ↔ Kalshi 跨平台套利
 
 > 15 分钟窗口下的跨平台定价偏差。
+
+<img width="1543" height="654" alt="image" src="https://github.com/user-attachments/assets/2108db5d-369d-4f80-9e6e-2b03e63e291a" />
+
 
 💰 **锁定的是价差，不是方向。** 双腿对冲——你的盈亏来自价差本身，与底层资产怎么走无关。
 
@@ -88,6 +100,8 @@
 
 > 短窗口动量与单边流向机会。
 
+<img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/f18aa0ee-a357-41c7-bdb1-c2b9006ebc06" /><img width="1190" height="855" alt="image" src="https://github.com/user-attachments/assets/0b793b61-8274-445b-b610-bc7cc7b601b9" />
+
 🎯 **规则定义一次，引擎全天候执行。** 入场、止盈、止损全自动——周末交给你，盯盘交给机器人。
 
 持续扫描多个标的与时间窗口，匹配你设定的入场条件。信号触发时入场，并按可配置的 TP/SL 自动管理出场。带实时信号提醒。
@@ -107,6 +121,8 @@
 
 > 系统化、可重复的微观优势。
 
+<img width="1052" height="798" alt="image" src="https://github.com/user-attachments/assets/6b231a2d-2e39-422e-b929-87f676289b58" />
+
 📈 **一千次 0.5¢ 的小胜，复利出来就是一个大数字。** 有纪律、可重复、平淡得恰到好处——这才是穿越所有市场环境的真正优势。
 
 以规则驱动的方式收割买卖价差。机器人挂在价差上，等待成交条件齐备，按一致的仓位规模执行。每笔交易与每次会话的盈亏都有完整记录。
@@ -125,6 +141,8 @@
 
 > 实时体育市场上的"点击即下单"速度。
 
+<img width="1175" height="852" alt="image" src="https://github.com/user-attachments/assets/174ed883-5153-4114-87b8-5e4e76a20cbc" />
+
 🏆 **点击。成交。完成——全程不到 50ms。** 在所有手动玩家还在确认订单时，你已经吃到了让他们破功的盘口移动。
 
 专注的实时体育交互界面，将实时赔率与高速 FAK 执行结合。选比赛、选 YES/NO、设仓位、按下执行——订单在 50ms 内送达。
@@ -142,6 +160,8 @@
 ### 7. 结算狙击（Resolution Sniper）
 
 > 预测市场独有的高胜率、低方差打法。
+
+<img width="1052" height="798" alt="image" src="https://github.com/user-attachments/assets/6b231a2d-2e39-422e-b929-87f676289b58" />
 
 🎯 **95%+ 概率买在 95¢ → 持有到结算时确定性的 $1.00 派息。** 这是任何市场提供过的最接近"白送钱"的玩法——而且只在预测市场里存在。
 
@@ -162,6 +182,8 @@
 
 > 纯订单流信号，无需任何外部数据。
 
+<img width="1017" height="789" alt="image" src="https://github.com/user-attachments/assets/05d3e6c5-ec26-420a-9cd6-a95ca6d0fff8" />
+
 📊 **不订阅、不接外部数据源、不依赖会坏的 API。** 信号本身就是订单簿——自给自足、坚不可摧，且无法被抢跑，因为没人能看到和你一样的视角。
 
 监控配置市场的实时买卖深度比（OBI）。当 OBI 超过阈值时，机器人逆向冲入主导方向——买盘重时反向卖出，卖盘重时反向买入。信号完全来自 500ms 刷新的实时订单簿，独立于任何外部源。
@@ -181,6 +203,8 @@
 
 > 在流动性差的预测市场被动赚取价差收入。
 
+<img width="1013" height="784" alt="image" src="https://github.com/user-attachments/assets/97c31543-317b-4619-8421-8e9510c05e84" />
+
 💰 **当庄家，不当赌客。** 双边挂单，每笔成交都吃价差——与方向无关的收入，规模随成交量而非运气增长。
 
 用 GTD 订单在两边持续报价。库存倾斜机制会在某一边被吃得过多时自动调整报价以再平衡 YES/NO 敞口。成交后自动撤掉对侧。
@@ -199,6 +223,8 @@
 ### 10. 链上鲸鱼信号
 
 > 最快可能的信号——比仓位 API 提前 3–30 秒。
+
+<img width="791" height="449" alt="image" src="https://github.com/user-attachments/assets/c549cd4b-f40a-4253-a4b7-601cce44160b" />
 
 ⚡ **比地球上其他所有跟踪器都快 3–30 秒。** 直接订阅 Polygon 区块——你能在公开仓位 API 还没意识到这笔交易存在之前，就看到鲸鱼的下单。
 
