@@ -25,6 +25,7 @@ use crate::service::{
     risk_guard::RiskGuard,
 };
 use anyhow::{anyhow, Result};
+use std::collections::HashSet;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{error, info, warn};
@@ -50,8 +51,10 @@ pub async fn run(cfg: AppConfig) -> Result<()> {
     let executor = OrderExecutor::new(cfg.clone(), Arc::clone(&risk))?;
 
     let filter = build_filter(&cfg, &whale)?;
+    let valid_exchanges: HashSet<String> = filter.address.iter().cloned().collect();
     let (tx, mut rx) = mpsc::channel::<RawLog>(LOG_CHANNEL_CAPACITY);
     let _sub = spawn_subscription(cfg.site.polygon_ws_url.clone(), filter, tx);
+    let mut seen_logs: HashSet<(String, Option<u64>)> = HashSet::new();
 
     let mut shutdown =
         Box::pin(tokio::signal::ctrl_c());
@@ -68,7 +71,7 @@ pub async fn run(cfg: AppConfig) -> Result<()> {
                     warn!("on-chain subscription channel closed");
                     return Ok(());
                 };
-                if let Err(e) = handle_log(&executor, &whale, &log).await {
+                if let Err(e) = handle_log(&executor, &whale, &valid_exchanges, &mut seen_logs, &log).await {
                     error!(error = ?e, tx = %log.tx_hash, "handle_log failed");
                 }
             }
@@ -76,7 +79,24 @@ pub async fn run(cfg: AppConfig) -> Result<()> {
     }
 }
 
-async fn handle_log(executor: &OrderExecutor, whale: &str, log: &RawLog) -> Result<()> {
+async fn handle_log(
+    executor: &OrderExecutor,
+    whale: &str,
+    valid_exchanges: &HashSet<String>,
+    seen_logs: &mut HashSet<(String, Option<u64>)>,
+    log: &RawLog,
+) -> Result<()> {
+    if !valid_exchanges.contains(&log.address) {
+        warn!(address = %log.address, tx = %log.tx_hash, "ignoring log from unexpected contract");
+        return Ok(());
+    }
+
+    let dedup_key = (log.tx_hash.to_lowercase(), log.log_index);
+    if !seen_logs.insert(dedup_key) {
+        warn!(tx = %log.tx_hash, log_index = ?log.log_index, "duplicate log ignored");
+        return Ok(());
+    }
+
     let Some(trade) = decode_whale_trade(log, whale)? else {
         return Ok(());
     };

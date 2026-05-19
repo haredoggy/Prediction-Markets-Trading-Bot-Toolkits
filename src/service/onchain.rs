@@ -19,6 +19,7 @@ pub struct RawLog {
     pub topics: Vec<String>,
     pub data: String,
     pub tx_hash: String,
+    pub log_index: Option<u64>,
     pub block_number: u64,
 }
 
@@ -124,17 +125,23 @@ fn parse_log(v: &Value) -> Result<RawLog> {
         data: String,
         #[serde(rename = "transactionHash")]
         tx_hash: String,
+        #[serde(rename = "logIndex")]
+        log_index: Option<String>,
         #[serde(rename = "blockNumber")]
         block_number: String,
     }
     let shape: LogShape = serde_json::from_value(v.clone())?;
     let block_number = u64::from_str_radix(shape.block_number.trim_start_matches("0x"), 16)
         .unwrap_or(0);
+    let log_index = shape
+        .log_index
+        .and_then(|idx| u64::from_str_radix(idx.trim_start_matches("0x"), 16).ok());
     Ok(RawLog {
         address: shape.address.to_lowercase(),
         topics: shape.topics.into_iter().map(|t| t.to_lowercase()).collect(),
         data: shape.data,
         tx_hash: shape.tx_hash,
+        log_index,
         block_number,
     })
 }
