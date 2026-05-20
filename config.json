@@ -44,5 +44,33 @@
     "chain_id": 137,
     "domain_name": "Polymarket CTF Exchange",
     "domain_version": "1"
+  },
+  "filters": {
+    "_comment_mode": "Strict allowlist: when any *_allow list is non-empty, only matching markets are copied. Block lists always win.",
+    "slug_allow": [],
+    "slug_block": [],
+    "categories_allow": ["Politics", "Sports", "Crypto"],
+    "categories_block": ["Memes"],
+    "tags_allow": [],
+    "tags_block": ["satire"],
+    "per_category_max_open_usd": {
+      "Politics": 500.0,
+      "Sports": 300.0,
+      "Crypto": 400.0
+    },
+    "per_tag_max_open_usd": {}
+  },
+  "tp_sl": {
+    "enabled": true,
+    "default_take_profit_pct": 50.0,
+    "default_stop_loss_pct": 30.0,
+    "per_category_tp_pct": {
+      "Politics": 40.0,
+      "Sports": 30.0
+    },
+    "per_category_sl_pct": {
+      "Politics": 25.0
+    },
+    "poll_interval_secs": 15
   }
 }

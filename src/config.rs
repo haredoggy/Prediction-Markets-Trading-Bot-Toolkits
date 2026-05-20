@@ -17,6 +17,14 @@ pub struct AppConfig {
     pub risk: RiskConfig,
     pub exchange: ExchangeConfig,
 
+    /// Market eligibility filter (allowlist + blocklist by category, tag, slug).
+    #[serde(default)]
+    pub filters: FiltersConfig,
+
+    /// Take-profit / stop-loss configuration.
+    #[serde(default)]
+    pub tp_sl: TpSlConfig,
+
     /// Loaded from `config.yaml`. Not serialised back out.
     #[serde(skip)]
     pub credentials: Credentials,
@@ -103,6 +111,83 @@ pub struct ExchangeConfig {
     pub domain_name: String,
     pub domain_version: String,
 }
+
+/// Market eligibility filter.
+///
+/// Behavior:
+/// 1. Block lists always win — anything matching is skipped.
+/// 2. If *any* allow list is non-empty, the market must match at least one
+///    allow rule for ANY of (slug / category / tag) to be eligible.
+/// 3. If all allow lists are empty, the bot falls back to allow-everything-
+///    minus-blocklist semantics (so users who haven't curated yet aren't
+///    stranded with zero trades).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct FiltersConfig {
+    #[serde(default)]
+    pub slug_allow: Vec<String>,
+    #[serde(default)]
+    pub slug_block: Vec<String>,
+    #[serde(default)]
+    pub categories_allow: Vec<String>,
+    #[serde(default)]
+    pub categories_block: Vec<String>,
+    #[serde(default)]
+    pub tags_allow: Vec<String>,
+    #[serde(default)]
+    pub tags_block: Vec<String>,
+
+    /// Per-category cap on simultaneously open USD notional.
+    /// e.g. `{ "Politics": 500, "Sports": 300 }`.
+    #[serde(default)]
+    pub per_category_max_open_usd: std::collections::HashMap<String, f64>,
+
+    /// Per-tag cap on simultaneously open USD notional.
+    #[serde(default)]
+    pub per_tag_max_open_usd: std::collections::HashMap<String, f64>,
+}
+
+impl FiltersConfig {
+    /// True when at least one allow list is populated — strict allowlist mode.
+    pub fn is_strict(&self) -> bool {
+        !self.slug_allow.is_empty()
+            || !self.categories_allow.is_empty()
+            || !self.tags_allow.is_empty()
+    }
+}
+
+/// Take-profit / stop-loss config (percent of entry price).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TpSlConfig {
+    #[serde(default = "default_true")]
+    pub enabled: bool,
+    #[serde(default = "default_tp_pct")]
+    pub default_take_profit_pct: f64,
+    #[serde(default = "default_sl_pct")]
+    pub default_stop_loss_pct: f64,
+    #[serde(default)]
+    pub per_category_tp_pct: std::collections::HashMap<String, f64>,
+    #[serde(default)]
+    pub per_category_sl_pct: std::collections::HashMap<String, f64>,
+    #[serde(default = "default_monitor_secs")]
+    pub poll_interval_secs: u64,
+}
+
+impl Default for TpSlConfig {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            default_take_profit_pct: 50.0,
+            default_stop_loss_pct: 30.0,
+            per_category_tp_pct: Default::default(),
+            per_category_sl_pct: Default::default(),
+            poll_interval_secs: 15,
+        }
+    }
+}
+
+fn default_tp_pct() -> f64 { 50.0 }
+fn default_sl_pct() -> f64 { 30.0 }
+fn default_monitor_secs() -> u64 { 15 }
 
 #[derive(Debug, Clone, Default)]
 pub struct Credentials {
