@@ -19,14 +19,26 @@ pub struct MarketInfo {
     pub question: String,
     pub yes_token_id: String,
     pub no_token_id: String,
+    pub category: Option<String>,
+    pub tags: Vec<String>,
     pub closed: bool,
+}
+
+impl MarketInfo {
+    /// Returns true if this market metadata describes the given outcome token.
+    pub fn contains_token(&self, token_id: &str) -> bool {
+        self.yes_token_id == token_id || self.no_token_id == token_id
+    }
 }
 
 #[derive(Debug)]
 pub struct MarketCache {
     http: Client,
     gamma_base: String,
+    /// Slug → (info, when fetched)
     entries: RwLock<HashMap<String, (MarketInfo, Instant)>>,
+    /// Token-id → slug, so token-id lookups can hit the slug cache.
+    token_index: RwLock<HashMap<String, String>>,
     ttl: Duration,
 }
 
@@ -36,6 +48,7 @@ impl MarketCache {
             http,
             gamma_base: gamma_base.into(),
             entries: RwLock::new(HashMap::new()),
+            token_index: RwLock::new(HashMap::new()),
             ttl: DEFAULT_TTL,
         })
     }
@@ -45,7 +58,20 @@ impl MarketCache {
             return Ok(info);
         }
         let info = self.fetch_by_slug(slug).await?;
-        self.insert(slug.to_string(), info.clone());
+        self.insert(info.clone());
+        Ok(info)
+    }
+
+    /// Resolve a CLOB token id (either YES or NO leg) to its full market info.
+    /// First consults the in-memory token-index; on miss, queries Gamma.
+    pub async fn by_token_id(&self, token_id: &str) -> Result<MarketInfo> {
+        if let Some(slug) = self.token_index.read().get(token_id).cloned() {
+            if let Some(info) = self.peek(&slug) {
+                return Ok(info);
+            }
+        }
+        let info = self.fetch_by_token(token_id).await?;
+        self.insert(info.clone());
         Ok(info)
     }
 
@@ -60,31 +86,53 @@ impl MarketCache {
         })
     }
 
-    fn insert(&self, slug: String, info: MarketInfo) {
-        let mut g = self.entries.write();
-        g.insert(slug, (info, Instant::now()));
+    fn insert(&self, info: MarketInfo) {
+        let mut e = self.entries.write();
+        let mut t = self.token_index.write();
+        t.insert(info.yes_token_id.clone(), info.slug.clone());
+        t.insert(info.no_token_id.clone(), info.slug.clone());
+        e.insert(info.slug.clone(), (info, Instant::now()));
     }
 
     async fn fetch_by_slug(&self, slug: &str) -> Result<MarketInfo> {
         let url = format!("{}/markets?slug={}", self.gamma_base, slug);
+        let body = self.fetch_markets_url(&url).await?;
+        let m = body
+            .iter()
+            .find(|m| m.get("slug").and_then(|v| v.as_str()) == Some(slug))
+            .ok_or_else(|| anyhow!("slug {slug} not found in gamma response"))?;
+        parse_market(m)
+    }
+
+    async fn fetch_by_token(&self, token_id: &str) -> Result<MarketInfo> {
+        // Gamma accepts ?clob_token_ids=<id> on the markets endpoint.
+        let url = format!("{}/markets?clob_token_ids={}", self.gamma_base, token_id);
+        let body = self.fetch_markets_url(&url).await?;
+        let m = body
+            .iter()
+            .find(|m| {
+                if let Ok(parsed) = parse_market(m) {
+                    parsed.contains_token(token_id)
+                } else {
+                    false
+                }
+            })
+            .ok_or_else(|| anyhow!("token_id {token_id} not resolved by gamma"))?;
+        parse_market(m)
+    }
+
+    async fn fetch_markets_url(&self, url: &str) -> Result<Vec<serde_json::Value>> {
         let resp = self
             .http
-            .get(&url)
+            .get(url)
             .send()
             .await?
             .error_for_status()?
             .json::<serde_json::Value>()
             .await?;
-
-        let markets = resp
-            .as_array()
-            .ok_or_else(|| anyhow!("gamma /markets returned non-array"))?;
-        let m = markets
-            .iter()
-            .find(|m| m.get("slug").and_then(|v| v.as_str()) == Some(slug))
-            .ok_or_else(|| anyhow!("slug {slug} not found in gamma response"))?;
-
-        parse_market(m)
+        resp.as_array()
+            .cloned()
+            .ok_or_else(|| anyhow!("gamma /markets returned non-array for {url}"))
     }
 }
 
@@ -118,11 +166,37 @@ fn parse_market(m: &serde_json::Value) -> Result<MarketInfo> {
         return Err(anyhow!("expected 2 clob token ids, got {}", tokens.len()));
     }
 
+    let category = m
+        .get("category")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string());
+
+    // `tags` is sometimes an array of strings, sometimes an array of objects
+    // with `label` / `slug` fields depending on Gamma version. Read defensively.
+    let tags = match m.get("tags") {
+        Some(serde_json::Value::Array(arr)) => arr
+            .iter()
+            .filter_map(|t| {
+                if let Some(s) = t.as_str() {
+                    Some(s.to_string())
+                } else {
+                    t.get("label")
+                        .and_then(|v| v.as_str())
+                        .or_else(|| t.get("slug").and_then(|v| v.as_str()))
+                        .map(|s| s.to_string())
+                }
+            })
+            .collect(),
+        _ => Vec::new(),
+    };
+
     Ok(MarketInfo {
         slug,
         question,
         yes_token_id: tokens[0].clone(),
         no_token_id: tokens[1].clone(),
+        category,
+        tags,
         closed,
     })
 }

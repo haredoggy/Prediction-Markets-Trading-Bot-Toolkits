@@ -7,24 +7,38 @@
 //!    watched whale address packed as topic-2 (maker). Server-side filtering
 //!    means the bot is woken only when the whale actually transacts.
 //! 2. **Parse**: decode raw logs into [`WhaleTrade`] via [`service::parse`].
-//! 3. **Sizing**: apply the configured copy strategy ([`service::strategy`]).
-//! 4. **Risk**: fast in-memory check, optional book/depth check
+//! 3. **Eligibility**: resolve market metadata via Gamma, then check against
+//!    the operator's allow/block lists ([`service::eligibility`]).
+//! 4. **Sizing**: apply the configured copy strategy ([`service::strategy`]).
+//! 5. **Exposure caps**: per-category and per-tag open-USD limits enforced
+//!    via [`service::position_store`].
+//! 6. **Risk**: fast in-memory check, optional book/depth check
 //!    ([`service::risk_guard`]).
-//! 5. **Execute**: build EIP-712 signed CTF order, post via L2 auth
+//! 7. **Execute**: build EIP-712 signed CTF order, post via L2 auth
 //!    ([`service::clob`], [`service::order_executor`]).
+//! 8. **TP/SL**: background monitor polls midprice for every open position
+//!    and submits an exit FAK when P&L crosses the configured thresholds
+//!    ([`service::position_monitor`]).
 //!
 //! Safety: `enable_trading=false` OR `mock_trading=true` keeps the executor
-//! in dry-run mode — the full pipeline runs but signed orders are logged, not
-//! submitted.
+//! in dry-run mode — the full pipeline runs but signed orders are logged,
+//! not submitted. Dry-run also records positions locally so the TP/SL
+//! monitor exercises against real midprices.
 
 use crate::config::AppConfig;
 use crate::service::{
+    clob::ClobClient,
+    market_cache::MarketCache,
+    midprice::{ClobMidpriceSource, MidpriceSource},
     onchain::{spawn_subscription, LogFilter, RawLog},
     order_executor::{ExecutionOutcome, OrderExecutor},
     parse::{decode_whale_trade, order_filled_topic},
+    position_monitor,
+    position_store::PositionStore,
     risk_guard::RiskGuard,
 };
 use anyhow::{anyhow, Result};
+use reqwest::Client;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use tracing::{error, info, warn};
@@ -43,24 +57,65 @@ pub async fn run(cfg: AppConfig) -> Result<()> {
         whale = %whale,
         enable_trading = cfg.bot.enable_trading,
         mock_trading = cfg.bot.mock_trading,
+        strict_allowlist = cfg.filters.is_strict(),
+        tp_sl_enabled = cfg.tp_sl.enabled,
         "starting copy-trading bot"
     );
 
+    let http = Client::builder()
+        .user_agent("polymarket-toolkits/0.1")
+        .build()?;
     let risk = RiskGuard::new(cfg.risk.clone());
-    let executor = OrderExecutor::new(cfg.clone(), Arc::clone(&risk))?;
+    let markets = MarketCache::new(http.clone(), cfg.site.gamma_api_base.clone());
+    let positions = PositionStore::new();
+
+    let executor = OrderExecutor::new(
+        cfg.clone(),
+        Arc::clone(&risk),
+        Arc::clone(&markets),
+        Arc::clone(&positions),
+    )?;
+
+    // TP/SL monitor — only spawn if we have a CLOB client (cfg permitted it).
+    if cfg.tp_sl.enabled {
+        if let Some(clob) = executor.clob() {
+            let midprice: Arc<dyn MidpriceSource> = Arc::new(ClobMidpriceSource::new(
+                http.clone(),
+                cfg.site.clob_api_base.clone(),
+            ));
+            let live = cfg.live_trading_allowed();
+            position_monitor::spawn(
+                cfg.tp_sl.clone(),
+                Arc::clone(&positions),
+                clob,
+                midprice,
+                live,
+                cfg.trading.price_buffer,
+                cfg.trading.order_expiration_secs,
+            );
+            info!(
+                poll_interval_secs = cfg.tp_sl.poll_interval_secs,
+                "TP/SL monitor spawned"
+            );
+        } else {
+            warn!(
+                "TP/SL enabled but no CLOB client (missing credentials?) — \
+                 entries will still record positions, but exits won't fire"
+            );
+        }
+    }
 
     let filter = build_filter(&cfg, &whale)?;
     let (tx, mut rx) = mpsc::channel::<RawLog>(LOG_CHANNEL_CAPACITY);
     let _sub = spawn_subscription(cfg.site.polygon_ws_url.clone(), filter, tx);
 
-    let mut shutdown =
-        Box::pin(tokio::signal::ctrl_c());
+    let mut shutdown = Box::pin(tokio::signal::ctrl_c());
 
     loop {
         tokio::select! {
             biased;
             _ = &mut shutdown => {
-                info!("shutdown signal received; copy-trading exiting");
+                info!(open_positions = positions.len(), "shutdown signal received");
                 return Ok(());
             }
             maybe_log = rx.recv() => {
@@ -112,9 +167,6 @@ fn build_filter(cfg: &AppConfig, whale: &str) -> Result<LogFilter> {
     let whale_topic = pad_address_to_topic(whale)?;
     Ok(LogFilter {
         address: exchanges,
-        // topic0 = OrderFilled selector
-        // topic1 = orderHash (any)
-        // topic2 = maker = whale
         topics: vec![
             Some(vec![topic0]),
             None,
