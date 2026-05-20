@@ -46,7 +46,7 @@ Tracks one or more high-performing wallets and mirrors BUY/SELL actions. Copy pe
 | **Dry run** | Fully supported |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -70,7 +70,7 @@ Watches BTC Up/Down windows. When a pricing inefficiency or directional setup em
 | **Execution** | ~42ms end-to-end |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -92,7 +92,7 @@ Monitors the same market on both venues. When a configurable price delta is dete
 | **Logging** | Full P&L tracking |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -113,7 +113,7 @@ Continuously scans symbols and time windows for setups matching your criteria. O
 | **Exit** | TP + SL, auto-exit |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -133,7 +133,7 @@ Farms the bid-ask spread with rule-based entries and exits. Sits at the spread, 
 | **Logging** | Per-trade P&L + session totals |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -153,7 +153,7 @@ A focused live-sports interface that combines real-time odds with fast FAK execu
 | **Execution** | < 50ms |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -174,7 +174,7 @@ Scans active markets for outcomes trading at near-certainty (e.g. ≥ 95% YES or
 | **Venues** | Polymarket · Kalshi · Limitless |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -195,7 +195,7 @@ Monitors live bid/ask depth ratio (OBI). When OBI exceeds threshold, the bot fad
 | **Venues** | Polymarket · Kalshi · Limitless |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -216,7 +216,7 @@ Continuously quotes both sides with GTD orders. Inventory skewing rebalances quo
 | **Venues** | Polymarket · Kalshi |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -237,7 +237,7 @@ Subscribes directly to Polygon block data and filters for transactions from trac
 | **Detection** | ABI calldata decoding |
 | **Status** | ✅ Production-ready |
 
-[contact](https://t.me/haredoggy)
+[contact](https://t.me/HarrierOnChain)
 
 ---
 
@@ -287,7 +287,7 @@ Built and maintained actively. If you're working on Polymarket tooling, algorith
 | Platform | Link |
 |----------|------|
 | **Discussions** | [GitHub Discussions](../../discussions) |
-| **Telegram** | [@haredoggy](https://t.me/haredoggy) |
+| **Telegram** | [@HarrierOnChain](https://t.me/HarrierOnChain) |
 
 *Response time is typically within a few hours. Open to questions, feedback, and serious collaborations.*
 

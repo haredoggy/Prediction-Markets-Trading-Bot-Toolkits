@@ -46,7 +46,7 @@
 | **空跑模式** | 完整支持 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -70,7 +70,7 @@
 | **执行** | ~42ms 端到端 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -92,7 +92,7 @@
 | **日志** | 完整盈亏记录 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -113,7 +113,7 @@
 | **出场** | TP + SL，自动平仓 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -133,7 +133,7 @@
 | **日志** | 单笔盈亏 + 会话汇总 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -153,7 +153,7 @@
 | **执行** | < 50ms |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -174,7 +174,7 @@
 | **平台** | Polymarket · Kalshi · Limitless |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -195,7 +195,7 @@
 | **平台** | Polymarket · Kalshi · Limitless |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -216,7 +216,7 @@
 | **平台** | Polymarket · Kalshi |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -237,7 +237,7 @@
 | **解码方式** | ABI calldata 解析 |
 | **状态** | ✅ 已生产可用 |
 
-[联系方式](https://t.me/haredoggy)
+[联系方式](https://t.me/HarrierOnChain)
 
 ---
 
@@ -287,7 +287,7 @@
 | 平台 | 链接 |
 |------|------|
 | **讨论区** | [GitHub Discussions](../../discussions) |
-| **Telegram** | [@haredoggy](https://t.me/haredoggy) |
+| **Telegram** | [@HarrierOnChain](https://t.me/HarrierOnChain) |
 
 *响应时间通常在数小时内。欢迎提问、反馈与正经合作。*
 

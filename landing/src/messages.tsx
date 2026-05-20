@@ -407,7 +407,7 @@ const messages: Record<Lang, Messages> = {
       headline: 'Ready to put a bot to work?',
       description:
         'Telegram for direct conversation, scope discussion, or paid setup. GitHub for the open-source repo, configuration docs, and the live codebase. Response time on Telegram is typically a few hours.',
-      ctaTelegram: '@haredoggy on Telegram',
+      ctaTelegram: '@HarrierOnChain on Telegram',
       ctaGithub: 'Browse the repo',
       pillars: [
         { title: 'Open source', body: 'MIT licensed. Read the code, fork it, build on it.' },
@@ -695,7 +695,7 @@ const messages: Record<Lang, Messages> = {
       headline: '准备好让机器人开始工作了吗？',
       description:
         'Telegram 用于直接对话、需求讨论、或付费部署。GitHub 用于查看开源代码、配置文档、最新提交。Telegram 通常几小时内回复。',
-      ctaTelegram: 'Telegram：@haredoggy',
+      ctaTelegram: 'Telegram：@HarrierOnChain',
       ctaGithub: '查看代码仓库',
       pillars: [
         { title: '开源', body: 'MIT 许可。读它、Fork 它、在它之上构建。' },

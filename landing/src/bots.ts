@@ -19,7 +19,7 @@ export interface BotMeta {
   accent: BotAccent;
 }
 
-export const TELEGRAM_URL = 'https://t.me/haredoggy';
+export const TELEGRAM_URL = 'https://t.me/HarrierOnChain';
 export const GITHUB_URL = 'https://github.com/haredoggy/Prediction-Markets-Trading-Bot-Toolkits';
 
 export const bots: BotMeta[] = [
